@@ -1,0 +1,65 @@
+/* System preference by default; a saved choice sets data-theme before paint. */
+:root {
+  color-scheme: light dark;
+  --ink: light-dark(#182027, #e4e7ec);
+  --muted: light-dark(#5c6870, #9ca5b3);
+  --paper: light-dark(#f8f8f4, #090b0f);
+  --green: light-dark(#2d6953, #39ff88);
+  --line: light-dark(#dce1da, #2a303b);
+  --surface: light-dark(#ffffff, #10141b);
+  --soft: light-dark(#e9ede6, #171d27);
+  --link-hover: light-dark(#153d2e, #a0ffc5);
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+a:hover { color: var(--link-hover); }
+.site-header, .card, .skip { background: var(--surface); }
+.card-image { background: var(--soft); }
+.image-placeholder { color: var(--muted); }
+.prose pre, .notice, .tags a, footer { background: var(--soft); }
+.search input, .prose input, .prose textarea, .prose select {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.button {
+  background: light-dark(#2d6953, #39ff88);
+  color: light-dark(#fff, #090b0f);
+}
+.button:hover {
+  background: light-dark(#1b4e39, #a0ffc5);
+  color: light-dark(#fff, #090b0f);
+}
+.hero-panel {
+  background: light-dark(#192b25, #171f2b);
+  color: light-dark(#d9eee1, #39ff88);
+  border: 1px solid light-dark(#192b25, #53657e);
+  box-shadow: 12px 12px 0 var(--soft);
+}
+.hero-panel pre, .hero-panel code { color: inherit; }
+.terminal-label { color: light-dark(#9fb9ac, #9ca5b3); }
+.hero-panel p {
+  color: light-dark(#c3d4cb, #c1c9d5);
+  border-color: light-dark(#466052, #2a303b);
+}
+.cursor { color: light-dark(#9fdb80, #39ff88); }
+:focus-visible { outline-color: light-dark(#ab5a19, #39ff88); }
+/* Keep the original logo legible without recoloring its artwork. */
+.brand { background: #fff; border-radius: 4px; padding: 6px 10px; }
+.site-header nav { align-items: center; }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.theme-toggle:hover { border-color: var(--green); }
+.theme-toggle[hidden] { display: none; }

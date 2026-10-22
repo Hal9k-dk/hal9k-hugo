@@ -41,13 +41,32 @@ for page in report['pages']:
         path = PUBLIC / unquote(page['url']).lstrip('/') / 'index.html'
         if not path.exists():
             errors.add(f'Migrated page not built: {page["url"]}')
+# Imported non-public records must never enter the deployable content tree.
+for source in (ROOT / 'content').rglob('*.html'):
+    front, _ = json.JSONDecoder().raw_decode(source.read_text())
+    if front.get('wordpress_id') and front.get('wordpress_status') != 'publish':
+        errors.add(f'Non-published WordPress record in content: {source.relative_to(ROOT)}')
+# /sponsorer/ is a new public section index, not the old unpublished page.
+public_urls = {unquote(p['url']) for p in report['pages'] if p['published']} | {'/sponsorer/'}
+for page in report['pages']:
+    if not page['published'] and unquote(page['url']) not in public_urls:
+        path = PUBLIC / unquote(page['url']).lstrip('/') / 'index.html'
+        if path.exists():
+            errors.add(f'Unpublished WordPress record was built: {page["url"]}')
 index = json.loads((PUBLIC / 'index.json').read_text())
-if len(index['articles']) != 113:
-    errors.add(f'Expected 113 imported articles, got {len(index["articles"])} (update this baseline when intentionally adding/removing articles)')
+if len(index['articles']) != 112:
+    errors.add(f'Expected 112 articles after deduplication, got {len(index["articles"])} (update this baseline when intentionally adding/removing articles)')
+duplicate_url = '/floppy-disks-the-best-tv-remote-for-kids-2/'
+canonical_url = '/floppy-disks-the-best-tv-remote-for-kids/'
+if any(a['url'] == duplicate_url for a in index['articles']):
+    errors.add('Duplicate Floppy Disks article is still indexed')
+redirect = PUBLIC / duplicate_url.strip('/') / 'index.html'
+if not redirect.exists() or not any(marker in redirect.read_text() for marker in ('http-equiv="refresh"', 'http-equiv=refresh')) or canonical_url not in redirect.read_text():
+    errors.add('Duplicate Floppy Disks URL must redirect to the original')
 for file in PUBLIC.rglob('*'):
     if file.is_file() and file.suffix.lower() in {'.php', '.sql', '.tar', '.log'}:
         errors.add(f'Unexpected deployment file: {file}')
 if errors:
     print('\n'.join(sorted(errors)))
     sys.exit(1)
-print(f'PASS: {len(files)} HTML files, all local links/media and all migrated public URLs checked; 113 articles indexed.')
+print(f'PASS: {len(files)} HTML files, all local links/media and all migrated public URLs checked; 112 articles indexed; duplicate redirect checked.')

@@ -23,7 +23,7 @@ Deploy **only `public/`**. The fileserver needs directory indexes (`/slug/` → 
 
 ## Editing content
 
-- `content/posts/`: all 113 published WordPress articles.
+- `content/posts/`: 112 published articles (113 imported, one duplicate archived).
 - `content/pages/`: all 12 published WordPress pages; nested historical URLs are set explicitly in front matter.
 - `content/sponsors/`: 10 historical sponsor acknowledgements.
 - `content/legacy/`: 5 other published custom-type records (including old tests), preserved rather than silently dropped.
@@ -53,7 +53,7 @@ Skriv artiklen her.
 
 Place new images in `static/images/`, or use Hugo page bundles. Change `hugo.toml` for navigation/site settings. The home page shows all articles chronologically; `/artikler/` provides local client-side search. FAQ toggles use native `<details>`, YouTube embeds use youtube-nocookie.com, and galleries need no WordPress JavaScript. The original battery-life calculator has been reimplemented in `static/js/site.js`.
 
-`check_site.py` currently expects the migration baseline of 113 articles. Update that baseline when intentionally adding or removing articles. It checks every built local link/media reference and all original public page URLs.
+`check_site.py` currently expects 112 articles after deduplication and verifies the duplicate URL redirect. Update that baseline when intentionally adding or removing articles. It checks every built local link/media reference and all original public page URLs.
 
 ## CI and fileserver deployment
 
@@ -86,7 +86,7 @@ See `migration/report.json` for the full imported-record inventory and `migratio
 - **Regnskab:** the backup contained a BeEF browser-hook script and a suspicious invoice/code-entry form. The public URL is preserved with a safe contact notice rather than reproducing that payload. The unmodified original remains in the source backup outside this repository.
 - Two unique external media resources remain remote: an expired Facebook CDN image and a video exceeding the import size limit. Their original URLs are retained, and failures are recorded in the download manifest. External video players/other remote embeds still require the corresponding services.
 - Accounts, member submissions, email logs, plugin credentials, caches, WordPress executables and revision history are not part of the deployment. All original records remain in the extracted backup next to this repo.
-- Content is intentionally not deduplicated: the two published “Floppy Disks” articles have separate historical URLs and are both retained.
+- The duplicate “Floppy Disks” article (WordPress ID 9037) is archived in `migration/duplicates/`, outside published content. Its `-2` URL redirects via a Hugo alias to the original (ID 7557); both legacy WordPress IDs resolve to the original. There are now 112 published articles. `migration/report.json` remains the original import inventory.
 
 ## Re-running the importer (not part of normal editing)
 

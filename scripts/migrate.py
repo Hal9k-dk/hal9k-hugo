@@ -196,10 +196,18 @@ for p, text in zip(selected, formatted):
         front['aliases'].append('/' + slug(p) + '/')
     for tax, name in [('category', 'categories'), ('post_tag', 'tags')]:
         front[name] = list(dict.fromkeys(terms[t['term_id']]['name'] for t in relationships[p['ID']] if t['taxonomy'] == tax))
-    image = attachment_urls.get(int(meta[p['ID']].get('_thumbnail_id', 0)))
+    featured_id = int(meta[p['ID']].get('_thumbnail_id', 0))
+    image = attachment_urls.get(featured_id)
+    # Syndicated wp-image IDs can collide with unrelated local attachments.
+    # Trust attachment ownership or a matching image URL, not CSS wp-image IDs.
+    def image_family(value):
+        return re.sub(r'-\d+x\d+(?=\.)', '', Path(unquote(urlsplit(value).path)).name)
+    body_images = [img.get('src') for img in soup.find_all('img') if img.get('src')]
+    if image and posts.get(featured_id, {}).get('post_parent') != p['ID']:
+        if not any(image_family(src) == image_family(image) for src in body_images):
+            image = None
     if not image:
-        img = soup.find('img')
-        image = img.get('src') if img else None
+        image = body_images[0] if body_images else None
     if image:
         front['image'] = image
     if p['post_excerpt']:

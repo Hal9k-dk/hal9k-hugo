@@ -9,15 +9,18 @@
   <meta property="og:title" content="{{ .Title }}">
   <meta property="og:url" content="{{ .Permalink }}">
   {{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+  <meta name="color-scheme" content="light dark">
+  <script src="{{ "js/theme.js" | relURL }}"></script>
   <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/theme.css" | relURL }}">
   <link rel="alternate" type="application/rss+xml" title="Hal9k" href="{{ "index.xml" | absURL }}">
   <script defer src="{{ "js/site.js" | relURL }}"></script>
 </head>
 <body>
 <a class="skip" href="#main">Spring til indhold</a>
 <header class="site-header"><div class="wrap header-inner">
-  <a class="brand" href="/" aria-label="Hal9k forside"><span class="hal-eye"></span>HAL<span>9K</span><small>HACKERSPACE · AALBORG</small></a>
-  <nav aria-label="Hovedmenu">{{ range site.Menus.main }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}</nav>
+  <a class="brand" href="/" aria-label="Hal9k forside"><img src="{{ site.Params.logo | relURL }}" alt="Hal9k" width="280" height="103"></a>
+  <nav aria-label="Hovedmenu">{{ range site.Menus.main }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Mørkt tema" aria-pressed="false" hidden><span data-theme-icon aria-hidden="true">☾</span><span>Mørkt tema</span></button></nav>
 </div></header>
 <main id="main" class="wrap">{{ block "main" . }}{{ end }}</main>
 <footer><div class="wrap footer-grid"><div><strong>HAL9K</strong><p>Sofiendalsvej 80<br>9200 Aalborg SV<br>CVR: 33444524</p><a href="/find-os/">Åbent torsdag fra kl. 19.00 →</a></div><div><strong>Foreningen</strong><a href="/hal9k/">Om Hal9k</a><a href="/historie/">Historie</a><a href="/hal9k/bestyrelsen/">Bestyrelsen</a><a href="/hal9k/vedtaegter/">Vedtægter</a><a href="/sponsorer/">Sponsorer</a></div><div><strong>Find rundt</strong><a href="/sider/">Alle sider</a><a href="/sporgsmal-vi-bliver-stillet-hele-tiden/">Ofte stillede spørgsmål</a><a href="/kontakt/">Kontakt</a><a href="/databeskyttelse/">Databeskyttelse</a><a href="/index.xml">RSS</a></div></div></footer>

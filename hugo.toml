@@ -30,7 +30,7 @@ summaryLength = 35
 
 [params]
   description = 'Hackerspace i Aalborg. Et fællesskab for kreativ brug af teknik, elektronik, mekanik og software.'
-  logo = '/wp-content/uploads/2012/10/hal9k_log-sky1.png'
+  logo = '/images/hal9k-logo.svg'
 
 [[menus.main]]
   name = 'Artikler'
