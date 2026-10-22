@@ -1,0 +1,59 @@
+{
+  "title": "PrintrBot Jr getting closer to working state",
+  "date": "2013-06-14T08:55:53+02:00",
+  "lastmod": "2013-06-14T11:27:35+02:00",
+  "url": "/printrbot-jr-getting-closer-to-working-state/",
+  "type": "posts",
+  "wordpress_id": 578,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter"
+  ],
+  "tags": [
+    "prototypelab",
+    "3dprinter",
+    "printrbotjr"
+  ],
+  "image": "/wp-content/uploads/2013/06/DSC_0078.jpg"
+}
+
+<p>Yesterday our <a href="http://wiki.hal9k.dk/equipment/printrbotjr" title="Hal9k's Printrbot Jr">PrintrBot Jr</a> made its first useful prints!</p>
+<p><a href="/wp-content/uploads/2013/06/DSC_0078.jpg"><img alt="DSC_0078" class="alignnone size-medium wp-image-579" height="168" loading="lazy" src="/wp-content/uploads/2013/06/DSC_0078-300x168.jpg" width="300"/></a></p>
+<p>It has taken quite some effort to get to this stage, mostly because I knew nothing about 3d-printers when we started the project, and the original builders were out of town (but have now returned).</p>
+<p><a href="/wp-content/uploads/2013/06/DSC_0059.jpg"><img alt="DSC_0059" class="alignnone size-medium wp-image-580" height="168" loading="lazy" src="/wp-content/uploads/2013/06/DSC_0059-300x168.jpg" width="300"/></a></p>
+<p>We have made quite some modifications to the printer, mostly <a href="http://hardwired.cc/?p=335">inspired by this blog post</a>. Specifically we have (as <a href="http://wiki.hal9k.dk/equipment/printrbotjr">documented on our wiki</a>):</p>
+<ul>
+<li>Upgraded belts to GT2, in our case with a 20-tooth pulley, all ordered from <a href="http://3dnielsen.dk/">3dnielsen.dk</a> (although the GT2 belt seems quite expensive). This has definitely improved our accuracy, now the X- and Y-axis are at a nice even 80 steps/mm, as calculated by the very awesome <a href="http://calculator.josefprusa.cz/">RepRap Calculator</a>.</li>
+<li>Replaced some of the LM8UU ball bearings on the Y-axis because they were very unstable. This was probably the most important modification, although I don't know if there is a difference in quality between the old and the new bearings. We still use the old bearings on the X-axis, they seem okay.</li>
+<li>Added <a href="http://3dnielsen.dk/nema-17-motor/110-motor-daemper-laser-skaret-1stk.html">cork mufflers</a> to the motors. I doubt this is essential or even provides much benefit on the Printrbot Jr because the motors touch the chassis at multiple points, but they are cheap and can be retro-fitted with little effort.</li>
+<li>Made sure the circular ball bearings were properly tightened such that the middle part, that is not supposed to turn (as I learned), does not turn. Additionally, add wafers to get the bearings height aligned with the belts.</li>
+<li>Replaced the Z-axis threaded rod with a metric one: This is an almost too easy upgrade to not do, as an M8 rod fits the Printrbot Jr without any problems. The benefit (as can be calculated by the very awesome <a href="http://calculator.josefprusa.cz/">RepRap Calculator</a>) is that the Z-axis will need an even number of steps to move from one layer to the next. As an example, consider a layer height of 0.3 mm with the old 5/16" rod: this will result in an error of +1.1217541105598867mm over 10cm, where with an M8 rod there is no such error.</li>
+<li>We have not yet added a brass nut to the Z-axis because we have been unable to find one locally. An additional benefit of going for an M8 rod is that it requires no further modifications (<a href="http://www.thingiverse.com/thing:59246">unlike an M6, which needs a printed bit</a>), but the M8 can still be incrementally improved, e.g. <a href="http://www.thingiverse.com/thing:64738">http://www.thingiverse.com/thing:64738</a>.</li>
+</ul>
+<p>At this point our main problem is with adhesion of the first layer. We have experimented with a glass plate because we want to add a heated bed. We learned a couple of lessons from that, namely:</p>
+<ul>
+<li><span style="line-height: 13px;">Kapton tape on top of glass is not very adhesive, if it is not heated.</span></li>
+<li>We experimented with hair-spray. Hair-spray on painter's tape is not a good idea, it makes the tape bubble and dissolves it a bit.</li>
+<li>Printing on glass with hair-spray is almost doable, but not quite convenient.</li>
+<li>Adding the glass plate on top of the original wood plate adds quite a bit of height, and the plate adjustment screws cannot be tightened too much because two of them will then hit screws on the chassis, resulting in the X-axis crashing. A good solution could be a longer Z-axis stop screw.</li>
+</ul>
+<p>At this point we are back to printing on painter's tape directly on top of the original wood plate. It seems sufficiently flat for the small prints we have done until now. A heated bed is definitely a thing to do, we plan to mill a PCB on our Bungard machine, following something like <a href="http://www.thingiverse.com/thing:91403">http://www.thingiverse.com/thing:91403</a> (however note that I read double-sided PCB is recommended, because heating only one side will result in the PCB warping).</p>
+<p>With regards to calibrating the axis for the correct number of steps the instructions at <a href="http://reprap.org/wiki/Calibration">http://reprap.org/wiki/Calibration</a> has the following quote:</p>
+<blockquote><p><i>The following information concerning steps/mm adjustments is outdated. It has since been agreed that steps/mm should be set to the exact calculated values since printing with non-ideal steps/mm results in an accurate test piece, but makes the dimensions on every other part even more inaccurate.</i></p></blockquote>
+<p>... which sort of appeals to me because it is less labor, and the correct solution can be calculated. Thus, we are now using calculated values from the very awesome <a href="http://calculator.josefprusa.cz/">RepRap Calculator</a>: X-axis: 80 steps/mm, Y-axis: 80 steps/mm, Z-axis: 2560 steps/mm. The extruder is currently at 600 steps/mm, but this is per calibration; the <a href="http://printrbot.com/wp-content/uploads/2012/04/Printrbot-Getting-Started-Guide2.pdf">PrintrBot documentation</a> mentions a default of 569 steps/mm.</p>
+<p>With all this effort we are now able to print various small items improving the printer:</p>
+<ul>
+<li><span style="line-height: 13px;">Z-axis bolt holder: <a href="http://www.thingiverse.com/thing:78023">http://www.thingiverse.com/thing:78023</a>. The derivation was too tight for our build, the original fits snugly.<br/>
+</span></li>
+<li>4 bed levellers: <a href="http://www.thingiverse.com/thing:90336">http://www.thingiverse.com/thing:90336</a>. Nice little addition, and additionally it validated that our calibration was not totally off: one nut could be inserted by hand, the three others only needed a little "Jysk kærlighed" aka. a very small smack with a hammer.</li>
+<li>New gears for the extruder: <a href="http://www.thingiverse.com/thing:26243">http://www.thingiverse.com/thing:26243</a>. Our large gear already has a small crack from the original assembly, and some of the teeth on the large gear have started grinding leading to slips in movement, so we will need new ones at some point. We have printed the small gear, and will go for the large one soon.</li>
+<li>An 8-bit heart, to try to explain to wifes and girlfriends what we do: <a href="http://www.thingiverse.com/thing:21795">http://www.thingiverse.com/thing:21795</a> :-)</li>
+</ul>
+<p> </p>
+

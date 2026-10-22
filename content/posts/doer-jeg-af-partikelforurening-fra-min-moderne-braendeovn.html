@@ -1,0 +1,141 @@
+{
+  "title": "Dør jeg af partikelforurening fra min moderne brændeovn?",
+  "date": "2019-02-01T16:27:01+02:00",
+  "lastmod": "2019-02-01T16:27:01+02:00",
+  "url": "/doer-jeg-af-partikelforurening-fra-min-moderne-braendeovn/",
+  "type": "posts",
+  "wordpress_id": 1727,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "danish",
+    "Planets"
+  ],
+  "image": "/wp-content/uploads/2013/04/IMG_4321.jpg",
+  "description": "Vi har en fin moderne brændeovn derhjemme (en Aduro 1-2), som vi bruger ret intensivt til opvarmning af vores gamle stuehus. Et meget relevant spørgsmål er derfor: hvor meget bidrager sådan en moderne brændeovn til partikelforureningen i vores stue? Partikelforurening er små partikler af støv og sod, der bl.a. fremkommer ved afbrænding af fossile brændsler, […]"
+}
+
+<p>Vi har en fin moderne brændeovn derhjemme (en Aduro 1-2), som vi bruger ret intensivt til opvarmning af vores gamle stuehus. Et meget relevant spørgsmål er derfor: hvor meget bidrager sådan en moderne brændeovn til partikelforureningen i vores stue?</p>
+<div class="wp-block-image">
+<figure class="alignright is-resized"><img alt="" class="wp-image-200" height="294" loading="lazy" sizes="(max-width: 166px) 100vw, 166px" src="/media/imported/39fd54e66b7edf58cf27.jpg" srcset="/media/imported/39fd54e66b7edf58cf27.jpg 529w, /media/imported/09848c33f56f50392a8e.jpg 169w" width="166"/></figure>
+</div>
+<p><a href="https://en.wikipedia.org/wiki/Particulates">Partikelforurening</a> er små partikler af støv og sod, der bl.a. fremkommer ved afbrænding af fossile brændsler, som olie og træ. De kan forårsage forskellige slags sundhedsproblemer, bl.a. kræft. På et <a href="http://lpdv.spatialsuite.dk/spatialmap?">interaktivt partikelkort</a> kan man se hvilke niveauer der (beregnet) var i Danmark i 2012, og f.x. forskellen mellem land og by; årsgennemsnittet for PM2.5 lå på 5.3 – 11.9 μg/m<sup>3</sup>.</p>
+<p>Det er et ganske egoistisk projekt jeg har gang i: jeg har ingen data for hvor stor partikelforureningen er udenfor huset, men kun inde i selve stuen. Der er en del kilder til partikelforurening som jeg kender til, eller har observeret:</p>
+<ul>
+<li>Vi har et pillefyr, der står i nærheden, der også kører i den kolde tid</li>
+<li>Vi bor i kort afstand fra en lettere befærdet vej</li>
+<li>Madlavning, specielt med en gammel emhætte, kan bidrage betydeligt</li>
+<li>Den generelle baggrundsvariation kan være betydelig</li>
+</ul>
+<p>For at undersøge det har jeg opsat en partikel sensor (en <a href="https://sensing.honeywell.com/hpma115s0-particulate-matter-sensors">Honeywell HPMA-1150S0</a>) i stuen, ca. 3 m fra brændeovnen. Samtidig registrerer jeg brændeovnens temperatur, via en <a href="https://blog.smartere.dk/2017/01/reverse-engineering-aduro-smart-response/">Aduro Smart Response sensor</a>. Dette har jeg nu gjort i lidt over et år, og kan dermed lave en data analyse på et års data.</p>
+<p>Til brug for analysen er der registreret PM10 og PM2.5 værdier, ifølge <a href="https://sensing.honeywell.com/honeywell-sensing-hpm-series-particle-sensors-datasheet-32322550-e-en.pdf">databladet</a> i μg/m<sup>3</sup>. Sensoren skulle desuden være “fully calibrated”, og kunne køre i mindst 20.000 timer, så et års data burde man kunne stole på. Usikkerheden er dog angivet til +/- 15 μg/m<sup>3</sup>, eller +/-15% alt efter målingen; i praksis virker den dog til at være ret stabil i værdierne. Sensoren beregner PM10 værdier ud fra PM2.5 værdier, så jeg vil primært fokusere på analyse af PM2.5 værdierne. Data er optaget med et interval på 5 minutter, men med sensor læsninger ca. hvert 6 sekund der så er aggregeret ved gennemsnit (Der er brugt HPMA-1150S0 sensorens “auto-send”).</p>
+<figure class="wp-block-image"><img alt="" class="wp-image-350" loading="lazy" sizes="(max-width: 646px) 100vw, 646px" src="/media/imported/9c479ff998e8775408ff.png" srcset="/media/imported/9c479ff998e8775408ff.png 646w, /media/imported/c4c3f336362e39b34ec0.png 300w"/><figcaption>Sensoren opfanger partikler mindre end 2.5 μg med en laser.</figcaption></figure>
+<p>Brændeovnens temperatur er målt som foreskrevet af Aduro Smart Response, dvs. i den øvre del af brændkammeret på vej mod røgrøret. Aduro sensoren sender data i ca. 4 timer. Jeg har defineret at brændeovnen er i brug, hvis temperaturen er registreret, dvs. afkøling også er talt med.</p>
+<figure class="wp-block-image"><a href="/media/imported/0244ea1ac46c60163ad3.png"><img alt="" class="wp-image-367" loading="lazy" sizes="(max-width: 795px) 100vw, 795px" src="/media/imported/0244ea1ac46c60163ad3.png" srcset="/media/imported/0244ea1ac46c60163ad3.png 795w, /media/imported/5ff2fd0c4155b6a8eefc.png 300w, /media/imported/ffafa5954a3f29b2b1eb.png 768w"/></a><figcaption>Data der er opsamlet er bl.a. PM10, PM2.5, brændeovnens temperatur, og strømforbrug på de 3 faser.</figcaption></figure>
+<p>Vi bruger vores brændeovn en hel del i de kolde måneder. Faktisk helt op til halvdelen af tiden:</p>
+<figure class="wp-block-image"><img alt="" class="wp-image-290" loading="lazy" sizes="(max-width: 600px) 100vw, 600px" src="/media/imported/18c85ad2ccbf661d1e0a.png" srcset="/media/imported/18c85ad2ccbf661d1e0a.png 600w, /media/imported/1011851c1bcc50471211.png 300w"/></figure>
+<p>Det passer meget godt med at vi bruger brændeovnen næsten alt tid vi er hjemme, i de kolde måneder.</p>
+<p>Vi tænder op efter forskrifterne og bedste evne; genindfyring sker typisk ved 175C eller 150C ved at lægge 2-3 stykker brænde ind, og åbne spjældet (der så ved Adurotronic lukker over ca. 6 minutter). Der er naturligvis stor variation i præcis hvornår der lige bliver genindfyret. Og en sjælden gang imellem glipper optændingen, og giver røg i stuen. Men generelt opleves fyringen som ganske uproblematisk.</p>
+<p>Gennem året har jeg lavet lidt observationer, og min subjektive vurdering for partikelforureningen er ca.:</p>
+<ul>
+<li>Der er normalt meget lille partikelforurening, 2-3 μg/m<sup>3</sup></li>
+<li>Ved god optænding stiger forureningen med 1-2 μg/m<sup>3</sup></li>
+<li>I nogle perioder er baggrundsforureningen højere, lige under 20 μg/m<sup>3</sup></li>
+<li>Ved uheldig opførsel stiger partikelforureningen drastisk – helt op til 900 μg/m<sup>3</sup>; det kan f.x. være ved dårlig optænding, eller ved madlavning.</li>
+</ul>
+<ul class="wp-block-gallery columns-2 is-cropped">
+<li class="blocks-gallery-item">
+<figure><a href="/media/imported/3734cfacc70ff2a5011f.png"><img alt="" class="wp-image-315" data-id="315" data-link="https://blog.smartere.dk/?attachment_id=315" loading="lazy" sizes="(max-width: 803px) 100vw, 803px" src="/media/imported/3734cfacc70ff2a5011f.png" srcset="/media/imported/75237c4f048c7c3e01fb.png 803w, /media/imported/06ba10297d353b3bf281.png 300w, /media/imported/03b240d12c209373d787.png 768w"/></a><figcaption>Uheldig optænding.</figcaption></figure>
+</li>
+<li class="blocks-gallery-item">
+<figure><a href="/media/imported/37a2ff6e1996390c954a.png"><img alt="" class="wp-image-316" data-id="316" data-link="https://blog.smartere.dk/?attachment_id=316" loading="lazy" sizes="(max-width: 534px) 100vw, 534px" src="/media/imported/37a2ff6e1996390c954a.png" srcset="/media/imported/37a2ff6e1996390c954a.png 534w, /media/imported/ce2c93de1dae34cda18a.png 300w"/></a><figcaption>Uheldig baconstegning.</figcaption></figure>
+</li>
+</ul>
+<h2>Målinger</h2>
+<figure class="wp-block-image"><a href="/media/imported/1c382e3c30aa329b7d87.png"><img alt="" class="wp-image-306" loading="lazy" sizes="(max-width: 600px) 100vw, 600px" src="/media/imported/1c382e3c30aa329b7d87.png" srcset="/media/imported/1c382e3c30aa329b7d87.png 600w, /media/imported/0339177b4c7a02e2d2d2.png 300w"/></a><figcaption>PM2.5 koncentrationer, ifht. årets måneder.<br/></figcaption></figure>
+<p>Som det kan ses er der en del variation imellem månederne. Der er også en hel del outliers, der trækker gennemsnittet op, mens medianen for alle måneder ligger under 5  μg/m<sup>3</sup>.</p>
+<figure class="wp-block-image"><a href="/media/imported/0ee6eb45ba934a76dbf5.png"><img alt="" class="wp-image-320" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" src="/media/imported/0ee6eb45ba934a76dbf5.png" srcset="/media/imported/0ee6eb45ba934a76dbf5.png 800w, /media/imported/2ed2e26a50ab9df04903.png 300w, /media/imported/549b0176efc0fb9f9e3f.png 768w"/></a><figcaption>PM2.5 koncentrationer, ifht. brændeovnens temperatur; røde cirkler angiver gennemsnit, rød linje angiver kubisk tendenslinje.</figcaption></figure>
+<p>Mere interessant er det om partikelforureningen påvirkes af brændeovnens temperatur, og dermed dens brug. Det ser det bestemt ud til! Selvom median værdierne ikke stiger meget stiger specielt 3. kvartil. Gennemsnitsværdierne stiger også, helt op til 12.37 μg/m<sup>3 </sup>for intervallet [250, 300). En tolkning af dette kunne være at der normalt (median) ikke er ret meget mere partikelforurening, men det sker hyppigere at der er store koncentrationer til stede.</p>
+<p>Det bør noteres at der ikke er særlig mange målinger over 350C, som det kan ses af histogrammet for hvilke brændeovnstemperaturer der er registreret:</p>
+<figure class="wp-block-image"><a href="/media/imported/97125b9f962bf096d22b.png"><img alt="" class="wp-image-327" loading="lazy" sizes="(max-width: 480px) 100vw, 480px" src="/media/imported/97125b9f962bf096d22b.png" srcset="/media/imported/97125b9f962bf096d22b.png 480w, /media/imported/a311a45f162dd3b9ad94.png 150w, /media/imported/503cb8f440728e317c9a.png 300w"/></a></figure>
+<h2>Fejlkilder</h2>
+<p>Der er et par fejlkilder i målingerne:</p>
+<ul>
+<li>Der mangler en uges data i september, hvor en <a href="https://blog.smartere.dk/2018/09/olimex-a20-olinuxino-lime2-a-review-after-4-years-in-service/">strømforsyning stod af</a> mens vi var på ferie.</li>
+<li>Partikelsensoren giver nogle meget højere målinger i et enkelt punkt, engang imellem. Checksummen fra sensoren ser ud til at passe, så hvad præcist problemet er ved jeg ikke. Jeg har først filtreret åbenlyst forkerte målinger (&lt;0 eller &gt;1000) fra i databehandlingen, men pga. gennemsnittet over de 5 min kan nogle åbenlyst forkerte målinger stadig være talt med.</li>
+<li>Brændeovnssensor har nok manglet batteri en dag eller to, det kan jeg ikke helt huske.</li>
+</ul>
+<h2>Analyse</h2>
+<table class="wp-block-table is-style-regular">
+<tbody>
+<tr>
+<td></td>
+<td>PM2.5</td>
+</tr>
+<tr>
+<td>Årligt gennemsnit</td>
+<td>5.44 μg/m<sup>3</sup></td>
+</tr>
+<tr>
+<td>– Årligt gennemsnit, brændeovn i brug</td>
+<td>9.28 μg/m<sup>3</sup></td>
+</tr>
+<tr>
+<td>– Årligt gennemsnit, brændeovn <strong>ikke</strong> i brug</td>
+<td>4.49 μg/m<sup>3</sup></td>
+</tr>
+</tbody>
+</table>
+<p> Alle værdier er under <a href="https://en.wikipedia.org/wiki/Particulates#European%20Union">EU’s grænseværdi</a>, på 25 μg/m<sup>3</sup> PM2.5. Hvis vi antager at målingerne mens brændeovnen ikke er i brug er repræsentative for hele året, <strong>så har brændeovnen bidraget med 0.95 μg/m</strong><sup><strong>3</strong></sup><strong> PM2.5 til års gennemsnittet</strong>.</p>
+<h3>Hvor farligt er det så?</h3>
+<p>Et <a href="https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(13)70279-1/fulltext">studie fra 2013 af sammenhængen mellem partikelforurening og lungekræft</a> fandt (eftersigende, jeg har ikke adgang til artiklen men kun til <a href="https://videnskab.dk/krop-sundhed/sma-maengder-forurening-oger-faren-kraeft">resuméet på Videnskab.dk</a>) at selv små stigninger i partikelforurening giver øget risiko for lungekræft.</p>
+<blockquote class="wp-block-quote">
+<p>For småkornet luftforurening [PM2.5] stiger risikoen for lungekræft med 18 procent per fem ekstra mikrogram svævestøv, men det resultat var ikke statistisk signifikant. Det var alle resultaterne for risikostigning under det tilladte niveau heller ikke.</p>
+<p><cite><a href="https://videnskab.dk/krop-sundhed/sma-maengder-forurening-oger-faren-kraeft">Videnskab.dk: Små mængder forurening øger faren for kræft</a><br/></cite></p></blockquote>
+<p>Hvis vi antager at det resultat holder, og at virkningen er lineær, vil den øgede forurening på 0.95 μg/m<sup>3</sup> PM2.5 <strong>øge risikoen for lungekræft med 3.42%.</strong></p>
+<h3>Enkeltstående tilfælde</h3>
+<p>Et andet problem kunne være hvis enkeltstående tilfælde af høj luftforurening var specielt sundhedsskadeligt, som indikeret af at <a href="https://en.wikipedia.org/wiki/Particulates#European%20Union">EU for PM10 også har en daglig grænseværdi</a> (50 μg/m<sup>3</sup>), og et antal tilladte overskridelser per år (35). Der er 0 dage hvor den daglige PM10 grænseværdi har været overskredet. Jeg har alligevel analyseret de 35 dage med det højeste gennemsnit, og forsøgt at klassificere de årsager (primær og sekundære) til de høje værdier. Det har jeg gjort ved at kigge på brændeovnstemperaturen, strømforbruget, tidspunket på dagen, osv. Disse tal må derfor siges at være min subjektive vurdering.</p>
+<table class="wp-block-table alignright">
+<tbody>
+<tr>
+<td></td>
+<td>Primær årsag</td>
+<td>Sekundær årsag</td>
+</tr>
+<tr>
+<td>Madlavning</td>
+<td style="text-align:right;">19</td>
+<td style="text-align:right;">3</td>
+</tr>
+<tr>
+<td>Baggrund</td>
+<td style="text-align:right;">11</td>
+<td style="text-align:right;">1</td>
+</tr>
+<tr>
+<td>Brændeovn</td>
+<td style="text-align:right;">3</td>
+<td style="text-align:right;">15</td>
+</tr>
+<tr>
+<td>Ukendt</td>
+<td style="text-align:right;">2</td>
+<td style="text-align:right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>De primære årsager til høje målinger ser ud til at være madlaving og baggrund, mens brændeovnen bidrager til halvdelen af de høje dagsgennemsnit.</p>
+<h2>Konklusion</h2>
+<p>Vores moderne brændeovn bidrager med 0.95 μg/m<sup>3</sup> PM2.5 til års gennemsnittet, og øger dermed vores risiko for lungekræft med 3.42%. Hvis vi f.x. flyttede til en større by som København ville vi opleve en væsentlig højere forøgelse til måske 10 μg/m<sup>3</sup>, ifølge <a href="http://lpdv.spatialsuite.dk/spatialmap?">modelberegningen</a>, hvilket ville øge risikoen for lungekræft med 16%.</p>
+<p>Hvis man ser på PM2.5 koncentrationer ifht. brændeovnens temperatur, ser det ud til at brændeovnen for det meste (målt på medianen) ikke udleder ret mange partikler, men bidrager til at høje forureningskoncentrationer optræder oftere (som set på de øgede gennemsnitsværdier, og forøgede 3. kvartil).</p>
+<p>Brændeovnen bidrager til 18 af de 35 højeste dagsmålinger, mens de primære årsager til høje dagsmålinger er madlavning og baggrundsforurening. </p>
+

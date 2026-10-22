@@ -1,0 +1,42 @@
+{
+  "title": "Ford 3000 Tractor Instrument Voltage Stabilizer – Mechanical PWM!",
+  "date": "2017-05-25T15:51:55+02:00",
+  "lastmod": "2017-05-25T15:51:55+02:00",
+  "url": "/ford-3000-tractor-instrument-voltage-stabilizer-mechanical-pwm/",
+  "type": "posts",
+  "wordpress_id": 1549,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planet Ubuntu-DK",
+    "Planets"
+  ],
+  "image": "/wp-content/uploads/2012/08/08-kopi.png",
+  "description": "Some time ago we bought a nice used Ford 3000 tractor (3 cylinder diesel, Chief frontloader). It needed some work, and one of the items was a new wiring harness. After replacing all the wiring everything seemed to work fine, until one day all the instruments just died; this being a mechanical beast everything else kept […]"
+}
+
+<p><a href="https://blog.smartere.dk/wp-content/uploads/2017/05/DSC_0217.jpg"><img alt="" class="alignnone size-medium wp-image-209" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/0bc5008bc5820953728b.jpg" srcset="/media/imported/0bc5008bc5820953728b.jpg 300w, /media/imported/36d88ea1e4437f3507ad.jpg 768w, /media/imported/9cc86137cfca0b535f03.jpg 1024w" width="300"/><br/>
+</a></p>
+<p>Some time ago we bought a nice used Ford 3000 tractor (3 cylinder diesel, Chief frontloader). It needed some work, and one of the items was a new wiring harness. After replacing all the wiring everything seemed to work fine, until one day all the instruments just died; this being a mechanical beast everything else kept working. After quite some investigation, I found out that the instrument fuse (the only fuse in the entire system) had blown. Replacing it just blew it again, so something was clearly wrong. This lead to taking out the so-called “instrument voltage stabilizer”, and disassembling it.</p>
+<p><a href="https://blog.smartere.dk/wp-content/uploads/2017/05/DSC_0395.jpg"><img alt="" class="alignnone size-medium wp-image-210" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/2f69245416813e8fcf2e.jpg" srcset="/media/imported/2f69245416813e8fcf2e.jpg 300w, /media/imported/9457c9866b8786687667.jpg 768w, /media/imported/c723f4d0f884cdf36841.jpg 1024w" width="300"/></a><a href="https://blog.smartere.dk/wp-content/uploads/2017/05/DSC_0396.jpg"><img alt="" class="alignnone size-medium wp-image-211" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/75463add0e787a2d5078.jpg" srcset="/media/imported/75463add0e787a2d5078.jpg 300w, /media/imported/bc34a0ae8c9adcbb4cf7.jpg 768w, /media/imported/c4d9822e395d34c01c2d.jpg 1024w" width="300"/></a></p>
+<p>Apparently I had connected it in such a way that the arm had raised itself, and was now short-circuiting to the case. I had already ordered a replacement, but only got what was essentially a very expensive connection:</p>
+<p><a href="/media/imported/45988e857dc3e5668332.jpg"><img alt="" class="alignnone size-medium wp-image-212" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/ee3b6cb4157f26399a98.jpg" srcset="/media/imported/ee3b6cb4157f26399a98.jpg 300w, /media/imported/45988e857dc3e5668332.jpg 413w" width="300"/></a> <a href="https://blog.smartere.dk/wp-content/uploads/2017/05/DSC_0394.jpg"><img alt="" class="alignnone size-medium wp-image-213" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/1a8af448cb9f5076fa30.jpg" srcset="/media/imported/1a8af448cb9f5076fa30.jpg 300w, /media/imported/374b155f99dfde6d429a.jpg 768w, /media/imported/25ea38d34ba90c0fe2e1.jpg 1024w" width="300"/></a></p>
+<p>So, what was the mechanism actually doing, and is it essential? After some headscratching at <a href="/">Hal9k</a> the conclusion was that it was essentially a mechanical PWM, with something like this diagram<br/>
+<a href="/media/imported/dc4b31633da2b3991f53.png"><img alt="" class="alignnone size-medium wp-image-214" height="143" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/53803ab05f05b28e845e.png" srcset="/media/imported/53803ab05f05b28e845e.png 300w, /media/imported/fff45900d6f6ecc81589.png 768w, /media/imported/9f5cf67dc6a04121e739.png 1024w, /media/imported/dc4b31633da2b3991f53.png 1178w" width="300"/></a><br/>
+When the switch is touching the terminal current is flowing from the battery (B) to the instruments (I), but also to ground (E) through the resistor wrapped around the switch arm, causing the metal in the switch to heat up and lift. This breaks the connection, whereafter the switch cools down, and at some point makes contact again. Beautifully simple mechanism! Bending the arm back into position essentially fixed the device, and gave this waveform<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2017/05/DSC_0397.jpg"><img alt="" class="alignnone size-medium wp-image-215" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/1ff5df2680b80ed47679.jpg" srcset="/media/imported/1ff5df2680b80ed47679.jpg 300w, /media/imported/5a509b395fd884750a35.jpg 768w, /media/imported/d5bed322d39847a7355e.jpg 1024w" width="300"/></a></p>
+<p>I have seen the function described online as “pulsating DC”, which is actually quite accurate. So, I re-assembled the stabilizer with some sealant, inserted in the instrument cluster of the tractor, and it has worked perfectly ever since.<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2017/05/DSC_0404.jpg"><img alt="" class="alignnone size-medium wp-image-216" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/42fda6d28e1791ff599e.jpg" srcset="/media/imported/42fda6d28e1791ff599e.jpg 300w, /media/imported/661a36e670d3dc5492cd.jpg 768w, /media/imported/519cec0cafb295da6a4b.jpg 1024w" width="300"/></a></p>
+<p>The only question is why it is done this way, if just giving a constant DC voltage from the battery also seems to work? I haven’t looked into it further, but my best guess is that the instruments are using coils to move the dials slowly, and that the PWM will heat up the coils less. In conclusion: If your voltage “stabilizer” is broken, you can probably do without it, or quite easily repair it.</p>
+<p>For reference, here are the resistance readings between B-E, and I-E:<br/>
+<a href="/media/imported/60ebe4351bd354e86e41.jpg"><img alt="" class="alignnone size-medium wp-image-217" height="300" loading="lazy" sizes="(max-width: 169px) 100vw, 169px" src="/media/imported/e806b0a32dc07c76938d.jpg" srcset="/media/imported/e806b0a32dc07c76938d.jpg 169w, /media/imported/60ebe4351bd354e86e41.jpg 529w" width="169"/></a> <a href="/media/imported/ad9048e3eff034909d9a.jpg"><img alt="" class="alignnone size-medium wp-image-218" height="300" loading="lazy" sizes="(max-width: 169px) 100vw, 169px" src="/media/imported/44b6c0fc9e5d065f9365.jpg" srcset="/media/imported/44b6c0fc9e5d065f9365.jpg 169w, /media/imported/ad9048e3eff034909d9a.jpg 529w" width="169"/></a></p>
+

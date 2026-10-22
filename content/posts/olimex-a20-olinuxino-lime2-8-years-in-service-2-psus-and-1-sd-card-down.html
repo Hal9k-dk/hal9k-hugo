@@ -1,0 +1,74 @@
+{
+  "title": "Olimex A20-OLinuXino-LIME2 – 8 years in service, 2 PSUs and 1 SD-card down",
+  "date": "2022-10-04T19:38:16+02:00",
+  "lastmod": "2022-10-04T19:38:16+02:00",
+  "url": "/olimex-a20-olinuxino-lime2-8-years-in-service-2-psus-and-1-sd-card-down/",
+  "type": "posts",
+  "wordpress_id": 2189,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets",
+    "Sysadmin'ing"
+  ],
+  "image": "/wp-content/uploads/2013/05/2013-05-23-23.19.34.jpg",
+  "description": "4 years ago I posted a 4 year review of the Olimex LIME2. It seems that the lifetime of power supplies is approximately 4 years as now another power supply died, and this time also the SD-card was expiring. The LIME2 lives on however! It was a bit hard to notice, because the battery pack […]"
+}
+
+<p><a data-id="238" data-type="post" href="https://blog.smartere.dk/2018/09/olimex-a20-olinuxino-lime2-a-review-after-4-years-in-service/">4 years ago I posted a 4 year review of the Olimex LIME2</a>. It seems that the lifetime of power supplies is  approximately 4 years as now another power supply died, and this time also the SD-card was expiring. The LIME2 lives on however!</p>
+<p>It was a bit hard to notice, because the battery pack of the LIME2 kept it running pretty well even with the poor power supply. So, better monitoring of the battery pack is also on the todo list.</p>
+<h2>Recovering the bad SD-card</h2>
+<p>Recovering the SD-card was relatively easy with minimal dataloss, when out of the LIME2:</p>
+<pre class="wp-block-code"><code>$ sudo ddrescue /dev/mmcblk0 backup.img
+# Put in a new SD-card
+$ sudo dd if=backup.img of=/dev/mmcblk0 bs=16M</code></pre>
+<p>I have done this a couple of times with other SD-cards from Raspberry PIs, and though there is the potential for dataloss it is usually minimal. This time a few blocks were lost.</p>
+<h2>Upgrading Debian from Stretch to Bullseye</h2>
+<p>I took the opportunity to upgrade the Debian install while the system was offline anyway. Upgrading was generally painless, following the usual Debian method. I went through the Buster release just to be sure:</p>
+<pre class="wp-block-code"><code>$ vim /etc/apt/sources.list
+# replace all "stretch" with "buster" :%s/stretch/buster
+$ apt update &amp;&amp; apt upgrade &amp;&amp; apt full-upgrade
+$ reboot
+
+$ vim /etc/apt/sources.list
+# replace all "buster" with "bullseye" :%s/buster/bullseye
+$ apt update &amp;&amp; apt upgrade &amp;&amp; apt full-upgrade
+$ reboot</code></pre>
+<p>The only tricky part is booting the new kernel. Since that always fails for me on the first try, I always hookup the serial console. For future reference, this is how to hookup the serial console:</p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-455" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/8f205df50d01e06fc927.jpg" srcset="/media/imported/8f205df50d01e06fc927.jpg 1024w, /media/imported/65aba804a5bc6975df10.jpg 300w, /media/imported/57d3024467e21251b8a1.jpg 768w, /media/imported/50b7713253310afa85c1.jpg 1258w" width="1024"/><figcaption>Pinout from left as labelled on the LIME2: TX, RX, GND</figcaption></figure>
+<p>Now, of course the boot failed. I tried getting the <code>flash-kernel</code> package to work for my setup, but for historical reasons I have a separate boot partition. In the end I derived a simple bootscript from that package, that boots from p1 but loads the kernel, fdt and initrd from p2:</p>
+<pre class="wp-block-code"><code>setenv bootargs  ${bootargs} console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait panic=10
+
+#setenv fk_kvers '4.19.0-21-armmp-lpae'
+setenv fk_kvers '5.10.0-18-armmp-lpae'
+setenv fdtpath dtb-${fk_kvers}
+
+load mmc 0:2 ${kernel_addr_r} /boot/vmlinuz-${fk_kvers}
+load mmc 0:2 ${fdt_addr_r} /boot/${fdtpath}
+load mmc 0:2 ${ramdisk_addr_r} /boot/initrd.img-${fk_kvers}
+bootz ${kernel_addr_r} ${ramdisk_addr_r}:${filesize} ${fdt_addr_r}</code></pre>
+<p>The script can be manually input over the serial terminal, and thereby tested out.</p>
+<p>The only downside is it needs to be manually updated after each kernel upgrade. To activate the uboot bootscript:</p>
+<pre class="wp-block-code"><code>$ mount /dev/mmcblk0p1 /mnt/
+$ cd /mnt
+# ensure boot.cmd is as above
+$ mkimage -C none -A arm -T script -d boot.cmd boot.scr</code></pre>
+<h2>Monitoring the LIME2 battery pack</h2>
+<p>After upgrading to a recent 5.X mainline Linux kernel the battery pack is exposed in the sysfs filesystem:</p>
+<pre class="wp-block-code"><code>$ cat /sys/class/power_supply/axp20x-battery/voltage_now 
+4070000 # 4.07 V
+$ cat /sys/class/power_supply/axp20x-ac/voltage_now 
+4933000 # 4.93 V</code></pre>
+<p>I setup a couple of alerting rules for these in my home monitoring setup, so hopefully the next time the LIME2 defeats a power supply I’ll get notified.</p>
+<h2>Conclusion</h2>
+<p>I can still warmly recommend the LIME2. It is still available, and even a bit cheaper nowadays at 40 EUR + VAT, and still a little workhorse that just keeps on going.</p>
+

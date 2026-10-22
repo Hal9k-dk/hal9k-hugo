@@ -1,0 +1,4 @@
+---
+title: Sponsorer
+url: /sponsorer/
+---

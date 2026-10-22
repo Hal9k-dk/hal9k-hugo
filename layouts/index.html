@@ -1,0 +1,16 @@
+{{ define "main" }}
+<section class="hero"><div><p class="eyebrow">ET STED FOR NYSGERRIGE MENNESKER</p><h1>Byg noget.<br>Lær noget.<br><span>Gør det sammen.</span></h1><p class="intro">Hal9k er Aalborgs hackerspace. Vi mødes om teknik, elektronik, mekanik og software — og alt det, vi endnu ikke ved, hvordan man laver.</p><div class="actions"><a class="button" href="/find-os/">Kig forbi en torsdag →</a><a href="/hal9k/">Hvad er Hal9k?</a></div></div><aside class="hero-panel"><span class="terminal-label">hal9k@aalborg:~$</span><pre><code>&gt; open_space
+
+  ELEKTRONIK
+  SOFTWARE
+  MEKANIK
+  GODE IDÉER
+
+&gt; alle er velkomne<span class="cursor">_</span></code></pre><p>Torsdag fra kl. <strong>19.00</strong><br>Sofiendalsvej 80 · Aalborg SV</p></aside></section>
+<section class="article-section"><div class="section-heading"><div><p class="eyebrow">FRA VÆRKSTEDET</p><h2>Projekter &amp; fortællinger</h2></div><a href="/artikler/">Alle artikler →</a></div>
+{{ $pages := where site.RegularPages "Type" "posts" }}
+{{ $paginator := .Paginate $pages.ByDate.Reverse }}
+<div class="cards">{{ range $paginator.Pages }}{{ partial "card.html" . }}{{ end }}</div>
+{{ partial "pagination.html" . }}
+</section>
+{{ end }}

@@ -1,0 +1,192 @@
+{
+  "title": "Quick and dirty Lithium battery-powered Wemos D1 Mini",
+  "date": "2022-12-15T19:32:33+02:00",
+  "lastmod": "2022-12-16T18:59:18+02:00",
+  "url": "/quick-and-dirty-lithium-battery-powered-wemos-d1-mini/",
+  "type": "posts",
+  "wordpress_id": 2208,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [],
+  "image": "/wp-content/uploads/2022/12/wemosd1-battery-1-1024x681-1.png",
+  "description": "The Wemos D1 Mini is an ESP8266 based prototyping board with WiFi connectivity and countless applications. It becomes even more useful in battery-powered applications, where with the proper setup, it can run low-powered for months at a time — or only hours if done incorrectly. This is the quick and dirty guide to running a […]"
+}
+
+<p></p>
+<p>The <a href="https://www.wemos.cc/en/latest/d1/d1_mini.html">Wemos D1 Mini</a> is an <a href="https://en.wikipedia.org/wiki/ESP8266">ESP8266</a> based prototyping board with WiFi connectivity and countless applications. It becomes even more useful in battery-powered applications, where with the proper setup, it can run low-powered for months at a time — or only hours if done incorrectly.</p>
+<p></p>
+<p></p>
+<p>This is the quick and dirty guide to running a Wemos D1 Mini powered by Lithium-Ion batteries: We will be blatantly ignoring several design specifications, so double check everything before using in a critical project. Several things will vary, and since there is plenty of clones of the board some boards will work better than others.</p>
+<p></p>
+<p></p>
+<p><strong>Warning:</strong> Lithium-Ion batteries always command healthy respect, due to the energy they store! Do not use bad cells, and do not leave batteries unattended in places where a fire can develop, especially while charging. That being said, the setup given here should be as safe as most other Lithium-Ion battery projects.</p>
+<p></p>
+<p></p>
+<h2>Why run off a battery?</h2>
+<p></p>
+<p></p>
+<p>You chose a Wemos D1 because you want to do some WiFi connectivity. This narrows down the useful modes from the <a href="https://github.com/esp8266/Arduino/tree/master/libraries/esp8266/examples/LowPowerDemo">overwhelming large table of possibilities</a>. The approach will be slightly different depending on <em>why</em> you want to run off a battery. There are 3 main usecases:</p>
+<p></p>
+<p></p>
+<ul>
+<li>Periodically wake up on a timer, do some work, connect to WiFi, and go back to sleep. Here we can utilize the <em>deep sleep </em>mode of the ESP8266, and get lifetimes in months.</li>
+<p></p>
+<p></p>
+<li>Wake up based on an external pin trigger, do some work, connect to WiFi, and go back to sleep. Here we can also utilize <em>deep sleep</em>, and get lifetimes in weeks/months.</li>
+<p></p>
+<p></p>
+<li>React with low latency to an external pin, do some work, and go to sleep while still connected to WiFi. Here we can utilize <em>light sleep</em>, but only get lifetimes in hours/days.</li>
+<p></p></ul>
+<p></p>
+<p></p>
+<h2>Hardware setup</h2>
+<p></p>
+<p></p>
+<p>The hardware needed is:</p>
+<p></p>
+<p></p>
+<ul>
+<li>Wemos D1 Mini</li>
+<p></p>
+<p></p>
+<li>TP4056 module <strong>with “discharge protection”</strong>, most modules with more than one chip has this, but be careful!</li>
+<p></p>
+<p></p>
+<li>Lithium-Ion battery, e.g. a 18650 cell, and probably a holder for the battery</li>
+<p></p></ul>
+<p></p>
+<p></p>
+<p>What you <strong>don’t want</strong> is anything resembling a <strong>power bank or battery shield with a regulated output </strong>(5V or 3V). These are practically useless, simply a more expensive battery holder! Two reasons: poorly built (I have several where standby is prevented by pulling 100 mA through a resistor!), and you don’t want a switching mode power supply. The keyword here is “quiescent current”: an SMPS can easily consume 5-10 mA continuously, which could very likely be the majority of the current draw.</p>
+<p></p>
+<p></p>
+<figure class="wp-block-image"><img alt="" class="wp-image-477" loading="lazy" src="/media/imported/80eb0efeb62d333cd351.png"/><figcaption class="wp-element-caption">Wiring diagram.</figcaption></figure>
+<p></p>
+<p></p>
+<h2>Waking on a timer – deep sleep</h2>
+<p></p>
+<p></p>
+<p><a data-id="https://blog.smartere.dk/wp-content/uploads/2022/11/esp8266-lowpower-deepsleep-timer.txt" data-type="URL" href="https://blog.smartere.dk/wp-content/uploads/2022/11/esp8266-lowpower-deepsleep-timer.txt">Full code example for deep sleeping on a timer.</a></p>
+<p></p>
+<p></p>
+<p>To start deep sleep for a specified period of time:</p>
+<p></p>
+<p></p>
+<pre class="wp-block-code"><code>//Sleep for some time; when waking everything will be reset and setup() will run again
+ESP.deepSleep(30 * MICROSECONDS_PER_SEC);</code></pre>
+<p></p>
+<p></p>
+<p>Note that you <a href="https://github.com/esp8266/Arduino/tree/master/libraries/esp8266/examples/LowPowerDemo#test-10---deep-sleep-instant-wake-with-rf_disabled">can’t safely sleep for more than approximately 3 hours</a>. Power usage is approx 0.3–0.4mA when deep sleeping.</p>
+<p></p>
+<p></p>
+<p>Keep in mind that after waking from the timer the chip will be reset, meaning no state is available, and WiFi will have to reconnect. Reconnecting to WiFi can be anything from 3–10 seconds or even longer, meaning that will be a delay before the program can resume.</p>
+<p></p>
+<p></p>
+<h2>Waking on an pin trigger (reset)</h2>
+<p></p>
+<p></p>
+<p><a href="https://blog.smartere.dk/wp-content/uploads/2022/11/esp8266-lowpower-deepsleep-pin.txt">Full code example for deep sleeping waiting for a pin trigger.</a></p>
+<p></p>
+<p></p>
+<p>The code is exactly the same as waking on a timer, with one exception:</p>
+<p></p>
+<p></p>
+<pre class="wp-block-code"><code>//Sleep until RESET pin is triggered
+ESP.deepSleep(0);</code></pre>
+<p></p>
+<p></p>
+<p>The chip will be effectively Cinderella’ed, sleeping until a RESET is triggered. Same caveats apply: waking up the program is restarted, and reconnecting to WiFi will be a delay.</p>
+<p></p>
+<p></p>
+<h2>Stay connected – low latency</h2>
+<p></p>
+<p></p>
+<p><a href="https://blog.smartere.dk/wp-content/uploads/2022/11/esp8266-lowpower-lightsleep.txt">Full code example for light sleeping connected to WiFi waiting for a pin trigger.</a> Note that the button should be connected to D3 for this example, not RST.</p>
+<p></p>
+<p></p>
+<p>The key parts are:</p>
+<p></p>
+<p></p>
+<pre class="wp-block-code"><code>void setup() {
+  ...
+  WiFi.setSleepMode(WIFI_LIGHT_SLEEP, 3);  // Automatic Light Sleep
+}
+
+void loop() {
+  ...
+  delay(350); // Any value between 100--500 will work, higher value more power savings
+    // but also slower wakeup!
+}</code></pre>
+<p></p>
+<p></p>
+<p>Simply delaying will bring power savings — simple and easy!</p>
+<p></p>
+<p></p>
+<p>When awake power consumption is around 75mA. Average power consumption when light sleeping with delay(200) is around 45 mA, with delay(350) and larger is around 30–40mA.</p>
+<p></p>
+<p></p>
+<h2>Measuring battery depletion</h2>
+<p></p>
+<p></p>
+<p>The ESP can measure it’s internal VCC supply voltage, and because the battery will start dropping below the rated 3.3V before it is depleted, this allows to get an warning when the battery starts to deplete.</p>
+<p></p>
+<p></p>
+<pre class="wp-block-code"><code>ADC_MODE(ADC_VCC);
+
+void loop() {
+  if (ESP.getVcc() &lt; 2800) {
+    //Do something to warn of low battery
+  }
+}</code></pre>
+<p></p>
+<p></p>
+<p>In my experience the Vcc reading will drop below 2800 when the battery starts to be depleted.</p>
+<p></p>
+<p></p>
+<figure class="wp-block-image"><img alt="" class="wp-image-475" loading="lazy" src="/media/imported/fef6f4db92daf1f8f21e.png"/><figcaption class="wp-element-caption">ADC readings vs. battery voltage</figcaption></figure>
+<p></p>
+<p></p>
+<p>Note that measuring the VCC while connected with USB is not possible, as the USB connection will pull up the battery and the 5V rail to 5V!</p>
+<p></p>
+<p></p>
+<h2>Calculating battery life</h2>
+<p></p>
+<p></p>
+<p>Here is a quick calculator for how long your Wemos D1 Mini can stay powered</p>
+<p></p>
+<p></p>
+<div class="calculator">
+<label for="numbatts">Number of batteries (assuming 2000 mAh capacity):</label><br/>
+<input id="numbatts" max="10" min="1" type="range" value="1"/>
+<div id="batteryimgs">
+<img alt="" height="100px" loading="lazy" src="/media/imported/195a330b480400c2ab37.png"/>
+</div>
+<p> <label for="capacity">Capacity (mAh):</label><br/>
+<input id="capacity" value="2000"/></p>
+<h3>Deep sleep</h3>
+<p> <label for="deepinterval">Waking up every (minutes):</label><br/>
+<input id="deepinterval" value="15"/><br/>
+  (conservatively assumes base load 1mA, 10 secs burst of 100mA for every wakeup),<br/>
+  resulting in <br/>
+<label for="deepconsumption">Average Consumption (mA):</label><br/>
+<input id="deepconsumption" value="5.0"/><br/>
+<span id="deeplifetime">-</span></p>
+<h3>Light sleep</h3>
+<p> <label for="lightconsumption">Average Consumption (mA):</label><br/>
+<input id="lightconsumption" value="35.0"/><br/>
+<span id="lightlifetime">-</span></p>
+</div>
+<p><br/>
+</p>
+<p></p>
+<p>Of course the consumption can be brought even lower: some chips are unused but partly connected and will have some leakage (LEDs, USB chip on the Wemos). Making it even leaner is outside the scope of quick and dirty.</p>
+<p></p>
+

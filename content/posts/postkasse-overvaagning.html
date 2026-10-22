@@ -1,0 +1,67 @@
+{
+  "title": "Postkasse overvågning",
+  "date": "2015-10-03T14:47:39+02:00",
+  "lastmod": "2015-10-03T14:47:39+02:00",
+  "url": "/postkasse-overvaagning/",
+  "type": "posts",
+  "wordpress_id": 1246,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Anders Vestergaard"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter",
+    "HAL9k"
+  ],
+  "tags": [
+    "Arduino",
+    "PCB",
+    "esp8266",
+    "esp12",
+    "esp-12",
+    "esp12e",
+    "arduino ide",
+    "18650",
+    "battery",
+    "postkasse",
+    "mailbox",
+    "andersv209"
+  ],
+  "image": "/wp-content/uploads/2015/10/esp-postkasse-printtop.jpg"
+}
+
+<p>I dagens danmark hvor stort set alt hvad vi modtager af post foregår via digital post (E-boks) er det ikke så tit der kommer post i postkassen (med mindre man får mange små Kina pakker ;) ) så for at undgå at hele tiden når jeg tjekker postkassen om der er noget eller ikke og så finder den tom. Bestemte jeg mig for at lave så jeg får en E-mail når der er nogen der åbner lågen til postkassen.</p>
+<p>Så var spørgsmålet hvordan det skulle laves, det skulle være trådløst(WiFi), være fri for transformer/dc adapter da jeg ikke ville til at trække en ledning ud til postkassen!! Så derfor blev valget af microprocesser en ESP8266 ESP-12, da den allerede var klar til WiFi og skal bruge en spænding på ca 3.3 volt kan dog fint fungere på 4 volt, hvilket så også løste problemet med strøm der til, da jeg havde et par stykker af 18650 batterier til at ligge fra en gammel bærbar's batteri.</p>
+<p>Efter lidt oplæsning på ESP8266 funktioner på Github (<a href="https://github.com/esp8266/Arduino" target="_blank">Arduino core for ESP8266 WiFi chip</a>), fandt jeg frem til funktionen ESP.deepSleep(microseconds, mode) hvor man kan putte EPS8266 i sleep mode indtil at GPIO16 er forbundet til RESET, denne funktion er smart da der så bruges så lidt strøm som over hoved muligt når den ikke sender data. I samme omgang fandt jeg ud af at man kan bruge den ADC(analog in) ben til at måle spændingen den får. Men for at det ville fungere skal ESP8266 omkonfigurere dens ADC hvilket gøres ved at putte "ADC_MODE(ADC_VCC);" øverst i koden. Så kan funktionen ESP.getVcc() bruges til at få spændingen i milivolt.</p>
+<p>ESP8266'en blev placeret på et fumlebræt og forbundet til en FTDI så den kunne programmeres, og med en knap til at putte den i flashmode. Så skulle softwaren laves så den kunne sende en mail, så derfor tog jeg udgangs i en Arduino Ethernet sketch der sender en mail via smtp(non-SSL). Grundet at det kun virker med non-SSL smtp server kunne jeg ikke bruge min Hotmail til at sende mailen med da den kræver SSL eller TLS, men så faldt jeg over man med en Gmail kan sende en mail til sig selv eller anden Gmail ved at bruge "aspmx.l.google.com" som server med port 25 (<a href="https://support.google.com/a/answer/176600?hl=en" target="_blank">link til kilde</a>). De 2 før nævnte funktioner blev ind opereret i sketchen som var blevet ombygget til ESP8266, Så hver gang ESP8266 starter op sender den en mail til min gmail, og går der efter i sleep mode til at GPIO16 bliver sat til RESET.</p>
+<p>Mailen der kommer ser sådant ud.</p>
+<figure class="caption"><a href="/wp-content/uploads/2015/10/esp-postkasse-mail1.png" rel="attachment wp-att-1250"><img alt="Mailen der modtages." class="wp-image-1250 size-large" height="448" loading="lazy" src="/wp-content/uploads/2015/10/esp-postkasse-mail1-1024x820.png" width="560"/></a> Mailen der modtages.</figure>
+<p>Efter at jeg havde testet at alt fungerede som det skulle, ville jeg til at lave et print som kunne holde alle komponenter så det blev pænt og overskueligt, men for at kunne lave det måtte jeg først lave et nyt eaglecad library da jeg ikke kunne finde en library for 3 af de komponenter jeg ønskede at bruge, ESP8266 ESP-12 monteret på breakout board, Dual 18650 batteri holder og en 18650 batteri charge modul.</p>
+<p>Nu kunne der så laves et diagram over hvordan det hele skulle forbindes</p>
+<p><a href="/wp-content/uploads/2015/10/esp-postkasse_schematic.png" rel="attachment wp-att-1251"><img alt="esp-postkasse_schematic" class="alignnone wp-image-1251 size-large" height="350" loading="lazy" src="/wp-content/uploads/2015/10/esp-postkasse_schematic-1024x640.png" width="560"/></a></p>
+<p>Ud fra dette diagram blev der lavet en board fil på 90x80 mm hvor alt blev presset ind på</p>
+<p><a href="/wp-content/uploads/2015/10/esp-postkasse_board.png" rel="attachment wp-att-1252"><img alt="esp-postkasse_board" class="alignnone wp-image-1252 size-full" height="754" loading="lazy" src="/wp-content/uploads/2015/10/esp-postkasse_board.png" width="726"/></a></p>
+<p>Da board filen var blevet færdig skulle der jo fremstilles et PCB, hvor jeg lavede en gcode fil med "pcb-gcode" et ulp script for at kunne fræse printet på vores Bundgaard cnc fræser. Det blev til 3 gcode filer, en med til fræsning med v-bit til alle banerne, en med alle huller og en til at skære PCB'en fri af en større plade.</p>
+<p>For at få en pænere PCB valgte jeg at fjerne alt overskydende kobber med en hobbykniv ved at trække det af.</p>
+<figure class="caption"><a href="/wp-content/uploads/2015/10/esp-postkasse-printbund.jpg" rel="attachment wp-att-1249"><img alt="PCB efter overskyende kobber fjernelse og lodning. " class="wp-image-1249 size-large" height="420" loading="lazy" src="/wp-content/uploads/2015/10/esp-postkasse-printbund-1024x768.jpg" width="560"/></a> PCB efter overskyende kobber fjernelse og lodning.</figure>
+<p>Nu kunne alle komponenterne så blive loddet på PCB'en. Samt microswitch (NC) sat på en 2 ledet ledning med dupon stik.</p>
+<p><a href="/wp-content/uploads/2015/10/esp-postkasse-printtop.jpg" rel="attachment wp-att-1248"><img alt="esp-postkasse-printtop" class="alignnone wp-image-1248 size-large" height="420" loading="lazy" src="/wp-content/uploads/2015/10/esp-postkasse-printtop-1024x768.jpg" width="560"/></a></p>
+<p>Komplet komponent liste:</p>
+<ul>
+<li>ESP8266 ESP-12 på breakout board</li>
+<li>Dual 186500 batteri holder</li>
+<li>2 18650 genbrugsbatterier</li>
+<li>18650 charge controller modul</li>
+<li>en on/off kontakt</li>
+<li>2 trykknapper (til reset og flash mode)</li>
+<li>14 (6+2+6) male pin header</li>
+<li>16 (8+8) female pin header</li>
+<li>PCB power jack</li>
+</ul>
+<p>Klar til montering i postkassen. Det eneste der mangler nu er en 3D-printet boks der skal beskytte PCB'en og dens komponenter mod fugt og noget der kan falde ned og kortslutte noget!</p>
+<p>Så nu er det slut med at kigge forgæves i postkassen!</p>
+<p>Hvis du vil have eagle filer og koden til esp8266 kan de hentes <a href="/wp-content/uploads/2015/10/esp_postkasse.zip">her</a>.</p>
+

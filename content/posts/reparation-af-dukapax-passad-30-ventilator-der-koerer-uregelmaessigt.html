@@ -1,0 +1,38 @@
+{
+  "title": "Reparation af DUKA/PAX Passad 30 Ventilator der kører uregelmæssigt",
+  "date": "2017-10-17T20:44:57+02:00",
+  "lastmod": "2017-10-17T20:44:57+02:00",
+  "url": "/reparation-af-dukapax-passad-30-ventilator-der-koerer-uregelmaessigt/",
+  "type": "posts",
+  "wordpress_id": 1569,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "danish",
+    "Planets"
+  ],
+  "image": "/wp-content/uploads/2012/05/hal9k.png",
+  "description": "Vores Duka Passad 30 ventilator var begyndt at køre noget uregelmæssigt. Ventilatoren er ellers ret smart styret af fugtighed og IR-bevægelse, men vi bruger den kun fugtighedsstyret. Den var imidlertid begyndt ikke at kunne starte ordentligt: den reagerede fint på fugt, men motoren stoppede efter få sekunder, for straks derefter at starte igen. Der var […]"
+}
+
+<p><a href="/media/imported/3f26e2701f3ec21998d5.jpg"><img alt="" class="alignnone size-medium wp-image-227" height="300" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/c3f58daeef348f27da54.jpg" srcset="/media/imported/c3f58daeef348f27da54.jpg 300w, /media/imported/2c4fc3c100226f4a4394.jpg 150w, /media/imported/f0c299a59bf9a074231f.jpg 768w, /media/imported/3f26e2701f3ec21998d5.jpg 800w" width="300"/></a><a href="https://blog.smartere.dk/wp-content/uploads/2017/10/DSC_0707.jpg"><img alt="" class="alignnone wp-image-228 size-medium" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/b437deccca2cef8807f8.jpg" srcset="/media/imported/b437deccca2cef8807f8.jpg 300w, /media/imported/001232c2754637b74c08.jpg 768w, /media/imported/2ff9a5e546a3fdacf614.jpg 1024w" width="300"/></a><a href="https://blog.smartere.dk/wp-content/uploads/2017/10/DSC_0705.jpg"><img alt="" class="alignnone size-medium wp-image-229" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/00fcf34ce9b6aa0a9d97.jpg" srcset="/media/imported/00fcf34ce9b6aa0a9d97.jpg 300w, /media/imported/a2e4821aae7ae25ced9f.jpg 768w, /media/imported/ee19db078918442d68c7.jpg 1024w" width="300"/></a></p>
+<p>Vores Duka Passad 30 ventilator var begyndt at køre noget uregelmæssigt. Ventilatoren er ellers ret smart styret af fugtighed og IR-bevægelse, men vi bruger den kun fugtighedsstyret. Den var imidlertid begyndt ikke at kunne starte ordentligt: den reagerede fint på fugt, men motoren stoppede efter få sekunder, for straks derefter at starte igen.</p>
+<p>Der var jo ikke andet for end at prøve at åbne den og reparere den; en ny ventilator er relativt dyr, og den kunne jo ikke gå mere i stykker end den allerede var.<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2017/10/DSC_0712.jpg"><img alt="" class="alignnone size-medium wp-image-230" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/164932c29ad5af7538a9.jpg" srcset="/media/imported/164932c29ad5af7538a9.jpg 300w, /media/imported/eafb222825763ca8ba26.jpg 768w, /media/imported/58b4de14b31eda093ca4.jpg 1024w" width="300"/></a><br/>
+Bladene kan hives af direkte ved at hive op i dem, og tragten kan tages af ved at dreje til siden. Der gemmer sig en enkelt skrue under mærkaten på bagsiden. Inden i er et relativt simpelt printkort:<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2017/10/DSC_0714.jpg"><img alt="" class="alignnone size-medium wp-image-232" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/6c97bd68acd15b8dae82.jpg" srcset="/media/imported/6c97bd68acd15b8dae82.jpg 300w, /media/imported/b152b748bf1cea927f73.jpg 768w, /media/imported/5fceaf37b491ab2ae24c.jpg 1024w" width="300"/><br/>
+</a>Den eneste chip er desværre en micro-controller af en art, så hvis den er i stykker er der ikke rigtig noget at gøre. Jeg fik en hel del hjælp i <a href="/">Hal9k</a> til at måle på printet, og det viste sig at strømforsyningen ikke var særlig stabil; ca. når problemet opstod steg spændingen. Vi endte med at lodde en ledning på microcontrollerens GND-ben, og kunne så se at VCC-benet faktisk lå ret lavt ved ca. 3V, og at spændingen der faldt når problemet opstod. Ved at måle tilbage i kredsløbet derfra endte vi helt tilbage ved den store kondensator (0,33 uF) der er næsten først i kredsløbet.<br/>
+<a href="/media/imported/267e10a15015a99c2bd5.jpg"><img alt="" class="alignnone size-medium wp-image-233" height="300" loading="lazy" sizes="(max-width: 169px) 100vw, 169px" src="/media/imported/948a93fcdb458e27c697.jpg" srcset="/media/imported/948a93fcdb458e27c697.jpg 169w, /media/imported/267e10a15015a99c2bd5.jpg 529w" width="169"/><br/>
+</a>Det er dog ikke så nemt at måle kapacitet med kondensatoren i kredsløbet, men alligevel et forsøg værd: målingen var et godt stykke fra 0,33 uF. Med kondensatoren som hovedmistænkt blev den loddet af, og målt alene: værdien var nærmere et antal nF! Altså var kondensatoren gået i stykker. En erstatning blev fundet i en kaffemaskine fra Hal9k’s Limbo hylde, dog en 0,47 uF, men det burde virke:<br/>
+<a href="/media/imported/7a19e32205cc17ebbc6a.jpg"><img alt="" class="alignnone size-medium wp-image-234" height="300" loading="lazy" sizes="(max-width: 169px) 100vw, 169px" src="/media/imported/3422997ff05fd0a29b85.jpg" srcset="/media/imported/3422997ff05fd0a29b85.jpg 169w, /media/imported/7a19e32205cc17ebbc6a.jpg 529w" width="169"/></a></p>
+<p>Den nye kondensator blev loddet i, og problemet var nu væk! Spændingen ved micro-controlleren lå også stabilt, lige omkring 4,8V. Så var der kun tilbage at samle det hele igen, og sætte ventilatoren til, med lidt penge sparet, og en ventilator reddet fra skrotpladsen. Den eneste forskel synes at være at fugtigheds indstillingen nu skal stå lidt anderledes, men om det er pga. en lidt anden spænding eller bare er tilfældigt er jeg ikke sikker på.</p>
+

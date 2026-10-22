@@ -1,0 +1,57 @@
+{
+  "title": "Making a too cheap LED lamp safe to use",
+  "date": "2025-01-06T20:40:20+02:00",
+  "lastmod": "2025-01-06T20:40:20+02:00",
+  "url": "/making-a-too-cheap-led-lamp-safe-to-use/",
+  "type": "posts",
+  "wordpress_id": 2390,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets"
+  ],
+  "image": "/media/imported/3bfffd2b3bbe443a3251.png",
+  "description": "This is a non-rational quest to make a cheap chinese LED lamp safe to use."
+}
+
+<p>This could happen to you: A really cool LED lamp was found online, on a Danish and well-written homepage. Unfortunately, when the lamp arrives it is a cheap Chinese production, of questionable quality and safety. This is a non-rational quest to make such a cheap LED lamp safe to use.</p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-1 is-layout-flex wp-block-gallery-is-layout-flex">
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-671" data-id="671" decoding="async" height="225" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/3bfffd2b3bbe443a3251.png" srcset="/media/imported/3bfffd2b3bbe443a3251.png 300w, /media/imported/4ef8fa49e0fd0daecbe0.png 1024w, /media/imported/8f59031fd473e80a963c.png 768w, /media/imported/40429286f975a534fddb.png 1250w" width="300"/></figure>
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-672" data-id="672" decoding="async" height="225" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/00ca40bdc185ff51b7a0.png" srcset="/media/imported/00ca40bdc185ff51b7a0.png 300w, /media/imported/56b9814f0a0d87b90dca.png 1024w, /media/imported/6a1d818ece703b577093.png 768w, /media/imported/386064e85a40b64d95b9.png 1536w, /media/imported/93ddab14ea89d949070f.png 1667w" width="300"/></figure>
+</figure>
+<p>From the outset the wires are tiny. The wires are connected with wire nuts *gasp*! (Wire nuts are basically unheard of in Europe). The LED driver itself that converts the 230V AC into DC has absolutely no separation, and as we will see later, absolutely no safety features. It did have a cool feature of changing light color temperature by turning the lamp on and off a couple of times, though.</p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-2 is-layout-flex wp-block-gallery-is-layout-flex">
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-689" data-id="689" decoding="async" height="225" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/48411fe3c2c41f9356f2.png" srcset="/media/imported/48411fe3c2c41f9356f2.png 300w, /media/imported/01f99b57e7584e22c7d7.png 1024w, /media/imported/c682a327261c8e289ee1.png 768w, /media/imported/3a26bcae4b61a1cf9c79.png 1536w, /media/imported/a05295ce5c030ea14854.png 1667w" width="300"/><figcaption class="wp-element-caption">Short-circuited 300mA</figcaption></figure>
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-690" data-id="690" decoding="async" height="225" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/61f28340889ac0014606.png" srcset="/media/imported/61f28340889ac0014606.png 300w, /media/imported/4e2703b4de31792afba3.png 1024w, /media/imported/d43c0eda1d4fb453e058.png 768w, /media/imported/0bb6f25cef28abe97e94.png 1536w, /media/imported/4d425194d184974585f6.png 1667w" width="300"/><figcaption class="wp-element-caption">Unloaded 118V.</figcaption></figure>
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-691" data-id="691" decoding="async" height="300" loading="lazy" sizes="(max-width: 180px) 100vw, 180px" src="/media/imported/526adda6250638984e77.png" srcset="/media/imported/526adda6250638984e77.png 180w, /media/imported/60d01fe4cf12592e00f2.png 615w, /media/imported/35a43f1560ecd3705830.png 704w" width="180"/><figcaption class="wp-element-caption">Sparky!</figcaption></figure>
+</figure>
+<p>But happily going to 300mA when shorted, going up to 118V unloaded, and full willingness to spark away, is a deal-breaker. This abomination was not being powered on in this house! It should be possible to replace the unsafe parts with safer (and more expensive) parts.</p>
+<p>The first step was understanding the mess of wires. This took quite some pondering to figure out that all the LEDs were basically in series, and that it was wired with a “common positive”, with either the white or the black wire (or both) acting as ground depending on the wanted color temperature.</p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-3 is-layout-flex wp-block-gallery-is-layout-flex">
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-673" data-id="673" decoding="async" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/4726755234c32a657299.png" srcset="/media/imported/4726755234c32a657299.png 1024w, /media/imported/7c691ae9b8a4d2e813e0.png 300w, /media/imported/c9aea75c4cc8499dcdbe.png 768w, /media/imported/4c67f01b8327fc147325.png 1536w, /media/imported/6079a7ca677244c49d71.png 1667w" width="1024"/></figure>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-674" data-id="674" decoding="async" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/6a122a0e2d04948c76c0.png" srcset="/media/imported/6a122a0e2d04948c76c0.png 1024w, /media/imported/1bff52da8bab242e7e03.png 300w, /media/imported/a8d1eb6375e7e442ed65.png 768w, /media/imported/3223bb3ce77e5c919fcc.png 1536w, /media/imported/eef7da892b13fc517c49.png 1667w" width="1024"/></figure>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-675" data-id="675" decoding="async" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/a6a3cb36ba7e490a37f0.png" srcset="/media/imported/a6a3cb36ba7e490a37f0.png 1024w, /media/imported/985e9a23598383351414.png 300w, /media/imported/a58366eafcb7fdf892c6.png 768w, /media/imported/fbbd881cb9f1243e67c3.png 1536w, /media/imported/0d670f0bd55e81d4fa49.png 1667w" width="1024"/></figure>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-676" data-id="676" decoding="async" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/07afcd604cb58a96a8da.png" srcset="/media/imported/07afcd604cb58a96a8da.png 1024w, /media/imported/8a361585068b91b7a809.png 300w, /media/imported/d91a716d9a6eb5da95ff.png 768w, /media/imported/1b4d952e22538d4164f1.png 1536w, /media/imported/d551abbffb73b0e46691.png 1667w" width="1024"/></figure>
+</figure>
+<p>In the end the entire schematic was reverse engineered.</p>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-687" decoding="async" height="704" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/36369b050b735770bc4f.png" srcset="/media/imported/36369b050b735770bc4f.png 1024w, /media/imported/3e024950e30697edf6ed.png 300w, /media/imported/58943cec17246435e1c6.png 768w, /media/imported/65872f1cc01bf760574b.png 1536w, /media/imported/70da40e3b88230be1ff1.png 1659w" width="1024"/></figure>
+<p>That LED driver was going nowhere but the electronic garbage bin, so a replacement of decent quality had to be acquired: a constant-current LED driver (configurable from 200mA–350mA) was purchased from a reputable source. That gave the next problem: an LED driver of quality was at least double the size of the unsafe one, and did not fit in the original round enclosure. 3D-printing to the rescue, and a new bigger round enclosure was printed.</p>
+<p>Now everything should be able to fit and work! Instead of that illogical wiring of putting the LEDs in series, why not just put the two parts in parallel? Well, that won’t work. Only the path of least-resistance would light up, in this case the dome LEDs. So, back to the original wiring in series.</p>
+<p>Unfortunately, the next problem was that the new LED driver was unwilling to drive LEDs as originally wired, that seemed to require somewhere above 45V, out of spec for the new driver. More stuff had to change. Looking at the schematic, the long strip in the circle could be cut in half, and the two half put in parallel instead. This should reduce the power going to those LEDs, and thus also the light output, but should also help to decrease the required voltage. But first I had to learn again the hard way that putting LEDs in parallel they need to match quite closely: the original LED strip had 11 segments, and dividing into 6 and 5 gave lights only in the one part.</p>
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-694" decoding="async" height="938" loading="lazy" sizes="(max-width: 1250px) 100vw, 1250px" src="/media/imported/51fb701a6734f1967494.png" srcset="/media/imported/51fb701a6734f1967494.png 1250w, /media/imported/d7859b573fb96777a530.png 300w, /media/imported/10c0d8ec1d2259d5faab.png 1024w, /media/imported/93b31395aee4de7b1c81.png 768w" width="1250"/></figure>
+<p>Reducing to 5 and 5 segments worked really well!</p>
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-695" decoding="async" height="938" loading="lazy" sizes="(max-width: 1250px) 100vw, 1250px" src="/media/imported/97cd326443595d00be65.png" srcset="/media/imported/97cd326443595d00be65.png 1250w, /media/imported/582a16c477206f9e80a8.png 300w, /media/imported/09cc5c5f232f6f0ff88e.png 1024w, /media/imported/1d7a80dd2fa1df90e354.png 768w" width="1250"/></figure>
+<p>Finally, the total voltage of putting the two parts of the lamp in series was below what the new LED driver would supply.</p>
+<figure class="wp-block-image size-medium wp-lightbox-container"><img alt="" class="wp-image-696" decoding="async" height="938" loading="lazy" sizes="(max-width: 1250px) 100vw, 1250px" src="/media/imported/1a1ab16f2198715e4acd.png" srcset="/media/imported/1a1ab16f2198715e4acd.png 1250w, /media/imported/86be5f7e474d7322a4cb.png 300w, /media/imported/ec11daba8c99cdbc4f27.png 1024w, /media/imported/9fb625ba41f4509dd9fe.png 768w" width="1250"/></figure>
+<p>The only task remaining was to fit everything back into the enclosure, and add copious amounts of Kapton tape and hot glue. And finally, the spaceman could go star-fishing – safely.</p>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-688" decoding="async" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/3999c2ec8c4f5bf7cdcf.png" srcset="/media/imported/3999c2ec8c4f5bf7cdcf.png 1024w, /media/imported/550f670ed382a3f07aa3.png 300w, /media/imported/f39dee634b349865874b.png 768w, /media/imported/78bcdc159dc34750a2b1.png 1536w, /media/imported/00134c206132f703beaf.png 1667w" width="1024"/></figure>
+

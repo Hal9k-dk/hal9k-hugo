@@ -1,0 +1,8 @@
+{{ define "main" }}
+<article class="single"><header class="article-header"><a class="back" href="{{ if eq .Type "posts" }}/artikler/{{ else }}/sider/{{ end }}">← {{ if eq .Type "posts" }}Alle artikler{{ else }}Alle sider{{ end }}</a><h1>{{ .Title }}</h1>{{ if eq .Type "posts" }}<p class="byline"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "2. January 2006" }}</time>{{ with .Params.authors }} · {{ delimit . ", " }}{{ end }}</p>{{ end }}</header>
+<div class="prose">{{ .Content }}</div>
+{{ if eq .Type "posts" }}<div class="tags">{{ range .GetTerms "categories" }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}{{ range .GetTerms "tags" }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</div>{{ end }}
+{{ $id := printf "%v" .Params.wordpress_id }}{{ with index hugo.Data.comments $id }}<section class="comments"><h2>Kommentarer fra den tidligere hjemmeside</h2>{{ range . }}<article><h3>{{ .author }}</h3><small>{{ .date }}</small><p>{{ .text }}</p></article>{{ end }}</section>{{ end }}
+{{ if eq .Type "posts" }}<nav class="post-nav" aria-label="Flere artikler">{{ with .PrevInSection }}<a href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ end }}{{ with .NextInSection }}<a href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}</nav>{{ end }}
+</article>
+{{ end }}

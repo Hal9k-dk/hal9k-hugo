@@ -1,0 +1,1 @@
+{{ $p := .Paginator }}{{ if gt $p.TotalPages 1 }}<nav class="pagination" aria-label="Sidetal">{{ with $p.Prev }}<a href="{{ .URL }}">← Nyere</a>{{ end }}<span>Side {{ $p.PageNumber }} af {{ $p.TotalPages }}</span>{{ with $p.Next }}<a href="{{ .URL }}">Ældre →</a>{{ end }}</nav>{{ end }}

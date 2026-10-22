@@ -1,0 +1,107 @@
+{
+  "title": "Roomba 500-series Easy Scheduling using an Arduino",
+  "date": "2015-06-17T12:07:52+02:00",
+  "lastmod": "2015-06-17T12:07:52+02:00",
+  "url": "/roomba-500-series-easy-scheduling-using-an-arduino/",
+  "type": "posts",
+  "wordpress_id": 964,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planet Ubuntu-DK",
+    "Planets"
+  ],
+  "image": "/wp-content/uploads/2012/08/sussieRov-03.jpg",
+  "description": "I have a iRobot Roomba 500-series vacuum cleaner robot, but without any remote, or command center or anything; alas, I have to push a button everytime I want the cleaning revolution to start But no more! It turns out the Roomba can be programmed, quite easily, to schedule automatically, and all you need is: 1 […]"
+}
+
+<p><a href="http://blog.smartere.dk/wp-content/uploads/2015/06/DSC_0879.jpg"><img alt="DSC_0879" class="alignnone size-medium wp-image-117" height="169" loading="lazy" src="/media/imported/1f0e2160d3e93d3ed233.jpg" width="300"/><br/>
+</a>I have a iRobot Roomba 500-series vacuum cleaner robot, but without any remote, or command center or anything; alas, I have to push a button everytime I want the cleaning revolution to start <img alt=":-(" class="wp-smiley" loading="lazy" src="/media/imported/92443edde03e5305d49d.png" style="height: 1em; max-height: 1em;"/></p>
+<p>But no more! It turns out the Roomba can be programmed, quite easily, to schedule automatically, and all you need is:</p>
+<ul>
+<li>1 Arduino</li>
+<li>2 wires</li>
+</ul>
+<p>The Roomba actually supports a serial protocol, the <a href="http://cfpm.org/~peter/bfz/iRobot_Roomba_500_Open_Interface_Spec.pdf">iRobot Roomba 500 Open Interface Specification</a>, that allows remote control, driving, sensoring, and <em>scheduling</em>.</p>
+<h3>Finding the serial port</h3>
+<p>Remove the plastic cover. It is easiest to remove the vacuum bin, and <em>carefully</em> pry it off with a screwdriver.<br/>
+<a href="http://blog.smartere.dk/wp-content/uploads/2015/06/DSC_0882.jpg"><img alt="DSC_0882" class="alignnone size-medium wp-image-119" height="169" loading="lazy" src="/media/imported/b5ba5fa739bd19709c7f.jpg" width="300"/></a><a href="http://blog.smartere.dk/wp-content/uploads/2015/06/DSC_0884.jpg"><img alt="DSC_0884" class="alignnone size-medium wp-image-120" height="169" loading="lazy" src="/media/imported/0b912548bf74ea0c63e1.jpg" width="300"/></a></p>
+<p>There should be a 7-pin plug, on the right side. It has the following pinout:</p>
+<div class="wp-caption alignnone" id="attachment_107" style="width: 310px"><a href="http://blog.smartere.dk/wp-content/uploads/2015/06/roomba-serial-port.png"><img alt="Roomba serial pinout" class="size-medium wp-image-107" height="206" loading="lazy" src="/media/imported/134ba0c91df979a11d0f.png" width="300"/></a>
+<p class="wp-caption-text">Roomba serial pinout</p>
+</div>
+<h3>Program the Arduino</h3>
+<p>Use this sketch (download: <a href="http://blog.smartere.dk/wp-content/uploads/2015/06/roombaschedule.txt">roombaschedule.ino</a>):</p>
+<p><code><br/>
+/*<br/>
+Set a schedule on an iRobot Roomba 500 series, using just an Arduino.<br/>
+Mads Chr. Olesen, 2015.<br/>
+*/</code></p>
+<p>const byte currentDay = 3;<br/>
+// 0: Sunday, 1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday<br/>
+const byte currentHour = 2;<br/>
+const byte currentMinute = 58;</p>
+<p>// Schedule<br/>
+const byte SUNDAY = 0x01, MONDAY = 0x02, TUESDAY = 0x04, WEDNESDAY = 0x08, THURSDAY = 0x10, FRIDAY = 0x20, SATURDAY = 0x40;</p>
+<p>const byte daystorun = SUNDAY | MONDAY | WEDNESDAY | FRIDAY;<br/>
+const byte times[14] = {<br/>
+3, 0, // Sunday time<br/>
+3, 0, // Monday time<br/>
+3, 0, // Tuesday time<br/>
+3, 0, // Wednesday time<br/>
+3, 0, // Thursday time<br/>
+3, 0, // Friday time<br/>
+3, 0, // Saturday time<br/>
+};</p>
+<p>const int ledPin = 13;</p>
+<p>void setup() {<br/>
+Serial.begin(115200);<br/>
+pinMode(ledPin, OUTPUT);<br/>
+digitalWrite(ledPin, 0);</p>
+<p>Serial.write(128); //Start<br/>
+delay(1000);<br/>
+Serial.write(131); //Safe mode, turns off Roomba light<br/>
+delay(1000);<br/>
+Serial.write(128); //Start, back to passive mode<br/>
+delay(500);</p>
+<p>//Set day time<br/>
+Serial.write(168);<br/>
+Serial.write(currentDay);<br/>
+Serial.write(currentHour);<br/>
+Serial.write(currentMinute);<br/>
+delay(500);</p>
+<p>//Set schedule<br/>
+Serial.write(167);<br/>
+Serial.write(daystorun);<br/>
+for (int i = 0; i &lt; 14; i++) {<br/>
+Serial.write(times[i]);<br/>
+}<br/>
+}</p>
+<p>void loop() {<br/>
+digitalWrite(ledPin, 1);<br/>
+delay(1000);<br/>
+digitalWrite(ledPin, 0);<br/>
+delay(1000);<br/>
+}</p>
+<p>You need to modify the variables at the top: set currentDay, currentHour, currentMinute according to the present time.<br/>
+The pre-programmed schedule is to clean at 03:00 on Sunday, Monday, Wednesday and Friday. You can change this if you wish, by altering the daystorun and times variables.</p>
+<p>If you don't modify the schedule, the Roomba should start automatically after 2 minutes.</p>
+<h3>Put it all together</h3>
+<p>You should now have a partially undressed Roomba, and a programmed Arduino. Now it is time to connect them. With both unpowered, connect the following:</p>
+<ul>
+<li>Arduino GND to Roomba ground (pin 6)</li>
+<li>Arduino TX (pin 1 on e.g. Uno) to Roomba RX (pin 3)</li>
+</ul>
+<p>It should look like this:</p>
+<p><a href="http://blog.smartere.dk/wp-content/uploads/2015/06/DSC_0886.jpg"><img alt="DSC_0886" class="alignnone size-medium wp-image-121" height="169" loading="lazy" src="/media/imported/c5b73359c9667f03d3b7.jpg" width="300"/></a></p>
+<p>Now, the moment of truth. Press the "CLEAN" button on the Roomba, the light should go on. Plug in the USB for the Arduino. The Roomba light should turn off briefly, and after a few seconds the Arduino should blink it's LED. The schedule is now programmed, all done!</p>
+

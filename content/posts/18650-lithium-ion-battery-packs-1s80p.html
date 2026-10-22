@@ -1,0 +1,53 @@
+{
+  "title": "18650 Lithium-ion battery packs – 1S80P",
+  "date": "2018-09-29T21:18:01+02:00",
+  "lastmod": "2018-09-29T21:18:01+02:00",
+  "url": "/18650-lithium-ion-battery-packs-1s80p/",
+  "type": "posts",
+  "wordpress_id": 1659,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets"
+  ],
+  "image": "/wp-content/uploads/2012/09/outp0_original_back.png",
+  "description": "This is the considerations I did when building 1S80P 18650 battery packs, for a DIY powerwall. My design will go for 14 of these packs in series, for a nominal 48V system. I wanted a design that was: Very hard to short circuit, individual cell fuses, and generally as safe as possible Mechanically stable Balanced […]"
+}
+
+<p>This is the considerations I did when building 1S80P 18650 battery packs, for a DIY powerwall.</p>
+<p><a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1153.jpg"><img alt="" class="alignnone size-medium wp-image-259" height="95" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/5b8621038e086b953afe.jpg" srcset="/media/imported/5b8621038e086b953afe.jpg 300w, /media/imported/015c0971d8a2b0e1406c.jpg 768w, /media/imported/6c5b2e173e0742a3ca6c.jpg 1024w" width="300"/></a><a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1171.jpg"><img alt="" class="alignnone size-medium wp-image-260" height="254" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/e66c5059f538458756ef.jpg" srcset="/media/imported/e66c5059f538458756ef.jpg 300w, /media/imported/2e2a8d9178a688360310.jpg 768w, /media/imported/3bbfe1eb03b1f1de4f76.jpg 1024w" width="300"/></a></p>
+<p>My design will go for 14 of these packs in series, for a nominal 48V system.</p>
+<p>I wanted a design that was:</p>
+<ul>
+<li>Very hard to short circuit, individual cell fuses, and generally as safe as possible</li>
+<li>Mechanically stable</li>
+<li>Balanced as much as possible</li>
+<li>Expandable</li>
+</ul>
+<p>The design is basically 4 4×5 18650 holders for the top and bottom. The cells I used were all tested for capacity (all above 2000 mAh) and self-discharge (all above 4,1V after several weeks/months), and are all Samsung cells. When assembling the packs I tried to mix the cells as much as possible: this should mean that on average the packs will be approximately the same capacity.</p>
+<p>The packs have all the positive metal on the top, and the negative on the bottom. This means that any metal would have to touch both the top and the bottom, to short circuit the pack; this is not possible with a straight piece of metal. The connectors are going out on each side: if they went out the same side it would be possible to short-circuit them. Also, this will ensure that all the cells are discharged at the same rate: if they went out the same side the cells closest to the connectors would be loaded harder than the ones further away. This layout will not be a problem when they are put in series, they will just be alternating up-down. The busbars are shrink-wrapped on both ends, so only the connector is connected.<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1154.jpg"><img alt="" class="alignnone size-medium wp-image-261" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/e19fa57d52ee20fe3597.jpg" srcset="/media/imported/e19fa57d52ee20fe3597.jpg 300w, /media/imported/c33d84c9ad85101e0eee.jpg 768w, /media/imported/0bc6e1ba6619007552c3.jpg 1024w" width="300"/></a> <a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1158.jpg"><img alt="" class="alignnone size-medium wp-image-262" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/57b1213e1773cc8b3190.jpg" srcset="/media/imported/57b1213e1773cc8b3190.jpg 300w, /media/imported/249fc752b27eae3f0848.jpg 768w, /media/imported/f1c2bfbabec6a8daa897.jpg 1024w" width="300"/></a><br/>
+This means that the packs are impossible to short-circuit by themselves.</p>
+<p>The packs are held together by 6 zip-ties: 2 at each end, and 2 in the middle. 5mm holes are drilled in the holders. The zip-ties go through the packs and around the busbars on each side.<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1156.jpg"><img alt="" class="alignnone size-medium wp-image-263" height="93" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/e6f298a6ebe17c820c2f.jpg" srcset="/media/imported/e6f298a6ebe17c820c2f.jpg 300w, /media/imported/c2e5db155e0118b584b9.jpg 768w, /media/imported/8b2b1226bfa20c91996d.jpg 1024w" width="300"/></a></p>
+<p>The busbars are 4 wires of 2.5mm² wires, that are extracted from a <a href="https://www.harald-nyborg.dk/p5478/install-kabel-5x2-5-50m-750v">standard AC cable</a>. They are twisted together using a bench vise, and a cordless drill. They are then pre-bent using a template.<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1157.jpg"><img alt="" class="alignnone size-medium wp-image-264" height="144" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/4f3704f433c0be3464ba.jpg" srcset="/media/imported/4f3704f433c0be3464ba.jpg 300w, /media/imported/be2fd39a373d1354ee7f.jpg 768w, /media/imported/c1c034cd94f28da695d4.jpg 1024w" width="300"/></a></p>
+<p>The connectors are <a href="https://www.biltema.dk/bil---mc/elsystem/kabelkoblinger/uisolerede-rorkabelsko-10-stk-2000033982">25mm² cable lugs</a>. The two ends of the busbar go into the lug, meaning 8 wires of 2.5mm², or 20mm² in total. Depending on the exact calculations, this should be good up to 80A-160A. I intend to load the packs with <strong>at most</strong> 80A, and normally much less, so this should be fine.<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1160.jpg"><img alt="" class="alignnone size-medium wp-image-265" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/50e9244dfb86605c1525.jpg" srcset="/media/imported/50e9244dfb86605c1525.jpg 300w, /media/imported/2477c3c3c9c289305cc9.jpg 768w, /media/imported/ec76ab9295109593112c.jpg 1024w" width="300"/></a></p>
+<p>The cells are connected to the busbars by fuse-wires. I used legs from 1/8W resistors, from a batch I tested beforehand. The resistor legs blows at 5A after some time, and in a few seconds at 6A. This should be well within spec, since the fuse-wires are mainly intended to isolate cells that go short-circuit: in this case the other 79 cells will be delivering current to the one bad cell, and the fuse wire should blow very quickly. This is another reason to not build too small packs: you need enough current available that the fuses will blow quickly.</p>
+<p>The fuse wire is soldered to the cells, and soldered to the busbars. I used good lead-based solder, I tried crappier and lead-free solder but the results were poor. The positive side is soldered at about 340C, while the negative needs a bit more heat at 350C. For soldering to the busbars I go up to 380C, and move around in a circle since heat management is very much needed.</p>
+<p>One concern I have heard from several people is that the cells are losing capacity by soldering. I did a test by soldering a few cells, and leaving a few control cells unsoldered. Then I capacity tested all the cells for a few cycles to check if any capacity is lost. I was unable to find any capacity loss on the soldered or unsoldered cells, so for me that is “myth busted”.</p>
+<p>The packs are prepared for a future extension to 1s160P or similar. The holders are all oriented in the same way, and in such a way that 2 80P packs should be able to click together side by side:<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1167.jpg"><img alt="" class="alignnone size-medium wp-image-268" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/1bb6e132a2152b5dbb86.jpg" srcset="/media/imported/1bb6e132a2152b5dbb86.jpg 300w, /media/imported/6743d009de029138a208.jpg 768w, /media/imported/3ebc19b6eaafe873ca01.jpg 1024w" width="300"/></a> <a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1165.jpg"><img alt="" class="alignnone size-medium wp-image-269" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/83f013c0959a8899608a.jpg" srcset="/media/imported/83f013c0959a8899608a.jpg 300w, /media/imported/a094a774a53b50c2238c.jpg 768w, /media/imported/bbe69812d68466614f63.jpg 1024w" width="300"/></a> <a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1164.jpg"><img alt="" class="alignnone size-medium wp-image-270" height="169" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/dbc6b747b7c4a37f2b73.jpg" srcset="/media/imported/dbc6b747b7c4a37f2b73.jpg 300w, /media/imported/7658e3e0cd061b91013c.jpg 768w, /media/imported/71541ee754ae46a88544.jpg 1024w" width="300"/></a></p>
+<p>Each pack (or set of 2 packs if expanded) will get one Batrium LongMon. It should be fully capable of balancing such a system.</p>
+<p>If the hivemind has any ideas or things I missed, I’m very interested in hearing about it!</p>
+

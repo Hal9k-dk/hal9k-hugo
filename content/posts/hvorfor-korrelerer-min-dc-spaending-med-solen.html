@@ -1,0 +1,45 @@
+{
+  "title": "Hvorfor korrelerer min DC-spænding med solen?",
+  "date": "2016-02-19T15:32:03+02:00",
+  "lastmod": "2016-02-19T15:32:03+02:00",
+  "url": "/hvorfor-korrelerer-min-dc-spaending-med-solen/",
+  "type": "posts",
+  "wordpress_id": 1356,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "danish"
+  ],
+  "image": "/media/imported/8e01cdd242a27857a6f9.png",
+  "description": "I mit home-monitoring setup har jeg en AC-DC strømforsyning der laver DC-strøm og lader UPS-batterierne. Denne spænding overvåger jeg, som beskrevet i sidste blogindlæg. Grafen set for en typisk dag ser ud som ovenover. Der er en tydelig stigning i spændingen om morgenen og et tydeligt fald sidst på eftermiddagen. Det korrelerer forbavsende godt med hvornår […]"
+}
+
+<p><a href="http://blog.smartere.dk/wp-content/uploads/2016/02/pic1.png" rel="attachment wp-att-168"><img alt="DC-spænding over 24 timer" class="wp-image-168" height="306" loading="lazy" sizes="(max-width: 577px) 100vw, 577px" src="/media/imported/8e01cdd242a27857a6f9.png" srcset="/media/imported/93a34a55fee08b4e0c65.png 300w, /media/imported/e2402496ff2f30500297.png 768w, /media/imported/b1364c58909fd98f347c.png 1024w, /media/imported/3d3d695c43d33c352f65.png 1548w" width="577"/></a></p>
+<p>I mit home-monitoring setup har jeg en <a href="http://svane-el.dk/stroemforsyninger-7/24v-stroemforsyninger-127/stroemforsyning-276vdc-40a-838.html">AC-DC strømforsyning</a> der laver DC-strøm og lader UPS-batterierne. <a href="http://blog.smartere.dk/2015/08/measuring-high-dc-supply-voltage-with-an-arduino/">Denne spænding overvåger jeg, som beskrevet i sidste blogindlæg</a>. Grafen set for en typisk dag ser ud som ovenover. Der er en tydelig stigning i spændingen om morgenen og et tydeligt fald sidst på eftermiddagen. Det korrelerer forbavsende godt med hvornår solen står og og går ned. Her er data for 3 forskellige dage, overlagt med <a href="http://www.torbenhermansen.dk/almanak/almanak.php">sol op-/ned-tidspunkt</a>:</p>
+<div class="wp-caption alignleft" id="attachment_172" style="width: 310px"><a href="http://blog.smartere.dk/wp-content/uploads/2016/02/6sept.png" rel="attachment wp-att-172"><img alt="6sept" class="wp-image-172 size-medium" height="158" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/6cdf61423e19d64a3e5a.png" srcset="/media/imported/04c3d3eb37dd0c813654.png 300w, /media/imported/38232707b68aaea9ff09.png 768w, /media/imported/7e786e2412b482a653fd.png 1024w, /media/imported/1e46da0397550d3223f5.png 1074w" width="300"/></a>
+<p class="wp-caption-text">6. september – ufiltreret</p>
+</div>
+<div class="wp-caption alignleft" id="attachment_173" style="width: 310px"><a href="http://blog.smartere.dk/wp-content/uploads/2016/02/26-10-2015.png" rel="attachment wp-att-173"><img alt="26-10-2015" class="wp-image-173 size-medium" height="168" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/7169fd2d590430aedccf.png" srcset="/media/imported/c9b347d7ba121b088ffe.png 300w, /media/imported/8387c283802836d86744.png 768w, /media/imported/a94b3d2484cabbb05c07.png 874w" width="300"/></a>
+<p class="wp-caption-text">26. oktober – filtreret</p>
+</div>
+<div class="wp-caption alignnone" id="attachment_174" style="width: 310px"><a href="http://blog.smartere.dk/wp-content/uploads/2016/02/21-12-2015.png" rel="attachment wp-att-174"><img alt="21-12-2015" class="wp-image-174 size-medium" height="157" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/4d56e1b2ba27d75106c3.png" srcset="/media/imported/be0c63831af6dc52dc5a.png 300w, /media/imported/703b915c625ca6732e4b.png 768w, /media/imported/88114ebef1bb73c5e7f8.png 923w" width="300"/></a>
+<p class="wp-caption-text">21. december – filtreret</p>
+</div>
+<p>Der er ikke noget forbundet til DC-forsyningen der trækker væsentlig forskellig strøm efter belastning (det der er forbundet er switche, router og Arduinoer), og intet der tænder/slukker efter tidspunktet. Temperaturen varierer ikke væsentligt i rack-skabet, og korrelerer ikke med spændingen:</p>
+<div class="wp-caption alignleft" id="attachment_179" style="width: 310px"><a href="http://blog.smartere.dk/wp-content/uploads/2016/02/temp-volt-oct-1.png" rel="attachment wp-att-179"><img alt="temp-volt-oct" class="wp-image-179 size-medium" height="158" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/c2081f75bcb1900d854c.png" srcset="/media/imported/535789fb5886b28eea03.png 300w, /media/imported/77723cf650c8932e6f89.png 586w" width="300"/></a>
+<p class="wp-caption-text">Temperatur og spænding, hele oktober. Spænding (grøn) på højre akse.</p>
+</div>
+<div class="wp-caption alignnone" id="attachment_180" style="width: 310px"><a href="http://blog.smartere.dk/wp-content/uploads/2016/02/temp-volt-26oct.png" rel="attachment wp-att-180"><img alt="temp-volt-26oct" class="wp-image-180 size-medium" height="158" loading="lazy" sizes="(max-width: 300px) 100vw, 300px" src="/media/imported/4c45997ca8ea0e37bfe9.png" srcset="/media/imported/cf7c4218fd03ad5fa322.png 300w, /media/imported/eee53406127a0f4ad4cb.png 586w" width="300"/></a>
+<p class="wp-caption-text">Temperatur og spænding, 26. oktober. Spænding (grøn) på højre akse.</p>
+</div>
+<p>Så det store spørgsmål er: Hvorfor korrelerer min DC-spænding med solen? Er det pga. solceller i nabolaget? Er det pga. gadebelysning der tænder/slukker? Gode bud modtages <img alt=":-)" class="wp-smiley" loading="lazy" src="/media/imported/8b7a1ec2f27054b0b94d.png" style="height: 1em; max-height: 1em;"/></p>
+

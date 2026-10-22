@@ -1,0 +1,84 @@
+{
+  "title": "Measuring high DC supply voltage with an Arduino",
+  "date": "2015-08-31T22:11:41+02:00",
+  "lastmod": "2015-08-31T22:19:25+02:00",
+  "url": "/measuring-high-dc-supply-voltage-with-an-arduino/",
+  "type": "posts",
+  "wordpress_id": 1207,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets",
+    "Ikke kategoriseret"
+  ],
+  "image": "/wp-content/uploads/2012/08/DSC_0446.jpg",
+  "description": "For my home-monitoring setup I would like an Arduino to measure the supply voltage it is getting from a DC battery UPS (Uninteruptible Power Supply). Unfortunately (actually by design, but that’s another story), the power supply is 24V, which means it will put out anywhere from 21.3V-29.8V (according to the manufacturer), which is far too much […]"
+}
+
+<p>For my home-monitoring setup I would like an Arduino to measure the supply voltage it is getting from a DC battery UPS (Uninteruptible Power Supply). Unfortunately (actually by design, but that’s another story), the power supply is 24V, which means it will put out anywhere from 21.3V-29.8V (according to the manufacturer), which is far too much to measure with the Arduino’s 0-5V input range. For simplicity’s sake, lets assume we want to measure a 20-30V voltage.</p>
+<p>The immediate answer is to use a <a href="https://en.wikipedia.org/wiki/Voltage_divider">voltage divider</a>, which will bring a voltage in the 0-30V range into the 0-5V range. The general formula for the resistor divider is:</p>
+<p class="ql-center-displayed-equation" style="line-height: 40px;"><span class="ql-right-eqno">   </span><span class="ql-left-eqno">   </span><img alt="\[V_{out} = \frac{R_2}{R_1+R_2} \cdot V_{in}\]" class="ql-img-displayed-equation quicklatex-auto-format" height="40" loading="lazy" src="/media/imported/175f4d55bb8dd04cc23b.png" title="Rendered by QuickLaTeX.com" width="158"/></p>
+<p>We want <img alt="V_{in} = 30" class="ql-img-inline-formula quicklatex-auto-format" height="15" loading="lazy" src="/media/imported/2fcb042a5530ec761f0a.png" style="vertical-align: -3px;" title="Rendered by QuickLaTeX.com" width="66"/> to give <img alt="V_{out} = 5" class="ql-img-inline-formula quicklatex-auto-format" height="16" loading="lazy" src="/media/imported/bb54c22411cd332bc6e4.png" style="vertical-align: -3px;" title="Rendered by QuickLaTeX.com" width="62"/>, so</p>
+<p class="ql-center-displayed-equation" style="line-height: 41px;"><span class="ql-right-eqno">   </span><span class="ql-left-eqno">   </span><img alt="\[\frac{5}{30} = \frac{R_2}{R_1+R_2}\]" class="ql-img-displayed-equation quicklatex-auto-format" height="41" loading="lazy" src="/media/imported/9c14a9d7d1422bb14b5f.png" title="Rendered by QuickLaTeX.com" width="109"/></p>
+<p><a href="http://blog.smartere.dk/wp-content/uploads/2015/08/resistordivider.png"><img alt="resistordivider" class="alignnone size-medium wp-image-148" height="300" loading="lazy" src="/media/imported/df6d1126d917703e7650.png" width="152"/></a></p>
+<p>Now, just as a sanity check we should calculate the current of the resistor divider, to make sure we’re not converting too much electricity into heat. Ohm’s law gives us</p>
+<p class="ql-center-displayed-equation" style="line-height: 37px;"><span class="ql-right-eqno">   </span><span class="ql-left-eqno">   </span><img alt="\[ I = \frac{U}{R}\]" class="ql-img-displayed-equation quicklatex-auto-format" height="37" loading="lazy" src="/media/imported/856d7f746f7fd94fa0fb.png" title="Rendered by QuickLaTeX.com" width="50"/></p>
+<p>which in this cases gives</p>
+<p class="ql-center-displayed-equation" style="line-height: 37px;"><span class="ql-right-eqno">   </span><span class="ql-left-eqno">   </span><img alt="\[ I = \frac{30}{12000} = 0.0025 A = 2.5 mA\]" class="ql-img-displayed-equation quicklatex-auto-format" height="37" loading="lazy" src="/media/imported/50b7ab1396320dabcb9c.png" title="Rendered by QuickLaTeX.com" width="243"/></p>
+<p>No problems there.</p>
+<p>This works okay, but we lose a lot of precision, as only ~1/3 of the Arduino’s range is actually used: the Arduino’s ADC has 1024 different readings between 0-5V, so when reading the 0-30V range the precision is just about<br/>
+<img alt="30V / 1024 \approx 0.03 V" class="ql-img-inline-formula quicklatex-auto-format" height="18" loading="lazy" src="/media/imported/661915c6c317a7df2843.png" style="vertical-align: -5px;" title="Rendered by QuickLaTeX.com" width="144"/> over the range.</p>
+<p>If only we could move the lower bound, so that 20V would map to 0V on the Arduino. A wild <a href="https://en.wikipedia.org/wiki/Zener_diode">Zener Diode</a> appears! One use of a Zener diode is as a <a href="https://en.wikipedia.org/wiki/Zener_diode#Voltage_shifter">voltage shifter</a>.<br/>
+<a href="http://blog.smartere.dk/wp-content/uploads/2015/08/voltageshifter.png"><img alt="voltageshifter" class="size-medium wp-image-152 alignnone" height="300" loading="lazy" src="/media/imported/88a97a43c9243a7e011d.png" width="165"/></a></p>
+<p><img alt="Zener diode voltage shifter. This work is licensed under the Creative Commons Attribution 3.0 License, https://en.wikipedia.org/wiki/File:VoltageShifter2.png." class="wp-image-126 size-medium" height="223" loading="lazy" src="/media/imported/672a1642316308528d3c.png" width="300"/></p>
+<p>The closest Zener diode I could find was an 18V of the <a href="http://www.nxp.com/documents/data_sheet/BZX79.pdf">BZX79 series</a>. This resulted in the following circuit:</p>
+<p><a href="http://blog.smartere.dk/wp-content/uploads/2015/08/zener-voltage-divider.png"><img alt="zener-voltage-divider" class="alignnone size-medium wp-image-140" height="300" loading="lazy" src="/media/imported/8e506550e684a3e55f72.png" width="128"/></a></p>
+<p>which I hacked into my Arduino box.</p>
+<p><a href="http://blog.smartere.dk/wp-content/uploads/2015/08/DSC_1072.jpg"><img alt="Hacked supply monitoring" class="alignnone size-medium wp-image-131" height="169" loading="lazy" src="/media/imported/2bb6a2b8ffe74ab265cc.jpg" width="300"/></a></p>
+<p>Now, theoretically the formula for translating an voltage at the Arduino to the supply voltage should be:</p>
+<p class="ql-center-displayed-equation" style="line-height: 19px;"><span class="ql-right-eqno">   </span><span class="ql-left-eqno">   </span><img alt="\[Vcc = V_{in} / (4700/(4700+6800)) + 18 = V_{in} \cdot 2.4468 + 18\]" class="ql-img-displayed-equation quicklatex-auto-format" height="19" loading="lazy" src="/media/imported/da490d171b566b121a90.png" title="Rendered by QuickLaTeX.com" width="440"/></p>
+<p>I then did some quick measurements of various input voltages and the resulting voltage at the Arduino pin:</p>
+<table>
+<thead>
+<tr>
+<td>Input voltage</td>
+<td>Arduino pin</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18V</td>
+<td>0.32V</td>
+</tr>
+<tr>
+<td>20V</td>
+<td>1.16V</td>
+</tr>
+<tr>
+<td>26V</td>
+<td>3.60V</td>
+</tr>
+<tr>
+<td>28V</td>
+<td>4.41V</td>
+</tr>
+<tr>
+<td>29V</td>
+<td>4.81V</td>
+</tr>
+</tbody>
+</table>
+<p>Plot it into a spreadsheet, create a graph and add a linear regression gives:</p>
+<p><a href="/media/imported/ed6d7520fcd66e6470b2.png"><img alt="" class="alignnone wp-image-163 size-full" height="403" loading="lazy" src="/media/imported/ed6d7520fcd66e6470b2.png" width="589"/></a></p>
+<p>Now, this formula is a bit different compared to the theoretical one, mainly in the Zener diode drop. However, the datasheet for the BZX79 actually has the 18V C-type (<img alt="\plusminus 5\%" class="ql-img-inline-formula quicklatex-auto-format" height="15" loading="lazy" src="/media/imported/b60528355a66fe7b27cc.png" style="vertical-align: -1px;" title="Rendered by QuickLaTeX.com" width="23"/>) as between 16.8-19.1V, so this is well within spec. Since this is just a one-off, I’m happy to just use the measured formula, as this will be more accurate.</p>
+<p>The final precision should be <img alt="12V / 1024 = 0.012V" class="ql-img-inline-formula quicklatex-auto-format" height="18" loading="lazy" src="/media/imported/252881f341d82e30e37c.png" style="vertical-align: -5px;" title="Rendered by QuickLaTeX.com" width="152"/>. The current should be around <img alt="I = \frac{U}{R} = 30V/11500 Ohm \cdot 1000 \frac{mA}{A} = 2.6mA" class="ql-img-inline-formula quicklatex-auto-format" height="22" loading="lazy" src="/media/imported/8e78d878b37f03ca308a.png" style="vertical-align: -6px;" title="Rendered by QuickLaTeX.com" width="344"/>, which again is ok.</p>
+

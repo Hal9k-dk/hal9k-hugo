@@ -1,0 +1,128 @@
+{
+  "title": "Fra tungt træk til lette skridt: Carlsvognen med el, det er et hit",
+  "date": "2023-10-12T11:46:55+02:00",
+  "lastmod": "2023-10-12T21:10:18+02:00",
+  "url": "/carlsvognen-electrified/",
+  "type": "posts",
+  "wordpress_id": 2229,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Falke Carlsen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter",
+    "Udvalgte posts"
+  ],
+  "tags": [
+    "danish",
+    "carlsvognen",
+    "ladcykel",
+    "pedal assist"
+  ],
+  "image": "/wp-content/uploads/2023/10/carlsvogn-beer.jpg"
+}
+
+<p></p>
+<p>I august 2022 total-renoverede jeg min gamle Long John og den har nu tjent mig godt de sidste tretten måneder. Jeg måtte dog indse at den er temmelig tung, især når den benyttes til sit formål; at transportere tunge ting (eller mennesker).</p>
+<p></p>
+<p></p>
+<p>Jeg havde, <a data-id="https://www.hal9k.dk/carlsvognen-renovering-af-ladcykel-fra-1944/" data-type="URL" href="/carlsvognen-renovering-af-ladcykel-fra-1944/" rel="noreferrer noopener" target="_blank">som den vågne læser måske mindes</a>, allerede tiltænkt at cyklen skulle have ydelses-fremmende midler monteret. Modellen <a data-id="https://www.pswpower.com/products/europe-or-china-stock-48v-500w-or-750w-42t-vlcd5-tsdz2-electric-bicycle-mid-motor-with-torque-sensor-throttle-e-brake-lever-88" data-type="URL" href="https://www.pswpower.com/products/europe-or-china-stock-48v-500w-or-750w-42t-vlcd5-tsdz2-electric-bicycle-mid-motor-with-torque-sensor-throttle-e-brake-lever-88" rel="noreferrer noopener" target="_blank">Tongsheng TSDZ2B</a> var også bestemt på daværende tidspunkt så røret der blev svejset på omkring krankboks havde rigeligt med luft til netop denne krankmotor.<br/>Valget faldt på denne type motor, da de yder proportionelt med den effekt man selv smider i pedalerne ved hjælp af en torque-sensor i kranken. </p>
+<p></p>
+<p></p>
+<p>Det giver en mere naturlig cykeloplevelse kontra typiske nav-motorer, der hjælper med en konstant effekt når der trædes i pedalerne. Ydermere, siges det at krankmotorer holder længere end nav-motorer da de arbejder for det meste i deres foretrukne omdrejningstal (30-90 rpm ved output), fremfor i hele spændet af omdrejninger et givent cykelhjul måtte have og dertil direkte gearet.</p>
+<p></p>
+<p></p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped">
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2230" loading="lazy" src="/wp-content/uploads/2023/04/IMG_20230326_2117331-768x1024.jpg"/><figcaption class="wp-element-caption">Krankboks fjernet. Godt den var fyldt med fedtstof, så den faktisk var til at fjerne.</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2237" loading="lazy" src="/wp-content/uploads/2023/04/IMG_20230326_2143471-768x1024.jpg"/><figcaption class="wp-element-caption">TSDZ2B monteret, igen med rigelig fedstof.</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2236" loading="lazy" src="/wp-content/uploads/2023/04/IMG_20230326_2205491-768x1024.jpg"/><figcaption class="wp-element-caption">Motorkabler i venteposition; stripset sammen i frysepose.</figcaption></figure>
+<p></p></figure>
+<p></p>
+<p></p>
+<p>Monteringen sker desuden direkte igennem den eksisterende krankboks og der ydes på klingen, således at den almindelige gearing kan udnyttes. Motor og batteri blev monteret med originalt firmware i April 2023.</p>
+<p></p>
+<p></p>
+<p>Der findes Open Source Firmware (OSF) til TSDZ2 motoren, i flere varianter:</p>
+<p></p>
+<p></p>
+<ul>
+<li>emmebrusa's (<a href="https://github.com/emmebrusa/TSDZ2-Smart-EBike-1">https://github.com/emmebrusa/TSDZ2-Smart-EBike-1</a>)<br/>Hvad min motor kører med pr. juni 2023, har support for det originale (og grimme) VLCD5 display. Det er besværligt at ændre motorindstillinger på displayet.</li>
+<p></p>
+<p></p>
+<li>casainho's (<a href="https://github.com/OpenSourceEBike/TSDZ2-Smart-EBike">https://github.com/OpenSourceEBike/TSDZ2-Smart-EBike</a>)<br/>Det første spadestik og reverse engineering i at lave OSF til TSDZ2 motoren. Møntet på at have et DIY OLED display som interface.</li>
+<p></p>
+<p></p>
+<li>mspider65's (<a href="https://github.com/TSDZ2-ESP32/TSDZ2-ESP32-Wiki/wiki">https://github.com/TSDZ2-ESP32/TSDZ2-ESP32-Wiki/wiki</a>)<br/>Udviklet et MITM (mellem controller og display) ESP32 board med dertilhørende Android app så et display ikke er nødvendigt i samme grad. Desværre slipper man ikke for at interagere med knapperne på det originale display.</li>
+<p></p></ul>
+<p></p>
+<p></p>
+<p>Fordelen ved OSF til TSDZ2 er at opnå bedre styring af motoren så der spildes mindre varme og opnås bedre effekt samt respons. Et klassisk problem med denne motor er at konstruktionen er ringe lavet til at aflede varme, da kontaktfalde ved drivaksel er omtrent ~2 cm² og motoren ikke har anden kontakt med aluminiums-huset omkring motoren.</p>
+<p></p>
+<p></p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped">
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2259" loading="lazy" src="/wp-content/uploads/2023/10/tsdz2-temp-probe-887x1024.jpg"/><figcaption class="wp-element-caption">TSDZ2 motor med eftermonteret LM35DZ analog temperaturføler</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2258" loading="lazy" src="/wp-content/uploads/2023/10/tsdz2-chamber-1024x768.jpg"/><figcaption class="wp-element-caption">Internetbillede af kontaktflade mellem motor og motorhus</figcaption></figure>
+<p></p></figure>
+<p></p>
+<p></p>
+<p>I foråret transporterede jeg min partner og jeg fra Aalborg Øst til Støvring over Gug alper, hvilket den underdimensionerede rullebremse ikke var så glad for. Det resulterede i at bremsefedtet som sådan en fyldes med brændte af. Ligeledes blev motoren ubehagelig varm på dens originale firmware, der er sat til 750w i maks effekt. Det er sandsynligvis der, hvor den første varmeskade skete.<br/>Siden da, har effekten af motoren føles mindre, den bliver hurtigere varm, og den originale rækkevidde på ~80km er nu ca. halveret. Det er netop det forløb og symptomer som ligesindede på e-bike forummet <a data-id="https://endless-sphere.com/sphere/" data-type="link" href="https://endless-sphere.com/sphere/">https://endless-sphere.com/</a> oplever. </p>
+<p></p>
+<p></p>
+<p>Bedre sent end aldrig fik jeg monteret en LM35DZ (outputter 10mV/C) analog temperaturføler på thumb-throttle ADC kanalen på den originale controller. Emmebrusas OSF kan bruge denne indgang til at læse motor-temperatur og derved gradvist regulere temperaturen ned, som den når 85C. Forinden dette har jeg også kommet thermal pads og kølefedtstof i det 1.5mm hulrum der er at finde mellem motorflade ved drivaksel og motorhus. </p>
+<p></p>
+<p></p>
+<p>Resultatet er marginalt bedre køling og beskyttelse af en allerede beskadiget motor. Efter 5 kilometers kørsel i de aalborgensiske bakker rammes de 85C. Det efterlader et valg mellem den stærkere torque-sensing mid-drive motor som den nye ToSeven <a href="https://to7motor.com/product/dm01-mid-drive-motor/">DM01</a> (pendant til Bafangs BBSHD 1kW motor) eller forsætte på TSDZ2 platformen med de begrænsninger og nødvendige eftermonteringer som det påkræver. Desværre er DM01 motoren ikke rigtig til at anskaffe i EU/US pga. manglende distribution, dog er ToSevens ingeniører at finde på forskellige fora, og sælger til enkeltpersoner. På den anden side koster en ny motor til TSDZ2 kun 450DKK - fortsættelse følger.</p>
+<p></p>
+<p></p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped">
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2261" loading="lazy" src="/wp-content/uploads/2023/10/carlsvogn-rack-953x1024.jpg"/><figcaption class="wp-element-caption">1m bred stativ til drive-in trælast</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2264" loading="lazy" src="/wp-content/uploads/2023/10/carlsvogn-bench-1024x727.jpg"/><figcaption class="wp-element-caption">1.5m bred slagbænk</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2262" loading="lazy" src="/wp-content/uploads/2023/10/carlsvogn-battery-1024x761.jpg"/><figcaption class="wp-element-caption">48v 19.2Ah Hailong Max batteri monteret under lad</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2265" loading="lazy" src="/wp-content/uploads/2023/10/carlsvogn-lumber-1024x701.jpg"/><figcaption class="wp-element-caption">Jank tilspændt tømmer til byg af slagbænk</figcaption></figure>
+<p></p>
+<p></p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-2263" loading="lazy" src="/wp-content/uploads/2023/10/carlsvogn-beer-1024x756.jpg"/><figcaption class="wp-element-caption">30l bryganlæg, 20kg malt, og fermenteringstank - og så kan man næsten stadig se over papkassen</figcaption></figure>
+<p></p></figure>
+<p></p>
+<p></p>
+<p>Fra august 2022 til april 2023 anslår jeg at cyklen har kørt ~1000km. Fra montering af motor i april 2023 og til oktober 2023 siger odometeret 1350km (-5% pga. fejlvisning). </p>
+<p></p>
+<p></p>
+<p>Dansk lovgivning omkring hjælpemotor på almindelige cykler er kort opridset:</p>
+<p></p>
+<p></p>
+<ul>
+<li>Motor må kun yde, når cyklist træder i pedalerne.</li>
+<p></p>
+<p></p>
+<li>Motor på ikke yde når hastighed er over 25 km/t, derefter er det kun rugbrødmotor.</li>
+<p></p>
+<p></p>
+<li>Motor må ikke yde mere end 250W effekt nominelt.</li>
+<p></p></ul>
+<p></p>
+<p></p>
+<p>Overstående er fornuftigt når man ser på <em>person</em>cykler; altså city-bikes og lignende. Det er ikke hensigtsmæssigt at el-cykler accelerer kraftigere eller cykler hurtigere end det normale cyklist-trafikbillede. Dog er det tydeligt at på en ladcykel som min med op til 100kg i laddet, 80kg i sadlen, og ~35kg i stellet, så er den hjælp ikke voldsom - og bestemt ikke op ad bakker. </p>
+<p></p>
+<p></p>
+<p>Jeg ønsker en ændring i lovgivningen der skelner mellem en 6kg kulfiber-racercykel og et 79 år gammelt, tungt ladcykelstel. Dette især hvis man ønsker at fordre alternative transportmetoder end bil for ens borgere i by-miljøer.</p>
+<p></p>
+<p></p>
+<p>Min oplevelse med el-motor på min ladcykel er enormt positiv. Carlsvognen har nærmest samme fleksibilitet som en bil, til en fraktion af udgifterne - og som vist, kan rigtig mange transportopgaver nemt løses.</p>
+<p></p>
+

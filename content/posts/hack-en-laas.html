@@ -1,0 +1,61 @@
+{
+  "title": "Hack en lås",
+  "date": "2021-02-01T19:47:25+02:00",
+  "lastmod": "2021-02-01T21:42:37+02:00",
+  "url": "/hack-en-laas/",
+  "type": "posts",
+  "wordpress_id": 1980,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Torsten Martinsen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter"
+  ],
+  "tags": [],
+  "image": "/wp-content/uploads/2021/02/topview.jpg"
+}
+
+<p>I Hal9k har alle medlemmer (normalt) fri adgang til spacet 24 timer i døgnet. Da det er ret upraktisk at holde styr på 50 nøgler, har medlemmerne i stedet adgangskort (som tidligere beskrevet <a href="/access-control-system/">her</a>).</p>
+<p>En lille, men væsentlig, del af adgangskontrolsystemet er selvfølgelig selve dørlåsen. Det har hidtil været en forholdsvis billig magnetlås, men da kommunen for nyligt valgte at udskifte alle døre og vinduer i bygningen, er der også kommet en ny hoveddør, og det er naturligvis en dør med trepunktslukning, som det er standard for moderne døre. Det betyder at den gamle magnetlås ikke kan bruges længere, og vi måtte derfor finde en anden løsning.</p>
+<p>Det letteste er selvfølgelig at montere en ny magnetlås, og det findes da også - men prisen er omkring 10.000 kr, og formodentlig ville vi også skulle have noget hjælp fra en låsesmed, så det ville blive en dyr løsning. Heldigvis findes der forskellige IoT-dimser, som er beregnet til at montere på en eksisterende lås, og som typisk betjenes via Bluetooth med en app på telefonen. Den der er nemmest at få fat på i Danmark er den danskproducerede <a href="https://danalock.com/">Danalock</a>, som kan fås til omkring en tusse.</p>
+<p>Jeg bestilte en Danalock til afhentning i et lokalt varehus og prøvede den på min egen yderdør, og det fungerede fint med den tilhørende app. Men til brug i spacet dur det selvfølgelig ikke, der skal den kunne kontrolleres fra adgangskontrolsystemet. Den oplagte løsning var at erstatte elektronikken med noget andet, og kun bruge selve mekanikken.</p>
+<p>Det første trin var derfor at skille låsen ad og se hvordan den var konstrueret.</p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/topview.jpg"><img alt="Danalock set oppefra" class="size-medium wp-image-1981" height="291" loading="lazy" src="/wp-content/uploads/2021/02/topview-300x291.jpg" width="300"/></a> Her ses motoren til venstre, den centrale akse i midten, og printet nederst.</figure>
+<p>Mekanikken er forholdsvis simpel og består af tre dele:</p>
+<p>En central akse, som er fast sammenkoblet med låsecylinderen. På forsiden af låsen sidder et håndtag som bruges til at dreje aksen og dermed låsecylinderen manuelt.</p>
+<p>En "rotary encoder" som aflæser positionen af den centrale ekse. Det er en standard kvadraturencoder med to optiske sensorer, dvs. der er ikke nogen decideret nulposition.</p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/encoder.png"><img alt="Pulser fra encoder" class="size-medium wp-image-1982" height="180" loading="lazy" src="/wp-content/uploads/2021/02/encoder-300x180.png" width="300"/></a> Her ses hvordan de to udgange fra encoderen reagerer når aksen drejes rundt.</figure>
+<p>Motoren og tilhørende gearing. De fleste af tandhjulene er stationære, men et par stykker af dem sidder på en arm der kan rotere. Det betyder at når motoren tændes, vil de bevægelige tandhjul efter kort tid gribe ind i det tandhjul der sidder på den centrale akse, som herved bringes til at rotere. På grund af de bevægelige tandhjul kan låsen stadig betjenes manuelt uden at motoren drejer med.</p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/motor.jpg"><img alt="Motor og gearing" class="size-medium wp-image-1983" height="300" loading="lazy" src="/wp-content/uploads/2021/02/motor-287x300.jpg" width="287"/></a> Her ses motoren og nogle af tandhjulene.</figure>
+<p>Elektronikken består af et lille print hvor de primære komponenter er en microcontroller og en motordriver.</p>
+<p>Jeg fjernede printet og metalstrimlerne i batteriboksen, hvilket gav rigelig plads til den nye elektronik. Designet af denne blev drevet af hvad jeg havde på lager, og blev</p>
+<ul>
+<li>et modul med en TB6612 motordriver</li>
+<li>en Wemos D1 mini (ESP8266)</li>
+<li>et stepdown modul til at konvertere 12V til 5V</li>
+</ul>
+<p>Motordriveren passede fint der hvor det originale print sad:</p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/nymotordriver.jpg"><img alt="Ny motordriver" class="size-medium wp-image-1985" height="300" loading="lazy" src="/wp-content/uploads/2021/02/nymotordriver-300x300.jpg" width="300"/></a> Et par klatter klar silicone sørger for at ledningerne ikke kommer i karambolage med de bevægelige dele.</figure>
+<p>Jeg designede en erstatning for batteridækslet i OpenSCAD, og efter et par iterationer havde jeg noget der kunne bruges. Det originale batteridæksel er blot klipset fast til en skrue, men jeg valgte at lade den same skrue gå igennem et hul i det nye "batteridæksel".</p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/nyside.jpg"><img alt="Ny side" class="size-medium wp-image-1984" height="252" loading="lazy" src="/wp-content/uploads/2021/02/nyside-300x252.jpg" width="300"/></a> Den 3D-printede del der erstatter batteridækslet. Der er udskæring til det USB-micro-stik der sidder på ESP8266, et hul til et JST PH-stil til 12V, og naturligvis en LED.</figure>
+<p>Og så kunne det hele samles:</p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/nysidemonteret.jpg"><img alt="Montering" class="size-medium wp-image-1986" height="241" loading="lazy" src="/wp-content/uploads/2021/02/nysidemonteret-300x241.jpg" width="300"/></a> ESP8266, stepdown og LED monteret på den nye side.</figure>
+<p> </p>
+<figure class="caption"><a href="/wp-content/uploads/2021/02/lukket.jpg"><img alt="Færdigsamlet" class="size-medium wp-image-1987" height="300" loading="lazy" src="/wp-content/uploads/2021/02/lukket-278x300.jpg" width="278"/></a> Monteret og lukket. Som det ses passer den nye side ikke perfekt, men det ser man ikke når klaveret spiller.</figure>
+<p>Herefter var der kun tilbage at lave noget software, og status i skrivende stund er at låsen fungerer fint på min egen dør. Så nu venter jeg kun på at kunne sætte den op i spacet.</p>
+<p> </p>
+<p></p>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio">
+<div class="wp-block-embed__wrapper">
+https://youtu.be/SFsGRgwG3E4
+</div>
+</figure>
+<p></p>
+<p></p>
+<p>Se kode osv. på <a href="https://github.com/bullestock/danalock-wired">https://github.com/bullestock/danalock-wired</a>.</p>
+<p></p>
+

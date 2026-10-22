@@ -1,0 +1,28 @@
+{
+  "title": "Chairbot (1)",
+  "date": "2015-02-22T20:35:27+02:00",
+  "lastmod": "2015-02-22T20:35:27+02:00",
+  "url": "/chairbot-1/",
+  "type": "posts",
+  "wordpress_id": 940,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Torsten Martinsen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter",
+    "HAL9k"
+  ],
+  "tags": [],
+  "image": "/wp-content/uploads/2015/02/joy-300x2281.png"
+}
+
+<p>For nogen tid siden fik vi fat i understellet til en elektrisk kørestol. Vi syntes det var oplagt at bygge den om til en robot. Der fulgte ingen batterier med, men vi havde en hel del 12V blyakkumulatorer. To af dem i serie blev monteret (sammen med et nødstop), og så gik vi i gang med at lave reverse engineering af protokollen mellem joystick og motorstyring.</p>
+<p>Ret hurtigt kunne vi dekode nok til at lave denne fine graf ved at bevæge joystick'en i en cirkel:</p>
+<p><a href="/wp-content/uploads/2015/02/joy.png"><img alt="joy" class="aligncenter size-medium wp-image-942" height="228" loading="lazy" src="/wp-content/uploads/2015/02/joy-300x228.png" width="300"/></a></p>
+<p>Næste skridt var selvfølgelig at prøve at sende data til motorstyringen. Der blev lavet en server i node.js, som modtager data fra en virtuel joystick (dvs. en klient på en touch-device) via WebSockets og sender serielle data til motorstyringen (via en Arduino, som primært fungerer som USB -&gt; seriel konverter). Med dette setup kan man fjernstyre stolen:</p>
+<div class="video"><iframe allowfullscreen="" loading="lazy" src="https://www.youtube-nocookie.com/embed/4xTtpg-LcTY" title="YouTube video"></iframe></div>
+

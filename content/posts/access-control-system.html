@@ -1,0 +1,38 @@
+{
+  "title": "Access Control System",
+  "date": "2018-10-27T15:29:22+02:00",
+  "lastmod": "2018-10-27T15:29:22+02:00",
+  "url": "/access-control-system/",
+  "type": "posts",
+  "wordpress_id": 1672,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Torsten Martinsen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter"
+  ],
+  "tags": [],
+  "image": "/wp-content/uploads/2018/10/acs-user.png"
+}
+
+<p>Our space has been equipped with an RFID-based door system since the beginning. It has worked well, but when we got the <a href="https://wiki.hal9k.dk/equipment/lasersaur">laser cutter</a>, it was necessary to restrict access to the cutter to members who had received training. At first, the laser cutter had its own simple 'database', but it soon became inefficient to maintain two separate fdsfsystems. Also, the door system was not integrated with the member database, so we actually had three different databases that had to be maintained.</p>
+<p>So we started talking about making a new system, and after extended discussion we actually started to code. The center of the system ia a <a href="https://github.com/Hal9k-dk/acs">backend</a>, written in <a href="https://rubyonrails.org/">Rails</a>. The backend provides a web interface for administration, and a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> interface for use by the various peripherals - called 'machines'.</p>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/acs-user.png"><img alt="" class="size-medium wp-image-1698" height="300" loading="lazy" src="/wp-content/uploads/2018/10/acs-user-232x300.png" width="232"/></a> Configuring a user's permissions with the web interface.</figure>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/acs-log.png"><img alt="" class="size-medium wp-image-1697" height="279" loading="lazy" src="/wp-content/uploads/2018/10/acs-log-300x279.png" width="300"/></a>Viewing the log.</figure>
+<p>The primary 'machine' is the card reader located at the door. It uses the REST API to determine if the card is associated with a user who has access to the space.</p>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/reader.jpg"><img alt="" class="size-medium wp-image-1685" height="300" loading="lazy" src="/wp-content/uploads/2018/10/reader-165x300.jpg" width="165"/></a> Card reader at the entrance</figure>
+<p>In the same way, a number of other machines (<a href="https://wiki.hal9k.dk/equipment/powertools/drejebaenk-royal">lathe</a>, <a href="https://wiki.hal9k.dk/equipment/powertools/huvema">mill</a>, <a href="https://wiki.hal9k.dk/equipment/bungard-ccd">CNC router</a>, <a href="https://wiki.hal9k.dk/equipment/3dprinting/start">3-D printers</a>) are equipped with a <a href="https://github.com/Hal9k-dk/bigbro">box</a> containing an RFID reader, a relay, and an ESP8266. The ESP8266 connects to the backend over WiFi. For most of the machines, the power is only on as long as the card is inserted into the reader, but for the 3-D printers, the card can be removed once the print is started (the box measures current consumption of the printer, and shuts off once the print is done and the printer has cooled down).</p>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/box2.jpg"><img alt="" class="aligncenter size-medium wp-image-1679" height="147" loading="lazy" src="/wp-content/uploads/2018/10/box2-300x147.jpg" width="300"/></a> Card reader at Bungard CNC</figure>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/box1.jpg"><img alt="" class="size-medium wp-image-1678" height="192" loading="lazy" src="/wp-content/uploads/2018/10/box1-300x192.jpg" width="300"/></a> Access control box mounted on the Lulzbot Taz printer</figure>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/box-open.jpg"><img alt="" class="size-medium wp-image-1681" height="172" loading="lazy" src="/wp-content/uploads/2018/10/box-open-300x172.jpg" width="300"/></a> Inside of access control box showing PSU, relay, and ESP8266. The version for the 3-D printers has an additional current sensor so that they can determine when the printer is idle.</figure>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/box-front.jpg"><img alt="" class="size-medium wp-image-1680" height="199" loading="lazy" src="/wp-content/uploads/2018/10/box-front-300x199.jpg" width="300"/></a> The front of the access control box seen from the inside, showing card reader loop antenna/switch, OLED display, card reader PCB, and indicator LED.</figure>
+<p>The backend runs on a Cubieboard (an SBC based on an Allwinner ARM core, with on board SATA) with an SDD for storage. The connection between backend and the door 'machine' is USB, so you can open the door as long as there's power, even if internet access should be down.</p>
+<p>The backend is placed near the door and has a display and two buttons; the green one unlocks the door for fifteen minutes, and the red one locks the door.</p>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/door-locked.jpg"><img alt="" class="size-medium wp-image-1682" height="169" loading="lazy" src="/wp-content/uploads/2018/10/door-locked-300x169.jpg" width="300"/></a> The door is locked.</figure>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/door-open.jpg"><img alt="" class="size-medium wp-image-1683" height="300" loading="lazy" src="/wp-content/uploads/2018/10/door-open-242x300.jpg" width="242"/></a> The door is open for 15 minutes.</figure>
+<figure class="caption"><a href="/wp-content/uploads/2018/10/door-open-7.jpg"><img alt="" class="size-medium wp-image-1684" height="300" loading="lazy" src="/wp-content/uploads/2018/10/door-open-7-266x300.jpg" width="266"/></a> Counting down.</figure>
+

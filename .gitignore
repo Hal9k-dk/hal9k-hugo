@@ -1,0 +1,8 @@
+/public/
+/resources/
+/.hugo_build.lock
+/wordpress-backup/
+*.sql
+*.tar
+__pycache__/
+.DS_Store

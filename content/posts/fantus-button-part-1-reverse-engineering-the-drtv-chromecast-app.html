@@ -1,0 +1,100 @@
+{
+  "title": "Fantus-button part 1: Reverse engineering the DRTV Chromecast App",
+  "date": "2023-07-18T19:35:21+02:00",
+  "lastmod": "2023-07-18T19:35:21+02:00",
+  "url": "/fantus-button-part-1-reverse-engineering-the-drtv-chromecast-app/",
+  "type": "posts",
+  "wordpress_id": 2252,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets"
+  ],
+  "image": "/media/imported/d4b7c1fd9f825df39e30.jpg",
+  "description": "I want to build a physical giant red button, that when pressed instantly starts a children’s TV-show, in my case Fantus on DRTV using a Chromecast. The first part of the build is figuring out how to remotely start a specific video on a Chromecast. Initially I thought this would be pretty simple to do […]"
+}
+
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-1 is-layout-flex">
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-563" data-id="563" decoding="async" height="1024" loading="lazy" sizes="(max-width: 768px) 100vw, 768px" src="/media/imported/d4b7c1fd9f825df39e30.jpg" srcset="/media/imported/d4b7c1fd9f825df39e30.jpg 768w, /media/imported/74028cf69662f6eb751d.jpg 225w, /media/imported/4be5c530d7ea6f48fd0c.jpg 1152w, /media/imported/eb6fbf9774c90804b4c3.jpg 1536w, /media/imported/5359ebb933a8e2e23dcc.jpg 1920w" width="768"/></figure>
+</figure>
+<p>I want to build a physical giant red button, that when pressed instantly starts a children’s TV-show, in my case <a href="https://www.dr.dk/drtv/serie/miniboernene_235859">Fantus</a> on <a href="http://dr.dk/">DRTV</a> using a Chromecast.</p>
+<figure class="wp-block-video"><video controls="" muted="" playsinline="" src="/media/imported/1b31b7f934cb10b67f9a.mp4"></video></figure>
+<p>The first part of the build is figuring out how to remotely start a specific video on a Chromecast. Initially I thought this would be pretty simple to do from an Arduino, because back in the day you could <a href="https://github.com/NoRulesJustFeels/ChromeCast-Arduino-Button">start a video just using a HTTP request</a>. Very much not so anymore: the Chromecast protocol has evolved into some <a href="https://hackernoon.com/the-chromecast-protocol-a-brief-look">monster using JSON inside Protobuf over TLS/TCP, with multicast DNS for discovery</a>. Chance of getting that working on a microcontroller is near-zero.</p>
+<p>But remote control is possible using e.g. <a href="https://github.com/home-assistant-libs/pychromecast">pychromecast</a> which has support for not only the usual app of YouTube, but also a couple of custom ones like BBC. Let’s try and add support for DRTV to pychromecast, starting at the hints given on <a href="https://github.com/home-assistant-libs/pychromecast#exploring-existing-namespaces">adding a new app</a>.</p>
+<p>Using the <a href="https://netlog-viewer.appspot.com/">netlog-viewer</a> to decode the captured net-export from Chrome, and looking at the unencrypted socket communication, the <code>appId</code> of the DRTV app is easily found.</p>
+<figure class="wp-block-image size-full"><img alt="" class="wp-image-550" decoding="async" height="333" loading="lazy" sizes="(max-width: 703px) 100vw, 703px" src="/media/imported/9b06760f4788be7981bc.png" srcset="/media/imported/9b06760f4788be7981bc.png 703w, /media/imported/8c43ee8f6ba2c1bad460.png 300w" width="703"/></figure>
+<p>However, one of the subsequent commands has a lot more <code>customData</code> than I expected, since it should more or less just be the <code>contentId</code> that is needed:</p>
+<pre class="wp-block-code"><code>{
+  "items": [
+    {
+      "autoplay": true,
+      "customData": {
+        "accountToken": {
+          "expirationDate": "2022-07-02T00:48:35.391Z",
+          "geoLocation": "dk",
+          "isCountryVerified": false,
+          "isDeviceAbroad": false,
+          "isFallbackToken": false,
+          "isOptedOut": false,
+          "profileId": "c4e0...f3e",
+          "refreshable": true,
+          "scope": "Catalog",
+          "type": "UserAccount",
+          "value": "eyJ0eX...Dh8kXg"
+        },
+        "chainPlayCountdown": 10,
+        "profileToken": {
+          "expirationDate": "2022-07-02T00:48:35.389Z",
+          "geoLocation": "dk",
+          "isCountryVerified": false,
+          "isDeviceAbroad": false,
+          "isFallbackToken": false,
+          "isOptedOut": false,
+          "profileId": "c4e0a...f3e",
+          "refreshable": true,
+          "scope": "Catalog",
+          "type": "UserProfile",
+          "value": "eyJ0eXAi...IkWOU5TA"
+        },
+        "senderAppVersion": "2.211.33",
+        "senderDeviceType": "web_browser",
+        "sessionId": "cd84eb44-bce0-495b-ab6a-41ef125b945d",
+        "showDebugOverlay": false,
+        "userId": ""
+      },
+      "media": {
+        "contentId": "<strong>278091</strong>",
+        "contentType": "video/hls",
+        "customData": {
+          "accessService": "StandardVideo"
+        },
+        "streamType": "BUFFERED"
+      },
+      "preloadTime": 0,
+      "startTime": 0
+    }
+  ],
+  "repeatMode": "REPEAT_OFF",
+  "requestId": 202,
+  "sessionId": "81bdf716-f28a-485b-8dc3-ac4881346f79",
+  "startIndex": 0,
+  "type": "QUEUE_LOAD"
+}</code></pre>
+<p>Here I spent a long time trying without any <code>customData</code>, and just using the <code>appId</code> and <code>contentId</code>. Initially it seemed to work!</p>
+<p>However, it turned out it only worked if the DRTV Chromecast app was already launched from another device. If launched directly from pychromecast the app would load, show a spinner, and then go back to idle. Here much frustration was spent; I guess the <code>customData</code> is actually needed. And indeed, putting that in works! But where do these tokens come from, and how do we get those tokens from Python?</p>
+<p>Using Chrome’s developer tools (F12) on the DRTV page, and then searching globally (CTRL-SHIFT-f) for various terms (“expirationDate”, “customData”, “profileToken”, “accountToken” etc.) revealed some interesting code, that was as semi-readable as any pretty-printed minifyed Javascript. Eventually I found the tokens in local storage:</p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-554" decoding="async" height="341" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/6eba3be80190776cc0e8.png" srcset="/media/imported/6eba3be80190776cc0e8.png 1024w, /media/imported/a9679dab5253bf41e352.png 300w, /media/imported/3091b435feeaf4ad62fb.png 768w, /media/imported/adddd6466e19d80aef74.png 1211w" width="1024"/></figure>
+<p>Using these tokens work really well, and allows starting playback!</p>
+<p>Some further exploration proceeded: using the <code>showDebugOverlay</code> flag reveals that the DRTV player is just a <a href="https://github.com/shaka-project/shaka-player">rebranded Shaka Player</a>. The autoplay functionality can be disabled by setting <code>chainPlayCountdown</code> to <code>-1</code>, which is honestly a real oversight that it cannot be disabled officially, to not have to rush to stop the playback of the item before the next autoplays.</p>
+<p>With all the puzzle pieces ready, I prepared a <a href="https://github.com/home-assistant-libs/pychromecast/pull/646">pull request (still open) to add support for DRTV to pychromecast</a>.</p>
+<p>Fantus-button part 2 will follow, detailing the hardware build and network integration with the support from pychromecast.</p>
+

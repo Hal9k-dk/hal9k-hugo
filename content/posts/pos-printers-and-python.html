@@ -1,0 +1,49 @@
+{
+  "title": "POS printers and Python",
+  "date": "2012-10-30T21:24:14+02:00",
+  "lastmod": "2012-10-30T21:24:14+02:00",
+  "url": "/pos-printers-and-python/",
+  "type": "posts",
+  "wordpress_id": 274,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Georg"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "open source",
+    "QR code",
+    "Extern"
+  ],
+  "tags": [
+    "Uncategorized",
+    "Python"
+  ],
+  "image": "/wp-content/uploads/2012/08/DSC_0460.jpg",
+  "description": "I had this old POS (Point Of Sale) receipt printer laying around for some time and thought it could be fun to play a bit with it. Printing plain text is simply done by sending it as characters via a serial connection. Cutting the paper is some ESC code which i found in a manual […]"
+}
+
+<p>I had this old POS (Point Of Sale) receipt printer laying around for some time and thought it could be fun to play a bit with it. Printing plain text is simply done by sending it as characters via a serial connection. Cutting the paper is some ESC code which i found in a manual online. Printing images was a bit more tricky, since it is requires some specific codes, depending on how the dots in a vertical bar, equal to the height of a character, must be composed. I wrote a small Python module integrating the ability to print images, text etc.  since I could not find anything online simliar to what i wanted.</p>
+<p>At the local hacker space (<a href="/">HAL9k</a>) we have now received a large box full of used receipt printers, VFDs etc. and some of the members have asked for the module for printing images so I have uploaded <a href="https://github.com/sman-dk/pyPOSprinter" title="pyPOSprinter at GitHub">pyPOSprinter</a> to GitHub. It makes use of <a href="http://pyserial.sourceforge.net/">pySerial</a> for communicating with the printer and <a href="http://www.pythonware.com/products/pil/">Python Image Library</a> for reading image files. The included example also shows how to use <a href="http://code.google.com/p/pyqrnative/">pyQRNative</a> to print QR-codes (bar codes are soo last centory :-)  ).</p>
+<p><a href="/media/imported/7fd8351f3751ab4fbb41.jpg"><img alt="" class="wp-image-166 alignnone" height="433" loading="lazy" src="/media/imported/7fd8351f3751ab4fbb41.jpg" title="pyPOSprinter_example2" width="422"/></a></p>
+<blockquote>
+<div>from pyqrnative import PyQRNative</div>
+<div id="LC4">qr = PyQRNative.QRCode(5, PyQRNative.QRErrorCorrectLevel.Q)</div>
+<div id="LC5">qr.addData(“http://www.sman.dk”)</div>
+<div id="LC6">qr.make()</div>
+<div id="LC7">im = qr.makeImage()</div>
+<div id="LC8">ims = im.resize((525,525))</div>
+<div id="LC9">from POSprinter import POSprinter</div>
+<div id="LC10">printer = POSprinter.POSprinter()</div>
+<div id="LC11">printer.write(“Hello Puffy\n”, align=”center”)</div>
+<div id="LC12">printer.lineFeed(2)</div>
+<div id="LC13">printer.printImgFromFile(“puffy.gif”, resolution=”low”, scale=1.0)</div>
+<div id="LC14">printer.write(“Friske agurker paa glas”, rcolStr=”200 DKK”)</div>
+<div id="LC15">printer.lineFeed(2)</div>
+<div id="LC16">printer.printImgFromPILObject(ims, scale=0.5)</div>
+<div id="LC17">printer.lineFeedCut()</div>
+</blockquote>
+

@@ -1,0 +1,3 @@
+{{ define "main" }}<section class="list-page"><p class="eyebrow">HAL9K · ARKIV</p><h1>{{ .Title }}</h1>{{ .Content }}
+{{ if eq .Section "posts" }}<div class="search"><label for="search">Søg i artiklerne</label><input id="search" type="search" placeholder="Søg efter et projekt, emne eller en idé…"><p id="search-status" aria-live="polite"></p><ul id="search-results"></ul></div>{{ end }}
+{{ $paginator := .Paginate .Pages.ByDate.Reverse }}<div class="cards">{{ range $paginator.Pages }}{{ partial "card.html" . }}{{ end }}</div>{{ partial "pagination.html" . }}</section>{{ end }}

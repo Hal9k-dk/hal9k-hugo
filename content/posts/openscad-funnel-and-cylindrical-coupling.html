@@ -1,0 +1,27 @@
+{
+  "title": "OpenSCAD: Funnel and Cylindrical Coupling",
+  "date": "2016-05-23T21:59:34+02:00",
+  "lastmod": "2016-05-23T22:01:34+02:00",
+  "url": "/openscad-funnel-and-cylindrical-coupling/",
+  "type": "posts",
+  "wordpress_id": 1415,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Alex Birklykke"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter",
+    "open source"
+  ],
+  "tags": [],
+  "image": "/wp-content/uploads/2016/05/Screenshot-from-2016-05-23-222736.png"
+}
+
+<p>As part of another project, I found myself in need of a funnel shape as well as a cylindrical coupling in <a href="http://www.openscad.org">OpenSCAD</a>. Now, the straight forward approach would be to make a first-order approximation using a cylinder with two different radii to create a cone. While this solution would surely work for most cases, it is not as aesthetically pleasing as the real things, at least in my mind. As I couldn't find any existing reference designs online, I decided to make and share a solution. The modules can be found on my GitHub: <a href="https://github.com/alexbirklykke/openscad">https://github.com/alexbirklykke/openscad</a></p>
+<p>Both solutions use the <code>rotate_extrude</code> function in OpenSCAD, which takes a 2D polygon and rotates it around the z-axis. For the funnel I used a 2D version of the <a href="http://mathworld.wolfram.com/Funnel.html">funnel surface function</a> and for the coupling I used a selection of <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid functions</a>. In both cases, the modules behave like the native cylinder module, but with additional <code>shape</code> and <code>slice</code> parameters that control the contour and number of polygon points of the drawn objects. For the cylindrical coupling it is also possible to choose between different sigmoid kernels (the standard sigmoid function, tanh, linear, and two other algebraic sigmoids) to tweak the contour even further. </p>
+<figure class="caption"><img alt="Funnel" class="size-large wp-image-1412" height="319" loading="lazy" src="/wp-content/uploads/2016/05/Screenshot-from-2016-05-23-222736-1024x583.png" width="560"/> Funnel</figure>
+<figure class="caption"><img alt="Cylindrical coupling" class="size-large wp-image-1413" height="319" loading="lazy" src="/wp-content/uploads/2016/05/Screenshot-from-2016-05-23-222748-1024x583.png" width="560"/> Cylindrical coupling</figure>
+

@@ -1,0 +1,74 @@
+{
+  "title": "Floppy Disks: the best TV remote for kids",
+  "date": "2026-01-12T12:53:57+02:00",
+  "lastmod": "2026-01-12T12:53:57+02:00",
+  "url": "/floppy-disks-the-best-tv-remote-for-kids-2/",
+  "type": "posts",
+  "wordpress_id": 9037,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planet Ubuntu-DK",
+    "Planets"
+  ],
+  "image": "/wp-content/uploads/2014/06/bord.jpg",
+  "description": "Modern TVs are very poorly suited for kids. They require using complicated remotes or mobile phones, and navigating apps that continually try to lure you into watching something else than you intended to. The usual scenario ends up with the kid feeling disempowered and asking an adult to put something on. That something ends up […]"
+}
+
+<p>Modern TVs are very poorly suited for kids. They require using complicated remotes or mobile phones, and navigating apps that continually try to lure you into watching something else than you intended to. The usual scenario ends up with the kid feeling disempowered and asking an adult to put something on. That something ends up on auto-play because then the adult is free to do other things and the kid ends up stranded powerless and comatose in front of the TV.</p>
+<figure class="wp-block-video"><video controls="" playsinline="" src="https://blog.smartere.dk/wp-content/uploads/2026/01/20230908_224249.mp4"></video></figure>
+<p>Instead I wanted to build something for my 3-year old son that he could understand and use independently. It should empower him to make his own choices. It should be physical and tangible, i.e. it should be something he could touch and feel. It should also have some illusion that the actual media content was stored physically and not un-understandably in “the cloud”, meaning it should e.g. be destroyable — if you break the media there should be consequences. And there should be no auto-play: interact <em>once </em>and get <em>one </em>video.</p>
+<h2 class="wp-block-heading">Floppy disks are awesome!</h2>
+<p>And then I remembered the sound of a floppy disk. The mechanical click as you insert it, the whirr of the disk spinning, and the sound of the read-head moving. Floppy disks are the best storage media ever invented! Why else would the “save-icon” still be a floppy disk? Who hasn’t turned in a paper on a broken floppy disk, with the excuse ready that the floppy must have broken when the teacher asks a few days later? But kids these days have never used nor even seen a floppy disk, and I believe they deserve this experience!</p>
+<p>Building on the experience from the <a data-id="570" data-type="post" href="https://blog.smartere.dk/2023/10/fantus-button-part-2-the-physical-button-build-and-the-network-communication/">Big Red Fantus-Button</a>, I already had a framework for controlling a Chromecast, and because of the <code>netcat | bash</code> shenanigans it was easily extendable.</p>
+<p>My first idea for datastorage was to use the shell of a floppy disk and floppy drive, and put in an RFID tag; this has been done a couple of times on the internet, such as <a href="https://github.com/ItsDanik/rfidisk">RFIDisk</a> or this <a href="https://magazine.raspberrypi.com/articles/rfid-floppy-disk-reader">RaspberryPi based RFID reader</a> or this <a href="https://www.youtube.com/watch?v=MsiUxiEBAqs">video covering how to embed an RFID tag in a floppy disk</a>. But getting the floppy disk apart to put in an RFID tag and getting it back together was kinda wonky.</p>
+<p>When working on the project in <a href="/">Hal9k</a> someone remarked: “Datastorage? The floppy disk can store data!”, and a quick prototype later this worked really, <em>really</em>, well. Formatting the disk and storing a single small file, “autoexec.sh”, means that all the data ends up in track 0 and is read more or less immediately. It also has the benefit that everything can be checked and edited with a USB floppy disk drive; and the major benefit that all the sounds are completely authentic: click, whirrr, brrr brrr.</p>
+<h2 class="wp-block-heading">Autorun for floppy disks is not really a thing.</h2>
+<p>The next problem to tackle was how to detect that a disk is inserted. The concept of <a href="https://en.wikipedia.org/wiki/AutoRun">AutoRun</a> from Windows 95 was a beauty: insert a CD-ROM and it would automatically start whatever was on the media. Great for convenience, quite questionably for security. While <em>in theory</em> <a href="https://learn.microsoft.com/da-dk/windows/win32/shell/autoplay-reg?redirectedfrom=MSDN">floppy disks are supported for AutoRun</a>, it turns out that floppy drives basically don’t know if a disk is inserted until the operating system tries to access it! There is a <a href="https://en.wikipedia.org/wiki/Floppy_disk_drive_interface">pin 34 “Disk Change” that is supposed to give this information</a>, but this is basically a lie. None of the drives in my possession had that pin connected to anything, and the internet mostly concurs. In the end I slightly modified the drive and added a simple rolling switch, that would engage when a disk was inserted.</p>
+<figure class="wp-block-video"><video controls="" playsinline="" src="/media/imported/ce80a3a56e23f2bd5195.mp4"></video></figure>
+<h2 class="wp-block-heading">A floppy disk walks into a drive; the microcontroller says “hello!”</h2>
+<p>The next challenge was to read the data on a microcontroller. Helpfully, there is the <a href="https://github.com/dhansel/ArduinoFDC">Arduino FDC Floppy library</a> by dhansel, which I must say is <em>most</em> excellent. Overall, this meant that the part of the project that involved reading a file from the floppy disk FAT filesystem was basically the easiest part of all!</p>
+<div class="wp-block-image">
+<figure class="alignleft size-full"><img alt="" class="wp-image-780" decoding="async" height="416" loading="lazy" sizes="(max-width: 416px) 100vw, 416px" src="/media/imported/301c7a76abf4b103f5bc.png" srcset="/media/imported/301c7a76abf4b103f5bc.png 416w, /media/imported/7cbcd7384cf2c628f779.png 300w, /media/imported/122884eafef08a4887c5.png 150w" width="416"/><figcaption class="wp-element-caption">A combined ATMega + ESP8266 UNO-like board. Not really recommended, but can be made to work.</figcaption></figure>
+</div>
+<p>However, the <a href="https://github.com/dhansel/ArduinoFDC">Arduino FDC Floppy</a> library is <em>only</em> compatible with the AVR-based Arduinos, not the ESP-based ones, because it needs to control the timing very precisely and therefore uses a healthy amount of inline assembler. This meant that I would need one AVR-based Arduino to control the floppy disk, but another ESP-based one to do the WiFi communication. Such combined boards do exist, and I ended up using such a board, but I’m not sure I would recommend it: the usage is really finagly, as you need to set the jumpers differently for programming the ATmega, or programming the ESP, or connecting the two boards serial ports together.</p>
+<h2 class="wp-block-heading">A remote should be battery-powered</h2>
+<p>A remote control should be portable, and this means battery-powered. Driving a floppy disk of of lithium batteries was interesting. There is a large spike in current draw when the disk needs to spin up of several amperes, while the power draw afterwards is more modest, a couple of hundred milliamperes. I wanted the batteries to be 18650s, because I have those in abundance. This meant a battery voltage of 3.7V nominally, up to 4.2V for a fully charged battery; 5V is needed to spin the floppy around, so a boost DC-DC converter was needed. I used an off the shelf XL6009 step-up converter board. At this point a lot of head-scratching occurred: that initial spin-up power draw would cause the microcontroller to reset. In the end a 1000uF capacitor at the microcontroller side seemed to help but not eliminate the problem.</p>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-779" decoding="async" height="768" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/2f5e7340e1c565e24c4e.png" srcset="/media/imported/2f5e7340e1c565e24c4e.png 1024w, /media/imported/6acb4eb7a824a04fe702.png 300w, /media/imported/334bcbcd6cfb3c8ab3fd.png 768w, /media/imported/4d556fece2345f8d8607.png 1536w, /media/imported/7e2d194239197236d78c.png 1667w" width="1024"/></figure>
+<p>One crucial finding was that the ground side of the interface cable should absolutely <em>not</em> be connected to any grounds on the microcontroller side. I was using a relatively simple logic-level MOSFET, the <a href="https://www.infineon.com/assets/row/public/documents/24/49/infineon-irlz34n-datasheet-en.pdf?fileId=5546d462533600a40153567206892720">IRLZ34N</a>, to turn off the drive by disconnecting the ground side. If any ground is connected, the disk won’t turn off. But also: if any logic pin was being pulled to ground by the ATmega, that would also provide a path to ground. But since the ATmega cannot sink that much current this would lead to spurious resets! Obvious after the fact, but this took quite some headscratching. <a href="https://github.com/mchro/FloppyDiskCast/commit/7a59d0754a0b9ad62af22d06c4fe978462e26150">Setting all the logic pins to input, and thus high impedance</a>, finally fixed the stability issues.</p>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-833" decoding="async" height="585" loading="lazy" sizes="(max-width: 1024px) 100vw, 1024px" src="/media/imported/be752cff02524d675579.png" srcset="/media/imported/be752cff02524d675579.png 1024w, /media/imported/55f493bb4c9e948c7598.png 300w, /media/imported/942551370d236a39de96.png 768w, /media/imported/65abfc707aa0cba4fc12.png 1536w, /media/imported/d429255e1e03a267bfbf.png 1656w" width="1024"/></figure>
+<p>After fixing the stability, the next challenge was how to make <em>both</em> of the microcontrollers sleep. Because the ATmega sleep modes are quite a lot easier to deal with, and because the initial trigger would be the floppy inserting, I decided to make the ATmega in charge overall. Then the ESP has a very simple function: when awoken, read serial in, when a newline is found then send off that complete line via WiFi, and after 30 seconds signal to the ATmega that we’re sleeping, and go back to sleep.</p>
+<figure class="wp-block-image size-large wp-lightbox-container"><img alt="" class="wp-image-791" decoding="async" height="677" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="/media/imported/e36ed0215f1941faf6e0.png" srcset="/media/imported/e36ed0215f1941faf6e0.png 1024w, /media/imported/e9e2e5389b1462438439.png 300w, /media/imported/cb5dfe7d4a4b0767c8eb.png 768w, /media/imported/a73a99d50a4769d69f51.png 1244w" width="1024"/></figure>
+<p>The overall flow for the ATmega is then:</p>
+<ol class="wp-block-list">
+<li>A disk is inserted, this triggers a interrupt on the ATmega that wakes up.</li>
+<li>The ATmega resets the ESP, waking it from deep sleep.</li>
+<li>The ATmega sends a “diskin” message over serial to the ESP; the ESP transmits this over WiFi when available.</li>
+<li>The ATmega turns on the drive itself, and reads the disk contents, and just sends it over serial to the ESP.</li>
+<li>Spin down the disk, go to sleep.</li>
+<li>When the disk is ejected, send a “diskout” message over serial, resetting the ESP if needed.</li>
+<li>Go back to 1.</li>
+</ol>
+<p>The box itself is just lasercut from MDF-board. For full details see the <a href="https://github.com/mchro/FloppyDiskCast">FloppyDiskCast Git repository</a>.</p>
+<h2 class="wp-block-heading">Server-side handlers</h2>
+<p>Responding to those commands is still the <code>netcat | bash</code> from the <a data-id="570" data-type="post" href="https://blog.smartere.dk/2023/10/fantus-button-part-2-the-physical-button-build-and-the-network-communication/">Big Red Fantus-Button</a>, which was simply extended with a few more commands and capabilities.</p>
+<figure class="wp-block-image size-full"><img alt="" class="wp-image-850" decoding="async" height="609" loading="lazy" sizes="auto, (max-width: 552px) 100vw, 552px" src="/media/imported/63e69f4b586296694e1c.png" srcset="/media/imported/63e69f4b586296694e1c.png 552w, /media/imported/1432f35273ba1e2bc74d.png 272w" width="552"/><figcaption class="wp-element-caption">A few different disks to chose from, with custom printed labels.</figcaption></figure>
+<p><code>diskin</code> always sends a “play” command to the Chromecast.<br/><code>diskout</code> always sends a “pause” command to the Chromecast.<br/>Other commands like <code>dad-music</code> are handled in one of two ways:</p>
+<ul class="wp-block-list">
+<li><a href="https://github.com/mchro/FloppyDiskCast/blob/1ac7c6f91fe1d587e3c1154cfd170fe0712a4c69/serverside/floppy-chromecast/handlers/common_player.py#L269">Play a random video from a set, if a video from that set is not already playing</a>: e.g. <code>dad-music</code> will randomly play one of dad’s music tracks – gotta influence the youth!</li>
+<li><a href="https://github.com/mchro/FloppyDiskCast/blob/1ac7c6f91fe1d587e3c1154cfd170fe0712a4c69/serverside/floppy-chromecast/handlers/common_player.py#L309">Play the next video from a list, if a video from the list is not already playing</a>: e.g. <code>fantus-maskinerne</code> will play the next episode, and only the next episode.</li>
+</ul>
+<p>Common for both is that they should be idempotent actions, and the <code>diskin</code> shortcut will make the media resume without having to wait for the disk contents itself to be read and processed. This means that the “play/pause” disk just contains an empty file to work.</p>
+<h2 class="wp-block-heading">Questionable idea meets real-world 3 year old user</h2>
+<figure class="wp-block-video"><video controls="" playsinline="" src="/media/imported/07e6079275f0559f3860.mp4"></video></figure>
+<p>The little guy quickly caught on to the idea! Much fun was had just pausing and resuming music and his Fantus TV shows. He explored and prodded, and some disks <em>were</em> harmed in the process. One problem that I did solve was that the read head stayed on track 0 after having read everything: this means that when the remote with disk inside it is tumbled around, the disk gets damaged at track 0. To compensate for this, I move the head to track 20 after reading has finished: any damage is then done there, where we don’t store any data. As a bonus it also plays a little more mechanic melody.</p>
+

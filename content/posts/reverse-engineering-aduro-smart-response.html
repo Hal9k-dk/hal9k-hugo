@@ -1,0 +1,116 @@
+{
+  "title": "Reverse engineering Aduro Smart Response",
+  "date": "2017-01-28T23:54:17+02:00",
+  "lastmod": "2017-01-28T23:54:17+02:00",
+  "url": "/reverse-engineering-aduro-smart-response/",
+  "type": "posts",
+  "wordpress_id": 1534,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [],
+  "image": "/media/imported/09848c33f56f50392a8e.jpg",
+  "description": "I have a fancy thermometer for my wood stove namely an Aduro Smart Response. The accompanying Android app basically shows a temperature graph, with guidelines as to whether the burning is optimal and when put in more wood. I have generally been content with the app: it is quite slow, but generally helps in more optimal burning. Recently however, the Android […]"
+}
+
+<p><a href="/media/imported/39fd54e66b7edf58cf27.jpg"><img alt="" class="alignnone size-medium wp-image-200" height="300" loading="lazy" sizes="(max-width: 169px) 100vw, 169px" src="/media/imported/09848c33f56f50392a8e.jpg" srcset="/media/imported/09848c33f56f50392a8e.jpg 169w, /media/imported/39fd54e66b7edf58cf27.jpg 529w" width="169"/></a><a href="/media/imported/74d2bdf3812d2f829ad9.png"><img alt="" class="alignnone size-medium wp-image-202" height="300" loading="lazy" sizes="(max-width: 169px) 100vw, 169px" src="/media/imported/4657f9d56a5ac8858708.png" srcset="/media/imported/4657f9d56a5ac8858708.png 169w, /media/imported/74d2bdf3812d2f829ad9.png 557w" width="169"/></a></p>
+<p>I have a fancy thermometer for my wood stove namely an <a href="http://www.aduro.dk/aduro-braendeovne/aduro-smart-response/">Aduro Smart Response</a>. The accompanying Android app basically shows a temperature graph, with guidelines as to whether the burning is optimal and when put in more wood. I have generally been content with the app: it is quite slow, but generally helps in more optimal burning. Recently however, the Android app has stopped working (something about connecting to a database), and this prompted me to start on a project I wanted to do for some time: get the data from the Smart Response unit into a database under my control.</p>
+<p>The Smart Response unit uses Bluetooth Low Energy, and is powered by 3xAAA batteries (my batteries lasted for a year before replacing). Connecting to a BLE unit from Linux is quite easy, at least from the command line:<br/>
+<code><br/>
+$ sudo hcitool lescan<br/>
+LE Scan ...<br/>
+B4:99:4C:25:12:B2 (unknown)<br/>
+B4:99:4C:25:12:B2 Aduro demo<br/>
+$ sudo hcitool lecc B4:99:4C:25:12:B2<br/>
+Connection handle 3585<br/>
+$ sudo gatttool -b B4:99:4C:25:12:B2 --interactive<br/>
+[B4:99:4C:25:12:B2][LE]&gt; connect<br/>
+Attempting to connect to B4:99:4C:25:12:B2<br/>
+Connection successful<br/>
+</code><br/>
+hcitool is used to create a connection/pairing. gatttool is used to query the device interactively. Thereafter the device can be explored, to see which “handles” are available:<br/>
+<code><br/>
+[B4:99:4C:25:12:B2][LE]&gt; primary<br/>
+attr handle: 0x0001, end grp handle: 0x000b uuid: 00001800-0000-1000-8000-00805f9b34fb #Generic Access<br/>
+attr handle: 0x000c, end grp handle: 0x000f uuid: 00001801-0000-1000-8000-00805f9b34fb #Generic Attribute<br/>
+attr handle: 0x0010, end grp handle: 0x0022 uuid: 0000180a-0000-1000-8000-00805f9b34fb #Device Information<br/>
+attr handle: 0x0023, end grp handle: 0x0027 uuid: 0000180f-0000-1000-8000-00805f9b34fb #Battery<br/>
+attr handle: 0x0028, end grp handle: 0xffff uuid: 0000ffb0-0000-1000-8000-00805f9b34fb # ???<br/>
+</code><br/>
+The annotations on the right are mine; the UUIDs can be looked up under <a href="https://www.bluetooth.com/specifications/gatt/services">GATT services on the Bluetooth website</a>.<br/>
+For example, the battery status can be queried somewhere in the Battery handle group from 0x0023 to 0x0027:<br/>
+<code><br/>
+[B4:99:4C:25:12:B2][LE]&gt; characteristics 0x0023 0x0027<br/>
+handle: 0x0024, char properties: 0x12, char value handle: 0x0025, uuid: 00002a19-0000-1000-8000-00805f9b34fb<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x0025<br/>
+Characteristic value/descriptor: 5d # Battery level 0x5d = 93%<br/>
+</code></p>
+<p>Now, the only unknown primary is from handle 0x0028 and higher. Let’s query those:<br/>
+<code><br/>
+[B4:99:4C:25:12:B2][LE]&gt; characteristics 0x0028 0xffff<br/>
+handle: 0x0029, char properties: 0x0a, char value handle: 0x002a, uuid: 0000ffb6-0000-1000-8000-00805f9b34fb # 0x0a = R/W<br/>
+handle: 0x002c, char properties: 0x10, char value handle: 0x002d, uuid: 0000ffb7-0000-1000-8000-00805f9b34fb # 0x10 = notify<br/>
+handle: 0x0030, char properties: 0x10, char value handle: 0x0031, uuid: 0000ffb3-0000-1000-8000-00805f9b34fb # 0x10 = notify<br/>
+handle: 0x0033, char properties: 0x02, char value handle: 0x0034, uuid: 0000ffb4-0000-1000-8000-00805f9b34fb # 0x02 = Read<br/>
+handle: 0x0035, char properties: 0x08, char value handle: 0x0036, uuid: 0000ffb8-0000-1000-8000-00805f9b34fb # 0x08 = Write<br/>
+handle: 0x0037, char properties: 0x08, char value handle: 0x0038, uuid: 0000ffb9-0000-1000-8000-00805f9b34fb # 0x08 = Write<br/>
+handle: 0x0039, char properties: 0x0a, char value handle: 0x003a, uuid: 0000ffb5-0000-1000-8000-00805f9b34fb # 0x0a = R/W<br/>
+handle: 0x003b, char properties: 0x08, char value handle: 0x003c, uuid: 0000ffb2-0000-1000-8000-00805f9b34fb # 0x08 = Write<br/>
+</code><br/>
+The annotations on the right are again mine: they specify the char properties as looked up under <a href="https://devzone.nordicsemi.com/tutorials/17/">“Characteristic Declaration”</a>. Querying the char value handles gives some uninteresting values (0x00 bytes, etc.), but also some interesting ones:<br/>
+<code><br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002d<br/>
+Characteristic value/descriptor: c4 01 03 01 fd 00<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x003a<br/>
+Characteristic value/descriptor: 44 65 6d 6f 20 20 20 00 # 'Demo \x00'<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x0034<br/>
+Characteristic value/descriptor: c3 01 ba 01 c4 01 27 00 c2 01 d1 01<br/>
+</code><br/>
+Querying a bit outside also gives some very interesting strings:<br/>
+<code><br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002b<br/>
+Characteristic value/descriptor: 41 64 75 72 6f 20 47 65 74 4c 6f 67 # 'Aduro GetLog'<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002f<br/>
+Characteristic value/descriptor: 41 64 75 72 6f 20 4c 69 76 65 56 61 6c 75 65 # 'Aduro LiveValue'<br/>
+</code></p>
+<p>At this point I tried to look for values that changed, and also manipulating the device (temperature, playing with the damper that is connected with a microswitch). It turns out that 0x002d and 0x0034 changes values, but 0x002d changes the most. Is there a pattern?<br/>
+<code><br/>
+Characteristic value/descriptor: c4 01 08 01 fb 00<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002d<br/>
+Characteristic value/descriptor: c4 01 1f 01 f3 00<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002d<br/>
+Characteristic value/descriptor: c4 01 3c 01 ec 00<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002d<br/>
+Characteristic value/descriptor: c4 01 5c 01 e2 00<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002d<br/>
+Characteristic value/descriptor: c4 01 9f 01 c3 00<br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-read-hnd 0x002d<br/>
+Characteristic value/descriptor: c4 01 0f 02 9d 00<br/>
+#counting UP DOWN<br/>
+</code><br/>
+Something is counting up, while something else seems to be counting down; this was while the temperature was cooling down. As 0x002d allows for notify, we can even ask for notifications by writing 0x0100 to 0x002d + 1:<br/>
+<code><br/>
+[B4:99:4C:25:12:B2][LE]&gt; char-write-cmd 0x002e 0100<br/>
+Notification handle = 0x002d value: c5 01 43 00 2a 01<br/>
+Notification handle = 0x002d value: c5 01 44 00 2a 01<br/>
+Notification handle = 0x002d value: c5 01 45 00 2b 01<br/>
+Notification handle = 0x002d value: c5 01 46 00 2c 01<br/>
+...<br/>
+Notification handle = 0x002d value: c5 01 f0 01 94 00<br/>
+Notification handle = 0x002d value: c5 01 f1 01 94 00<br/>
+Notification handle = 0x002d value: c6 01 00 00 93 00<br/>
+Notification handle = 0x002d value: c6 01 01 00 93 00<br/>
+</code><br/>
+In the end of the series I manipulated the damper. Trying to identify the temperature, the last 2 characters seems the most promising: values from 0x93 (147 C) to 0x012c (300 C) seem reasonable from what I have seen previously. The middle 2 characters always increase by 1, so it is probably a datapoint counter. The first 2 characters seems to increase by using the damper.</p>
+<p>This was implemented in a small Python script, using the Gattlib, <a href="https://blog.smartere.dk/pyAduroSmart.txt">pyAduroSmart.py</a>.</p>
+<p>I hooked this into my home monitoring system (more on that in a later blog post), and now have a nice graph of the number of firings, and the temperature:<br/>
+<a href="https://blog.smartere.dk/wp-content/uploads/2017/01/graph-1.png"><img alt="" class="alignnone wp-image-204" height="78" loading="lazy" sizes="(max-width: 502px) 100vw, 502px" src="/media/imported/8566d0323983d01f9fb2.png" srcset="/media/imported/8566d0323983d01f9fb2.png 300w, /media/imported/d891d8c535b11691ea61.png 768w, /media/imported/b24302102777897dc366.png 1024w" width="502"/></a></p>
+

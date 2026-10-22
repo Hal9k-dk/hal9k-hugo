@@ -1,0 +1,47 @@
+{
+  "title": "Fantus-button part 2: the physical button build and the network communication",
+  "date": "2023-10-28T19:48:10+02:00",
+  "lastmod": "2023-10-28T19:48:10+02:00",
+  "url": "/fantus-button-part-2-the-physical-button-build-and-the-network-communication-2/",
+  "type": "posts",
+  "wordpress_id": 2293,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets"
+  ],
+  "image": "/media/imported/74028cf69662f6eb751d.jpg",
+  "description": "First part of this series is here, covering the reverse engineering of the DRTV Chromecast App. I wanted the physical appearance to be extremely minimalistic, with slight references to various cubes from videogames. Because it is a remote control, it of course has to be wireless and battery-powered. The box is lasercut from 6 mm […]"
+}
+
+<p><a data-id="544" data-type="post" href="https://blog.smartere.dk/2023/07/fantus-button-part-1-reverse-engineering-the-drtv-chromecast-app/">First part of this series is here, covering the reverse engineering of the DRTV Chromecast App.</a></p>
+<p>I wanted the physical appearance to be extremely minimalistic, with slight references to various cubes from videogames. Because it is a remote control, it of course has to be wireless and battery-powered.</p>
+<figure class="wp-block-image size-medium"><img alt="" class="wp-image-563" decoding="async" height="300" loading="lazy" sizes="(max-width: 225px) 100vw, 225px" src="/media/imported/74028cf69662f6eb751d.jpg" srcset="/media/imported/74028cf69662f6eb751d.jpg 225w, /media/imported/d4b7c1fd9f825df39e30.jpg 768w, /media/imported/4be5c530d7ea6f48fd0c.jpg 1152w, /media/imported/eb6fbf9774c90804b4c3.jpg 1536w, /media/imported/5359ebb933a8e2e23dcc.jpg 1920w" width="225"/></figure>
+<p>The <a href="https://wiki.hal9k.dk/equipment/lasersaur">box is lasercut from 6 mm MDF</a>, and with a giant red arcade button on top with a red LED inside.</p>
+<p>The electronics inside is a <a data-id="468" data-type="post" href="https://blog.smartere.dk/2022/12/quick-and-dirty-lithium-battery-powered-wemos-d1-mini/">battery-powered Wemos D1</a>, along with 4 x 18650 Lithium battery cells. After some experimentation on the response time, which is primarily dominated by the time it takes to reconnect to the WiFi network, I initially only used “light sleep”. This resulted in a battery time of just over a week, which is okay, but not great.</p>
+<p>In order to preserve battery deep sleep would be really nice. The problem is deep sleep on the Wemos can only be interrupted by a reset. The idea was to use a MOSFET (in this case an N-channel logic level mosfet, <a href="https://www.infineon.com/dgdl/Infineon-IRFZ44N-DataSheet-v01_01-EN.pdf?fileId=5546d462533600a40153563b3a9f220d">IRFZ44N</a>) for the Wemos to be able to select whether a press of the button should reset it, or it should just register on a pin as normal. </p>
+<figure class="wp-block-image size-full"><img alt="" class="wp-image-575" decoding="async" height="672" loading="lazy" sizes="(max-width: 963px) 100vw, 963px" src="/media/imported/e373b1c8587a13d01a06.png" srcset="/media/imported/e373b1c8587a13d01a06.png 963w, /media/imported/b49eb43aea3e0658cbb0.png 300w, /media/imported/81c2a5bda0d90c211fc0.png 768w" width="963"/></figure>
+<p>This circuit allows RST to be pulled low by the button, as long as D0 is high. Luckily, <a href="https://edabbles.com/2020/03/24/wemos-d1-mini-esp8266-pin-states-on-off-deep-sleep-low-side-switch/">D0 is high during deep sleep</a>, so as long as the Arduino code keeps D0 low button presses will not reset — but can still be registered by reading pin D1.</p>
+<p>This works out “responsively enough” because the initial start has some delay due to the Chromecast initializing the app and loading media. Any subsequent button presses within the 30 seconds the Arduino stays awake are instant though. With this setup the battery life is not a problem – I’ve only had to charge it once. As a bonus feature/bug whenever the battery gets low the Wemos will trigger a bit sporadically: this causes “Fantus-bombing” where Fantus will just randomly start; quite quickly thereafter the Fantus-button is being charged <img alt="😉" class="wp-smiley" loading="lazy" src="/media/imported/a370f43138c98b068e3e.png" style="height: 1em; max-height: 1em;"/></p>
+<p>The Wemos itself is not powerful enough to do <a data-id="544" data-type="post" href="https://blog.smartere.dk/2023/07/fantus-button-part-1-reverse-engineering-the-drtv-chromecast-app/">all the pyChromecast communication needed</a>, so I setup a small Raspberry Pi to handle that part. Since I didn’t want to spend too much time and effort setting up the communication between them, I ended up using a trick from my youth: UDP broadcasting. Because UDP is datagram-oriented you can send a UDP packet to the broadcast address  (<code>255.255.255.255</code>) and then it will be received by all hosts on the local area network: no configuration needed. In Arduino code it looks like:</p>
+<pre class="wp-block-code"><code>  Udp.begin(31337);<br/>  Udp.beginPacket("255.255.255.255", 31337);<br/>  Udp.write("emergency-button\n");<br/>  Udp.endPacket();</code></pre>
+<p>(<a href="https://blog.smartere.dk/wp-content/uploads/2023/10/emergency-button-cast.txt">Full Arduino code available here</a>.)</p>
+<p>At this point I had a UDP packet that I could receive on the Raspberry Pi, and it was just a matter of writing a small server program to listen, receive and process those UDP commands. However, at this point a thought entered my mind, that derailed the project for a while:</p>
+<h2 class="wp-block-heading">netcat | bash</h2>
+<p>Why write my own server to parse and execute commands, when <code>Bash</code> is already fully capable of doing exactly that with more flexibility than I could ever dream of? And <code>netcat</code> is perfectly capable of receiving UDP packets? <a href="https://www.youtube.com/watch?v=dFUlAQZB9Ng">This is a UNIX system</a>, after all, and <a href="https://www.youtube.com/watch?v=bKzonnwoR2I">UNIX is all about combining simple commands in pipelines</a> — each doing one thing well.</p>
+<p>The diabolical simplicity of just executing commands directly from the network was a bit too insecure though. This is where <a href="https://www.gnu.org/software/bash/manual/html_node/The-Restricted-Shell.html">Bash Restricted mode</a> enters the project: I wouldn’t rely on it for high security (since it is trying to “<a href="https://www.ranum.com/security/computer_security/editorials/dumb/">enumerate badness</a>“), but by locking down the <code>PATH</code> of commands that are allowed to execute it should be relatively safe from most of the <a href="https://vk9-sec.com/linux-restricted-shell-bypass/">common bypass techniques</a>:</p>
+<pre class="wp-block-code"><code>netcat -u -k -l 31337 | PATH=./handlers/ /bin/bash -r</code></pre>
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<p>The project was now fully working: press the button, Fantus starts. Press it while Fantus is playing: Fantus pauses. Press it while Fantus is paused: Fantus resumes. The little human was delighted about his new powers over the world, and pressed the button to his hearts content (and his parents slight annoyance at times).</p>
+<p>(<a href="https://blog.smartere.dk/wp-content/uploads/2023/10/emergency-button.txt">Full code for handler available here</a>.)</p>
+<p>But wouldn’t it be cool if the little human had a (limited) choice in what to view?…</p>
+

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if not .IsHome }}{{ .Title }} · {{ end }}{{ site.Title }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  {{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+  <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+  <link rel="alternate" type="application/rss+xml" title="Hal9k" href="{{ "index.xml" | absURL }}">
+  <script defer src="{{ "js/site.js" | relURL }}"></script>
+</head>
+<body>
+<a class="skip" href="#main">Spring til indhold</a>
+<header class="site-header"><div class="wrap header-inner">
+  <a class="brand" href="/" aria-label="Hal9k forside"><span class="hal-eye"></span>HAL<span>9K</span><small>HACKERSPACE · AALBORG</small></a>
+  <nav aria-label="Hovedmenu">{{ range site.Menus.main }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}</nav>
+</div></header>
+<main id="main" class="wrap">{{ block "main" . }}{{ end }}</main>
+<footer><div class="wrap footer-grid"><div><strong>HAL9K</strong><p>Sofiendalsvej 80<br>9200 Aalborg SV<br>CVR: 33444524</p><a href="/find-os/">Åbent torsdag fra kl. 19.00 →</a></div><div><strong>Foreningen</strong><a href="/hal9k/">Om Hal9k</a><a href="/historie/">Historie</a><a href="/hal9k/bestyrelsen/">Bestyrelsen</a><a href="/hal9k/vedtaegter/">Vedtægter</a><a href="/sponsorer/">Sponsorer</a></div><div><strong>Find rundt</strong><a href="/sider/">Alle sider</a><a href="/sporgsmal-vi-bliver-stillet-hele-tiden/">Ofte stillede spørgsmål</a><a href="/kontakt/">Kontakt</a><a href="/databeskyttelse/">Databeskyttelse</a><a href="/index.xml">RSS</a></div></div></footer>
+</body></html>

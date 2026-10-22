@@ -1,0 +1,40 @@
+{
+  "title": "Olimex A20-OLinuXino-LIME2 – A review after 4 years in service",
+  "date": "2018-09-29T19:21:22+02:00",
+  "lastmod": "2018-09-29T19:21:22+02:00",
+  "url": "/olimex-a20-olinuxino-lime2-a-review-after-4-years-in-service/",
+  "type": "posts",
+  "wordpress_id": 1655,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "Planets",
+    "Sysadmin'ing"
+  ],
+  "image": "/media/imported/27a35a617b3ef69a8e4d.jpg",
+  "description": "Last week my A20-OLinuXino-LIME2 one board Linux computer quit working, with a power supply issue. I looked up when it was purchased, and realised it had been in 24/7 service for almost 4 years. I guess that is a good excuse to do a little review. It even turned out that it the board was fine, but the AC-DC […]"
+}
+
+<p>Last week my <a href="https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME2/open-source-hardware">A20-OLinuXino-LIME2</a> one board Linux computer quit working, with a power supply issue. I looked up when it was purchased, and realised it had been in 24/7 service for almost 4 years. I guess that is a good excuse to do a little review. It even turned out that it the board was fine, but the AC-DC power supply brick could not supply enough current anymore.</p>
+<p><a href="https://blog.smartere.dk/wp-content/uploads/2018/09/DSC_1172.jpg"><img alt="" class="alignnone size-medium wp-image-243" height="300" loading="lazy" sizes="(max-width: 274px) 100vw, 274px" src="/media/imported/27a35a617b3ef69a8e4d.jpg" srcset="/media/imported/27a35a617b3ef69a8e4d.jpg 274w, /media/imported/c8a5d3babee0c1ea2e2a.jpg 768w, /media/imported/0fb7b5a706c91a7262c8.jpg 935w" width="274"/></a></p>
+<p>The relevant specifications of the board, for my uses, are basically:</p>
+<ul>
+<li>Dual core 1 GHz ARM Cortex-A7</li>
+<li>1 GB memory, 1 Gbit ethernet, SATA connector</li>
+<li>LiPo battery connector/charger for UPS functionality</li>
+</ul>
+<p>The Lime2 has been tasked with running my home monitoring system, consisting of a Debian installation with a Graphite backend, a Grafana frontend, and a ZoneMinder installation. The Graphite database is running on a software RAID0 of two disks (one on SATA, one on USB): in the beginning it was two spinning disks, but after a few years the random 2.5″ laptop disk I was using crapped out, so it was upgraded to a Samsung SSD. The power budget is strained more or less to the max with two spinning harddrives: The system was only able to boot if the battery was connected, presumably because the voltage would otherwise drop for the startup torque. This problem went away after switching to a SSD.</p>
+<p>Software wise the system started out with the Debian supplied by Olimex on a SD-card, a Debian pre-Jessie with a custom SunXi kernel. This system was reasonable, but did experience random hangs after some time of use (I belive I found a bugreport back in the day, but am unable to refind it now). The system was later upgraded to a Debian Stretch with a 4.9 kernel from stretch-backports, that <a href="https://linux-sunxi.org/Linux_mainlining_effort#Status_Matrix">supports the SunXi chipset enough for my uses</a>. The upgrade was rather involved,  requiring the correct kernel image, a custom U-boot script and the correct device tree file. Something did of course go wrong, at which point I got to be familiar with the serial console of the Lime2: there is a convenient 3 pin header, that gives access to a TTL serial. Using the serial console, I was able to identify the mistake and correct it. After the upgrade the system has been rock-stable.</p>
+<p>The system has been handling the load reasonably: The 1GB of memory is constraining, there is not really any more free memory. The processor is only really strained by the motion detection in ZoneMinder, which uses more or less one core per camera. This will hopefully be optimized a bit, as <a href="https://github.com/ZoneMinder/zoneminder/pull/1823">ZoneMinder is being optimized for the ARM instruction set</a>. Handling only the Graphite/Grafana load would be a breeze, even though the system is receiving ~650 metrics per minute.</p>
+<p>All in all, I can recommend the Lime2 board for applications that need a little more umph than a Raspberry Pi, notably on the SATA and Ethernet side, and/or applications that need to be continuously available even after the power cuts out. For applications that need more than one SATA port, or more than one Ethernet port, or on-board Wifi, there are better — and more expensive — options. The price point of 45 EUR + VAT (which did not change from 4 years ago) puts the Lime2 slightly above the price of a RaspberryPi or BananaPi, but below boards like the <a href="https://www.pcengines.ch/apu2.htm">Apu2</a>. In addition, Olimex has announced that the <a href="https://olimex.wordpress.com/2014/11/27/how-long-olinuxino-with-allwinner-socs-will-be-produced-again-now-we-know-the-answer-forever/">Lime2 will be available “forever”</a>, making any system designed using the Lime2 future proof — for the foreseeable future.</p>
+<p>I ordered a new Lime2, before realising the problem was the power supply. I opted for the industrial variant that is now available. The only change, as far as I’m aware, is that the Allwinner A20 chip is rated for a larger temperature range, and it is 5 EUR more expensive.</p>
+

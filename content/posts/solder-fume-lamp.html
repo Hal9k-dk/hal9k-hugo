@@ -1,0 +1,62 @@
+{
+  "title": "Solder fume lamp",
+  "date": "2016-11-02T20:29:35+02:00",
+  "lastmod": "2016-11-02T20:29:35+02:00",
+  "url": "/solder-fume-lamp/",
+  "type": "posts",
+  "wordpress_id": 1491,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Georg"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "open source",
+    "Extern"
+  ],
+  "tags": [
+    "Arduino",
+    "Uncategorized",
+    "esp8266",
+    "Fume extractor",
+    "Lasercutter"
+  ],
+  "image": "/media/imported/1cedc257285b96a59be0.jpg",
+  "description": "I needed something to remove the smoke when soldering and build this USB powered solder fume fan lamp with an ESP8266 arduino, WS2812b/Neopixels, a fan with an active coal filter and a PIR sensor. See a short demo of the lamp on Youtube. Scad/svg files are available on Thingiverse. The case is lasercutted in 4 … Continue reading Solder fume lamp →"
+}
+
+<p><a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0011.jpg"><img alt="DSC_0011" class="size-medium wp-image-342 alignright" height="200" loading="lazy" src="/media/imported/1cedc257285b96a59be0.jpg" width="300"/></a></p>
+<p>I needed something to remove the smoke when soldering and build this USB powered solder fume fan lamp with an ESP8266 arduino, WS2812b/Neopixels, a fan with an active coal filter and a PIR sensor.</p>
+<p>See a short demo of the lamp on <a href="https://youtu.be/Z-aCkDBhwaY">Youtube</a>.</p>
+<p>Scad/svg files are available on <a href="https://www.thingiverse.com/thing:1843657">Thingiverse</a>.</p>
+<p>The case is lasercutted in 4 mm plywood.</p>
+<p>When there is no movement beneath the lamp the fan turns off after e.g. 60 seconds (can be extended to e.g. 1800 when holding down the fan button) and the LED turns off after 1800 seconds of inactivity. The LED intensity can be dimmed by holding down the LED button.</p>
+<p>Parts list:<br/>
+* 4 mm plywood for the laser cutted case<br/>
+* Ikea Forså lamp ( http://www.ikea.com/us/en/catalog/products/80146777/ )<br/>
+* WS2812b / Neopixel strip (30 LED/m, 12 LED’s are used for the lamp. I bought it on Ali Express)<br/>
+* Level shifter from 3.3 V to 5 V for the 3.3 V output from the PIR sensor (https://www.adafruit.com/product/757 I bougt it on AliExpress)<br/>
+* 1.5 mF capacitor betwen +5 V and ground near the Neopixels, for evening out voltage drops and ripple from the USB power.<br/>
+* PIR sensor (https://www.adafruit.com/product/189 I bought it on AliExpress)<a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0057.jpg"><img alt="DSC_0057" class="size-medium wp-image-340 alignright" height="200" loading="lazy" src="/media/imported/7284914bfa457355ad6e.jpg" width="300"/></a><br/>
+* Fan (80 mm, 12 V. It was just laying around)<br/>
+* Wemos D1 mini (https://www.wemos.cc/product/d1-mini.html)<br/>
+* Wemos ProtoBoard (https://www.wemos.cc/product/protoboard.html)<br/>
+* Wemos RelayShield for turning the fan on and off (https://www.wemos.cc/product/relay-shield.html)<br/>
+* MT3608 DC-DC Step Up Power Module from AliE for the power for the 12 V fan<br/>
+* Activated coal filter (adjusted the size with a scissor) (https://www.conrad.de/de/aktivkohlefilter-3teilig-toolcraft-79-7201-588546.html i bought it on AliE)<br/>
+* two push buttons, connecting the pins from the ESP8266 to ground.<br/>
+* USB cable<br/>
+* A few strips, pig tail wires, bolt and nuts etc.</p>
+<p><a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0056.jpg"><img alt="DSC_0056" class="aligncenter size-medium wp-image-339" height="200" loading="lazy" src="/media/imported/d6dcd5ef61ac172eacb0.jpg" width="300"/></a></p>
+<p>The case is glued together with normal wood glue and the PIR sensor and the WS2812b Neopixel strips are glued against the case with cyanoacrylate. The DC-DC converter is fixed with a cable tie. The Wemos D1 mini is fixed with a small bolt through a drilled hole in the ProtoBoard. The capacitor and the level shifter is glued with a hot glue gun. Be aware that there is very little room for the boards and the wires. If I were to build it again I would make some more room. Also the “stack” of the Wemos ProtoBoard, D1 mini and RelayShield is higher than the fan + activated coal filter, so it sticks out of the top, which I think is fine. All the parts do not need to be hidden away for the eye to see <img alt=":-)" class="wp-smiley" loading="lazy" src="/media/imported/8f5d834ffdb49be344e2.gif"/></p>
+<p>The software is available at:</p>
+<p>https://github.com/sman-dk/arduino/tree/master/solder_fume_lamp</p>
+<p>Since the ESP8266/Wemos D1 mini has wifi it can be made controllable via your smartphone etc. At the time of this writing I have no use of this, so for now I have not implemented anything fancy yet <img alt=":)" class="wp-smiley" loading="lazy" src="/media/imported/8f5d834ffdb49be344e2.gif"/></p>
+<p><a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0065.jpg"><img alt="DSC_0065" class="aligncenter size-medium wp-image-341" height="200" loading="lazy" src="/media/imported/25fb4c91250efe08520a.jpg" width="300"/></a></p>
+<p><a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0055.jpg"><img alt="IMG_3547" class="aligncenter size-medium wp-image-344" height="225" loading="lazy" src="/media/imported/7710ebc927f16e5fc43a.jpg" width="300"/><img alt="DSC_0055" class="size-medium wp-image-338 aligncenter" height="200" loading="lazy" src="/media/imported/bc766e1dc79f02931078.jpg" width="300"/></a></p>
+<figure class="wp-caption aligncenter" id="attachment_336" style="width: 299px;"><a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0051.jpg"><img alt="Power usage when the lamp and fan is active" class="wp-image-336" height="199" loading="lazy" src="/media/imported/f3654e43afe177436f65.jpg" width="299"/></a><figcaption class="wp-caption-text">Power usage when the lamp and fan is active</figcaption></figure>
+<figure class="wp-caption aligncenter" id="attachment_337" style="width: 300px;"><a href="http://blog.sman.dk/wp-content/uploads/2016/11/DSC_0052.jpg"><img alt="Power usage when idle" class="wp-image-337" height="200" loading="lazy" src="/media/imported/15e1c7f613f8265c87e9.jpg" width="300"/></a><figcaption class="wp-caption-text">Power usage when idle</figcaption></figure>
+

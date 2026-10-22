@@ -1,0 +1,95 @@
+{
+  "title": "Home automation - input knapper",
+  "date": "2019-12-19T19:20:17+02:00",
+  "lastmod": "2019-12-19T21:28:34+02:00",
+  "url": "/home-automation-input-knapper/",
+  "type": "posts",
+  "wordpress_id": 1821,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Anders Vestergaard"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "Projekter"
+  ],
+  "tags": [
+    "esp8266",
+    "fuga",
+    "ws2812",
+    "svagstrømstryk",
+    "home automation",
+    "openhab"
+  ],
+  "image": "/wp-content/uploads/2019/12/fuga-1.jpg"
+}
+
+<p></p>
+<p>Jeg har igennem længere tid arbejdet med at lave home automation af lyset.  Det hele startede med en arduino uno med ethernet shield, som så styrede nogle trådløse stikkontakter fra Harald Nyborg (<a href="https://www.instructables.com/id/LightControl/">link</a>). Som udelukkende kunne styres via hjemmeside på arduinoen. Da jeg så ville have nogle flere funktioner skiftede jeg over til <a href="https://www.openhab.org/">Openhab</a>, som er lavet til home automation, hvor der er en app til smartphone. <br/>Men så smart det er med en app osv. så er der steder i dagligdagen hvor det er besværligt at man skal finde telefonen frem for at kunne tænde lyset. <br/>Så derfor købte jeg en Xiaomi gateway med tilhørende zigbee trykknapper.</p>
+<p></p>
+<p></p>
+<div class="wp-block-image">
+<figure class="aligncenter is-resized"><img alt="" class="wp-image-1839" height="311" loading="lazy" src="/wp-content/uploads/2019/12/d14871ec-2be8-4562-9600-4e9234bb8877.jpg" width="311"/><figcaption>Xiaomi zigbee knap</figcaption></figure>
+</div>
+<p></p>
+<p></p>
+<p>Deres enkelt tryk med 3 funktioner (kort tryk, dobbelt tryk, langt tryk) og deres dobbelt tryk med 3 funktioner (venstre tryk, højre tryk, venstre+højre tryk) men jeg var ikke helt tilfreds med dem, da de fylder en del i forhold til antal af trykfunktioner. Så det skulle jeg havde fundet/lavet en smartere løsning på. </p>
+<p></p>
+<p></p>
+<div class="wp-block-image">
+<figure class="aligncenter is-resized"><img alt="" class="wp-image-1840" height="270" loading="lazy" src="/wp-content/uploads/2019/12/fuga-svagstroemstryk-4-slutte-diode-hvid-big.jpg" width="270"/><figcaption>Fuga svagstrømstryk - 4 tryk 2 led</figcaption></figure>
+</div>
+<p></p>
+<p></p>
+<p>Jeg kiggede derfor efter noget der gerne skulle kunne erstatte afbryderen. Derfor kiggede jeg på hvordan LK's svagstrømstryk til Fuga var lavet, og om det var muligt at bruge den, hvor elektronikken så blev stoppet ind i dåsen. <br/>Men det viste sig så at det ville være svært at få plads til + der var kun diode til de 2 af knapperne hvor jeg gerne ville have til alle 4. Så derfor begyndte jeg at kigge på at lave min egen version af svagstrømstrykket, hvor jeg fik målt op hvor stort det måtte være, hvor knapperne skulle sidde, hvor dioderne skulle sidde, samt et par styrehuller, så tangenten til LK's svagstrømstryk også passer til min. <br/>Den oprindelige plan var at bruge nogle 3 mm dioder, men kort før jeg skulle til at bestille PCB opdagede jeg at der netop var kommet en ny udgave af den digitale RGB lysdiode WS2812B, nemlig i en meget mindre pakke (2020 i stedet for 5050, dvs at den er 2x2 mm mod standard-dioden på 5x5 mm). Så de blev skiftet ud til den lille RGB diode. </p>
+<p></p>
+<p></p>
+<div class="wp-block-image">
+<figure class="aligncenter is-resized"><img alt="" class="wp-image-1844" height="334" loading="lazy" src="/wp-content/uploads/2019/12/fuga-knap-1024x982.jpg" width="348"/><figcaption>knapper og 2020 ws2812 led</figcaption></figure>
+</div>
+<p></p>
+<p></p>
+<p>Da jeg ikke ville til at ændre helt vildt i el-installationen, valgte jeg at sætte en esp8266 microcontroller med indbygget wifi på bagsiden af printet som læser knapperne samt opdaterer dioderne. </p>
+<p></p>
+<p></p>
+<div class="wp-block-image">
+<figure class="aligncenter is-resized"><img alt="" class="wp-image-1845" height="312" loading="lazy" src="/wp-content/uploads/2019/12/fuga-knap2-1024x1024.jpg" width="312"/><figcaption>ESP8266</figcaption></figure>
+</div>
+<p></p>
+<p></p>
+<p>Da jeg ikke er interesseret i at skulle skifte batterier hele tiden, skulle jeg have fundet en strømforsyning som skulle være PCB monterbar og passe ind i en Fuga dåse, der kiggede jeg straks på nogle fra Hi-link som jeg har brugt tidligere i andre projekter (i databladet står der at de er både UL og CE godkendte). De kunne lige nøjagtigt være der. </p>
+<p></p>
+<p></p>
+<p>Efter som at der var ved at være styr på elektronikken, så skulle der også laves noget så det kunne gøres fast og passe i en Fuga ramme. Så var det i gang med at måle op (jeg tog udgangspunkt i hullet i Fuga rammen og en Fuga PIR sensor). Jeg havde exporteret PCB layoutet fra kicad som 3D model, så det kunne laves omkring den. <br/>Det blev hurtigt til flere versioner, som alle blev test printet på 3D-printeren for at se hvordan det passede i virkeligheden. </p>
+<p></p>
+<p></p>
+<div class="wp-block-image">
+<figure class="aligncenter"><img alt="" class="wp-image-1846" loading="lazy" src="/wp-content/uploads/2019/12/fuga-knap3-1024x506.jpg"/><figcaption>I 3D print</figcaption></figure>
+</div>
+<p></p>
+<p></p>
+<p>Da jeg endelig havde et PCB og 3D-print jeg var tilpas med så blev der bestilt stumper hjem. Da det hele var kommet hjem fik jeg samlet den første. <br/>Efter de første test var jeg meget tilfreds med den, så blev resten af de første  samlet, og de begynder så småt at blive sat op derhjemme, som jeg får den programmeret til. </p>
+<p></p>
+<p></p>
+<div class="wp-block-image">
+<figure class="aligncenter is-resized"><img alt="" class="wp-image-1841" height="842" loading="lazy" src="/wp-content/uploads/2019/12/fuga-643x1024.jpg" width="529"/><figcaption>Mit fuga tryk</figcaption></figure>
+</div>
+<p></p>
+<p></p>
+<p>Hvert tryk står mig i ca 200 kr. </p>
+<p></p>
+<p></p>
+<p>Jeg havde en demo med til Mini Maker Faire i århus, hvor der var flere der viste interesse i dem, så derfor valgte jeg at lave dette lille skriv omkring projektet. </p>
+<p></p>
+<p></p>
+<p>Hvis du er interesseret i at få fat i nogle af dem så send mig en mail på andersv209 (a) hotmail.com med titlen "Fuga tryk esp model". Når der er til mindst en 50 stykker vil jeg sætte bestilling i gang. </p>
+<p></p>
+<p></p>
+<p class="has-small-font-size">PS. der gøres opmærksomt på at de ikke er godkendt til brug i fast installation og derfor anvendes på eget ansvar. Da der rodes i fast installation skal de monteres af en elektriker. </p>
+<p></p>
+<p></p>
+<p>Af Anders Vestergaard<br/>AndersV209</p>
+<p></p>
+

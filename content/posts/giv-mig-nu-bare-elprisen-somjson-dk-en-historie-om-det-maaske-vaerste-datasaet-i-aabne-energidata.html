@@ -1,0 +1,59 @@
+{
+  "title": "Giv mig nu bare elprisen.somjson.dk! (en historie om det måske værste datasæt i åbne energidata)",
+  "date": "2024-10-21T19:18:02+02:00",
+  "lastmod": "2024-10-21T19:18:02+02:00",
+  "url": "/giv-mig-nu-bare-elprisen-somjson-dk-en-historie-om-det-maaske-vaerste-datasaet-i-aabne-energidata/",
+  "type": "posts",
+  "wordpress_id": 2376,
+  "wordpress_type": "post",
+  "wordpress_status": "publish",
+  "authors": [
+    "Mads Chr. Olesen"
+  ],
+  "draft": false,
+  "aliases": [],
+  "categories": [
+    "HAL9k",
+    "Extern"
+  ],
+  "tags": [
+    "danish",
+    "Planets"
+  ],
+  "image": "/media/imported/4c47728a800ec7f3f6aa.png",
+  "description": "Der findes rigtig meget åbent data om det danske energi system hos Energi Data Service, f.x. spot prisen på elektricitet og CO2 prognoser per kWh. Det er dog overordentligt svært at finde den samlede pris man betaler som forbruger per kWh, pga. det uigennemskuelige datasæt over tariffer og priser. I frustration kom udbruddet: “Giv mig […]"
+}
+
+<p>Der findes rigtig meget åbent data om det danske energi system hos <a href="https://energidataservice.dk/">Energi Data Service</a>, f.x. <a href="https://energidataservice.dk/tso-electricity/Elspotprices">spot prisen på elektricitet</a> og <a href="https://energidataservice.dk/tso-electricity/CO2EmisProg">CO2 prognoser per kWh</a>. Det er dog overordentligt svært at finde den samlede  pris man betaler som forbruger per kWh, pga. det <a href="https://energidataservice.dk/tso-electricity/DatahubPricelist">uigennemskuelige datasæt over tariffer og priser</a>. I frustration kom udbruddet: “Giv mig nu bare <a href="http://elprisen.somjson.dk/">elprisen.somjson.dk</a>” der nemt summerer alle priser og afgiter per elselskab, er open source og uden yderligere dikke-darer.</p>
+<h2 class="wp-block-heading">Hvad koster strøm i Danmark?</h2>
+<p>For en forbruger i Danmark er strømprisen en sum af forskellige priser og afgifter, nogle faste, nogle dynamiske:</p>
+<ul class="wp-block-list">
+<li>El-afgiften fastsat ved lov til 0,761 kr per kWh.</li>
+<li><a href="https://energinet.dk/el/elmarkedet/tariffer/aktuelle-tariffer/">Energinet’s eltariffer</a>: Nettarif på 0,074 kr per kWh (år 2024), og systemtarif på 0,051 kr per kWh (år 2024).</li>
+<li>Netselskabstarif fra forsyningsselskabet (<a href="https://n1.dk/priser-og-vilkar">N1</a>, <a href="https://radiuselnet.dk/elnetkunder/tariffer-og-netabonnement/">Radius</a>, etc.): denne varierer per time og per sæson for at forsøge at incentivere til at udligne forbruget så der ikke skal investeres i nye og større elkabler, og er indkodet i datasættet <a href="https://energidataservice.dk/tso-electricity/DatahubPricelist">over tariffer og priser</a>. Private forbrugere betaler C-tarif.</li>
+<li><a href="https://energidataservice.dk/tso-electricity/Elspotprices">Spot-prisen</a>: er den anden variable, og denne varierer ud fra udbud og efterspørgsel.</li>
+<li>Moms: 25% lagt til summen af ovenstående</li>
+</ul>
+<p>Dette er alle de uundgåelige priser og afgifter, der kan regnes ud udelukkende fra adressen. Derudover kommer så det “frie elmarked”, hvor der skal betales til et elselskab: typisk månedsabonnement og et tillæg til spot-prisen.</p>
+<h2 class="wp-block-heading">Tariffer og priser – det værste åbne datasæt?</h2>
+<p>Som om det ikke er uoverskueligt nok i sig selv, bliver vi nødt til at snakke om datasættet <a href="https://energidataservice.dk/tso-electricity/DatahubPricelist">Datahub Price List</a>. Der er flere åbenlyse problemer med det:</p>
+<ul class="wp-block-list">
+<li>Der er flere felter man burde filtrere efter, men hvor der ikke findes en udtømmende liste over værdier, f.x. netselskab “ChargeOwner”. Det bedste man kan gøre er at downloade, hvor man så løber ind i at download kun giver 100.000 rækker – og datasættet er fuldt på over 300.000 rækker.</li>
+<li>ChargeTypeCode er per selskab – og uden systematik. Så for hvert enkelt selskab skal man finde ud af hvilken priskode de bruger for C-tariffen. Og hvad når det ændrer sig?</li>
+<li>ValidTo kan være udeladt og dermed et open ended interval, og prisen gælder så indtil data retroaktivt ændres. Det betyder også at man ikke kan filtrere på datoer, da prisen på 1. april kan være en række der har en ValidFrom 1. januar (eller tidligere).</li>
+<li>Price1-24: dette er selve timetarif-priserne. Hvis en pris ikke er udfyldt gælder Price1 – hvorfor I alverden dog tilføje den ekstra kompleksitet!?!?!</li>
+<li>For ikke at tale om tidszoner: man må <em>antage</em> (det er ikke dokumenteret) at alle datoer og timetal er angivet i hvad end tid der er gældende i Danmark på pågældende dato. Dette giver så problemer ved skift fra sommer-/normal-tid hvor en time gentages eller udelades: hvilken timesats bør bruges i et døgn der har 23 eller 25 timer?</li>
+</ul>
+<h2 class="wp-block-heading">Giv mig nu bare <a href="http://elprisen.somjson.dk/">elprisen.somjson.dk</a>!</h2>
+<p>Efter at have regnet de fleste af de ovenstående problemer ud, skrev jeg en API-proxy der udstiller det API man i virkeligheden vil have: givet en dato, og et elselskab (eller en adresse), returnerer den <a href="https://github.com/mchro/elprisen.somjson.dk">prisen time for time som et JSON dokument</a>. Prisen er typisk tilgængelig fra kl. 13 dagen før. Som bonus får man også CO2 udledningen med, hvis den er tilgængelig (typisk kl. 15 dagen før). Det er implementeret som en ren API proxy, dvs. det er ren omskrivning af input og data og ikke andet.</p>
+<figure class="wp-block-image size-full"><img alt="" class="wp-image-657" decoding="async" height="529" loading="lazy" sizes="(max-width: 936px) 100vw, 936px" src="/media/imported/4c47728a800ec7f3f6aa.png" srcset="/media/imported/4c47728a800ec7f3f6aa.png 936w, /media/imported/bf16f612f144cfb46762.png 300w, /media/imported/ad6cf07a77c30842a35d.png 768w" width="936"/></figure>
+<p>Det hele er open source, men der kører en version på <a href="http://elprisen.somjson.dk/">elprisen.somjson.dk</a> som frit kan benyttes.</p>
+<h4 class="wp-block-heading">Alternativer</h4>
+<p>Der findes andre API’er der opfylder forskellige use-cases:</p>
+<ul class="wp-block-list">
+<li><a href="https://docs.minstroem.app/api-reference/endpoints">Min Strøm API</a> er rigtig modent og har egen forecast model der kan forecaste 7 dage frem, før priserne er låst på Energi Data Service. Kræver en API nøgle og er uden kildekode</li>
+<li><a href="https://github.com/MTrab/energidataservice">HomeAssistant energidataservice</a> virker kun med Home Assistant, men fungerer på samme måde mod Energi Data Service.</li>
+<li><a href="https://stromligning.dk/api/docs/">Strømligning API</a> kan bruges til at udregne priser baseret på historisk forbrugsdata. Kan dog også bruges til at hente de forecastede priser. Med rate limiting, og uden kildekode.</li>
+<li><a href="https://kasperisme.gitbook.io/carnot">Carnot</a> har også et åbent API og egen forecast model. Kræver API nøgle, og er uden kildekode.</li>
+</ul>
+

@@ -1,0 +1,54 @@
+baseURL = 'https://hal9k.dk/'
+locale = 'da-DK'
+defaultContentLanguage = 'da'
+title = 'Hal9k'
+timeZone = 'Europe/Copenhagen'
+enableRobotsTXT = true
+buildFuture = true
+summaryLength = 35
+
+# HTML content preserves WordPress articles without lossy Markdown conversion.
+[security]
+  allowContent = ['text/html', 'text/markdown']
+
+[pagination]
+  pagerSize = 12
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+[permalinks.taxonomy]
+  categories = '/category/'
+  tags = '/tag/'
+[permalinks.term]
+  categories = '/category/:slug/'
+  tags = '/tag/:slug/'
+
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+
+[params]
+  description = 'Hackerspace i Aalborg. Et fællesskab for kreativ brug af teknik, elektronik, mekanik og software.'
+  logo = '/wp-content/uploads/2012/10/hal9k_log-sky1.png'
+
+[[menus.main]]
+  name = 'Artikler'
+  url = '/artikler/'
+  weight = 10
+[[menus.main]]
+  name = 'Kig forbi'
+  url = '/find-os/'
+  weight = 20
+[[menus.main]]
+  name = 'Om Hal9k'
+  url = '/hal9k/'
+  weight = 30
+[[menus.main]]
+  name = 'Wiki ↗'
+  url = 'https://wiki.hal9k.dk/'
+  weight = 40
+[[menus.main]]
+  name = 'Bliv medlem'
+  url = '/bliv-medlem/'
+  weight = 50
