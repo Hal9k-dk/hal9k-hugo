@@ -33,10 +33,6 @@ summaryLength = 35
   logo = '/images/hal9k-logo.svg'
 
 [[menus.main]]
-  name = 'Artikler'
-  url = '/artikler/'
-  weight = 10
-[[menus.main]]
   name = 'Kig forbi'
   url = '/find-os/'
   weight = 20
@@ -48,6 +44,10 @@ summaryLength = 35
   name = 'Wiki ↗'
   url = 'https://wiki.hal9k.dk/'
   weight = 40
+[[menus.main]]
+  name = 'T-shirts'
+  url = '/t-shirts/'
+  weight = 45
 [[menus.main]]
   name = 'Bliv medlem'
   url = '/bliv-medlem/'
