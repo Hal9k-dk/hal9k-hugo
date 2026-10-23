@@ -8,6 +8,7 @@
 
 &gt; alle er velkomne<span class="cursor">_</span></code></pre><p>Torsdag fra kl. <strong>19.00</strong><br>Sofiendalsvej 80 · Aalborg SV</p></aside></section>
 <section class="article-section"><div class="section-heading"><div><p class="eyebrow">FRA VÆRKSTEDET</p><h2>Projekter &amp; fortællinger</h2></div><a href="/artikler/">Alle artikler →</a></div>
+{{ partial "search.html" . }}
 {{ $pages := where site.RegularPages "Type" "posts" }}
 {{ $paginator := .Paginate $pages.ByDate.Reverse }}
 <div class="cards">{{ range $paginator.Pages }}{{ partial "card.html" . }}{{ end }}</div>
