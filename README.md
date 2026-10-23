@@ -5,9 +5,11 @@ No WordPress, database, PHP, Node, external theme, or asset pipeline is needed t
 
 ## Local development
 
-Install **Hugo extended 0.168.0** (the version pinned in CI), then:
+Install **Git LFS** and **Hugo extended 0.168.0** (the version pinned in CI). Before cloning, run `git lfs install`. For an existing checkout, download the media with:
 
 ```sh
+git lfs install
+git lfs pull
 hugo server --bind 0.0.0.0
 # Preview http://localhost:1313
 ```
@@ -72,7 +74,9 @@ And **secrets**:
 
 Until `DEPLOY_HOST` is configured CI only produces an artifact. Deployment runs only after a successful build/check, never for PRs. `rsync --delete` mirrors `public/`, so the destination must be dedicated to this site. Give the deployment user access to that directory only. For another CI provider, the build command and `public/` artifact are all that is required.
 
-The repo intentionally includes media in ordinary Git so a clean checkout builds offline; it is roughly 850 MB. No file requires Git LFS. If long-term media growth becomes a concern, move media to a separately managed static asset store while preserving its URLs.
+Media under `static/wp-content/uploads/`, `static/media/`, and `static/images/` is tracked with **Git LFS**, including existing history. Git stores small pointers; LFS stores roughly 850 MB of actual media. New files in these directories automatically use LFS via `.gitattributes`. Keep CSS, JavaScript, and content in ordinary Git. CI uses `actions/checkout` with `lfs: true` and verifies the objects before building. Once LFS files have been downloaded, builds work offline and the fileserver serves normal files, with no LFS support needed. GitHub LFS storage/download quotas apply, including CI downloads.
+
+History was rewritten for the LFS migration; existing checkouts should be re-cloned after the rewritten branch is pushed. A normal push uploads new LFS objects through the installed pre-push hook.
 
 ## Migration details and outstanding items
 

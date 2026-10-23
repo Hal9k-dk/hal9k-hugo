@@ -64,8 +64,13 @@ redirect = PUBLIC / duplicate_url.strip('/') / 'index.html'
 if not redirect.exists() or not any(marker in redirect.read_text() for marker in ('http-equiv="refresh"', 'http-equiv=refresh')) or canonical_url not in redirect.read_text():
     errors.add('Duplicate Floppy Disks URL must redirect to the original')
 for file in PUBLIC.rglob('*'):
-    if file.is_file() and file.suffix.lower() in {'.php', '.sql', '.tar', '.log'}:
+    if not file.is_file():
+        continue
+    if file.suffix.lower() in {'.php', '.sql', '.tar', '.log'}:
         errors.add(f'Unexpected deployment file: {file}')
+    with file.open('rb') as stream:
+        if stream.read(80).startswith(b'version https://git-lfs.github.com/spec/v1'):
+            errors.add(f'LFS pointer deployed instead of media (run git lfs pull): {file.relative_to(PUBLIC)}')
 if errors:
     print('\n'.join(sorted(errors)))
     sys.exit(1)
