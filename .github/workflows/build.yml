@@ -15,7 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
+      - name: Calculate LFS cache key
+        id: lfs-key
+        shell: bash
+        run: |
+          git lfs install --local
+          digest=$(git lfs ls-files --long | awk '{print $1}' | sort -u | sha256sum | cut -d ' ' -f 1)
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+      - name: Restore cached LFS objects
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: lfs-v1-${{ runner.os }}-${{ steps.lfs-key.outputs.digest }}
+          restore-keys: |
+            lfs-v1-${{ runner.os }}-
+      - name: Download only missing media and populate checkout
+        run: git lfs pull
       - name: Verify media checkout
         run: git lfs fsck
       - name: Install Hugo 0.168.0
@@ -50,4 +66,4 @@ jobs:
           printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
           printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
-          rsync -az --delete --delay-updates -e 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes' public/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH%/}/"
+          rsync -az --checksum --delete --delay-updates -e 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes' public/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH%/}/"
