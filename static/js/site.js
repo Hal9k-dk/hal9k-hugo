@@ -1,6 +1,7 @@
 'use strict';
 let indexPromise;
-const loadIndex = () => indexPromise ||= fetch('/index.json').then(r => { if (!r.ok) throw new Error('Index unavailable'); return r.json(); });
+// A failed load is forgotten so the next search can retry it.
+const loadIndex = () => indexPromise ||= fetch('/index.json').then(r => { if (!r.ok) throw new Error('Index unavailable'); return r.json(); }).catch(error => { indexPromise = undefined; throw error; });
 const query = new URLSearchParams(location.search);
 const legacyId = query.get('p') || query.get('page_id') || query.get('attachment_id');
 if (legacyId && /^\d+$/.test(legacyId)) {
