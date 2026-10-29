@@ -49,8 +49,10 @@ if (search) {
         if (value !== search.value.trim().toLocaleLowerCase('da')) return;
         const words = value.split(/\s+/);
         const matches = index.articles.filter(a => words.every(w => a.haystack.includes(w)));
-        status.textContent = matches.length + ' artikler fundet';
-        matches.forEach(a => { const li = document.createElement('li'); const link = document.createElement('a'); link.href = a.url; link.textContent = a.title; li.append(link); results.append(li); });
+        // Cap the list so a short query doesn't push the article cards far down the page.
+        const shown = matches.slice(0, 20);
+        status.textContent = (matches.length === 1 ? '1 artikel fundet' : matches.length + ' artikler fundet') + (matches.length > shown.length ? ` – viser de første ${shown.length}` : '');
+        shown.forEach(a => { const li = document.createElement('li'); const link = document.createElement('a'); link.href = a.url; link.textContent = a.title; li.append(link); results.append(li); });
       } catch (_) { status.textContent = 'Søgning kunne ikke indlæses. Prøv igen.'; }
     }, 180);
   });
