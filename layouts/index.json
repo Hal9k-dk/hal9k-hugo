@@ -1,1 +1,1 @@
-{{- $items := slice -}}{{- range where site.RegularPages "Type" "posts" -}}{{- $items = $items | append (dict "title" .Title "url" .RelPermalink "text" (.Plain | truncate 3000)) -}}{{- end -}}{{- dict "articles" $items | jsonify -}}
+{{- $items := slice -}}{{- range where site.RegularPages "Type" "posts" -}}{{- $items = $items | append (dict "title" .Title "url" .RelPermalink "text" .Plain) -}}{{- end -}}{{- dict "articles" $items | jsonify -}}
