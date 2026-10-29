@@ -1,7 +1,8 @@
 'use strict';
 let indexPromise;
-// A failed load is forgotten so the next search can retry it.
-const loadIndex = () => indexPromise ||= fetch('/index.json').then(r => { if (!r.ok) throw new Error('Index unavailable'); return r.json(); }).catch(error => { indexPromise = undefined; throw error; });
+// A failed load is forgotten so the next search can retry it. The lowercased
+// search text is built once here rather than on every keystroke.
+const loadIndex = () => indexPromise ||= fetch('/index.json').then(r => { if (!r.ok) throw new Error('Index unavailable'); return r.json(); }).then(index => { index.articles.forEach(a => { a.haystack = (a.title + ' ' + a.text).toLocaleLowerCase('da'); }); return index; }).catch(error => { indexPromise = undefined; throw error; });
 const query = new URLSearchParams(location.search);
 const legacyId = query.get('p') || query.get('page_id') || query.get('attachment_id');
 if (legacyId && /^\d+$/.test(legacyId)) {
@@ -47,7 +48,7 @@ if (search) {
         const index = await loadIndex();
         if (value !== search.value.trim().toLocaleLowerCase('da')) return;
         const words = value.split(/\s+/);
-        const matches = index.articles.filter(a => words.every(w => (a.title + ' ' + a.text).toLocaleLowerCase('da').includes(w)));
+        const matches = index.articles.filter(a => words.every(w => a.haystack.includes(w)));
         status.textContent = matches.length + ' artikler fundet';
         matches.forEach(a => { const li = document.createElement('li'); const link = document.createElement('a'); link.href = a.url; link.textContent = a.title; li.append(link); results.append(li); });
       } catch (_) { status.textContent = 'Søgning kunne ikke indlæses. Prøv igen.'; }
