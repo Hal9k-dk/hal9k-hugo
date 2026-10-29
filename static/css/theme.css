@@ -1,17 +1,74 @@
 /* System preference by default; a saved choice sets data-theme before paint. */
+/* Plain tokens rather than light-dark(), so dark mode works in every browser. */
 :root {
   color-scheme: light dark;
-  --ink: light-dark(#182027, #e4e7ec);
-  --muted: light-dark(#5c6870, #9ca5b3);
-  --paper: light-dark(#f8f8f4, #090b0f);
-  --green: light-dark(#2d6953, #39ff88);
-  --line: light-dark(#dce1da, #2a303b);
-  --surface: light-dark(#ffffff, #10141b);
-  --soft: light-dark(#e9ede6, #171d27);
-  --link-hover: light-dark(#153d2e, #a0ffc5);
+  --ink: #182027;
+  --muted: #5c6870;
+  --paper: #f8f8f4;
+  --green: #2d6953;
+  --line: #dce1da;
+  --surface: #ffffff;
+  --soft: #e9ede6;
+  --link-hover: #153d2e;
+  --button: #2d6953;
+  --button-hover: #1b4e39;
+  --button-ink: #fff;
+  --panel: #192b25;
+  --panel-ink: #d9eee1;
+  --panel-border: #192b25;
+  --panel-muted: #c3d4cb;
+  --panel-rule: #466052;
+  --terminal-label: #9fb9ac;
+  --cursor: #9fdb80;
+  --focus: #ab5a19;
 }
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #e4e7ec;
+    --muted: #9ca5b3;
+    --paper: #090b0f;
+    --green: #39ff88;
+    --line: #2a303b;
+    --surface: #10141b;
+    --soft: #171d27;
+    --link-hover: #a0ffc5;
+    --button: #39ff88;
+    --button-hover: #a0ffc5;
+    --button-ink: #090b0f;
+    --panel: #171f2b;
+    --panel-ink: #39ff88;
+    --panel-border: #53657e;
+    --panel-muted: #c1c9d5;
+    --panel-rule: #2a303b;
+    --terminal-label: #9ca5b3;
+    --cursor: #39ff88;
+    --focus: #39ff88;
+  }
+}
+/* Same dark values as above, for an explicit choice against the system setting. */
+:root[data-theme="dark"] {
+  --ink: #e4e7ec;
+  --muted: #9ca5b3;
+  --paper: #090b0f;
+  --green: #39ff88;
+  --line: #2a303b;
+  --surface: #10141b;
+  --soft: #171d27;
+  --link-hover: #a0ffc5;
+  --button: #39ff88;
+  --button-hover: #a0ffc5;
+  --button-ink: #090b0f;
+  --panel: #171f2b;
+  --panel-ink: #39ff88;
+  --panel-border: #53657e;
+  --panel-muted: #c1c9d5;
+  --panel-rule: #2a303b;
+  --terminal-label: #9ca5b3;
+  --cursor: #39ff88;
+  --focus: #39ff88;
+}
 a:hover { color: var(--link-hover); }
 .site-header, .card, .skip { background: var(--surface); }
 .card-image { background: var(--soft); }
@@ -23,27 +80,27 @@ a:hover { color: var(--link-hover); }
   border: 1px solid var(--line);
 }
 .button {
-  background: light-dark(#2d6953, #39ff88);
-  color: light-dark(#fff, #090b0f);
+  background: var(--button);
+  color: var(--button-ink);
 }
 .button:hover {
-  background: light-dark(#1b4e39, #a0ffc5);
-  color: light-dark(#fff, #090b0f);
+  background: var(--button-hover);
+  color: var(--button-ink);
 }
 .hero-panel {
-  background: light-dark(#192b25, #171f2b);
-  color: light-dark(#d9eee1, #39ff88);
-  border: 1px solid light-dark(#192b25, #53657e);
+  background: var(--panel);
+  color: var(--panel-ink);
+  border: 1px solid var(--panel-border);
   box-shadow: 12px 12px 0 var(--soft);
 }
 .hero-panel pre, .hero-panel code { color: inherit; }
-.terminal-label { color: light-dark(#9fb9ac, #9ca5b3); }
+.terminal-label { color: var(--terminal-label); }
 .hero-panel p {
-  color: light-dark(#c3d4cb, #c1c9d5);
-  border-color: light-dark(#466052, #2a303b);
+  color: var(--panel-muted);
+  border-color: var(--panel-rule);
 }
-.cursor { color: light-dark(#9fdb80, #39ff88); }
-:focus-visible { outline-color: light-dark(#ab5a19, #39ff88); }
+.cursor { color: var(--cursor); }
+:focus-visible { outline-color: var(--focus); }
 /* Keep the original logo legible without recoloring its artwork. */
 .brand { background: #fff; border-radius: 4px; padding: 6px 10px; }
 .site-header nav { align-items: center; }
