@@ -5,7 +5,7 @@ const loadIndex = () => indexPromise ||= fetch('/index.json').then(r => { if (!r
 const query = new URLSearchParams(location.search);
 const legacyId = query.get('p') || query.get('page_id') || query.get('attachment_id');
 if (legacyId && /^\d+$/.test(legacyId)) {
-  loadIndex().then(index => { const target = index.wordpress[legacyId]; if (target && target.startsWith('/')) location.replace(target + location.hash); }).catch(() => {});
+  fetch('/wordpress-ids.json').then(r => r.json()).then(ids => { const target = ids[legacyId]; if (target && target.startsWith('/')) location.replace(target + location.hash); }).catch(() => {});
 }
 // Reimplementation of the battery-life calculator from the original article.
 const calculator = document.querySelector('.calculator');
