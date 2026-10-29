@@ -25,8 +25,15 @@ summaryLength = 35
   categories = '/category/:slug/'
   tags = '/tag/:slug/'
 
+# Old WordPress ?p= IDs → URLs, kept out of the search index so redirects stay small.
+[outputFormats.WordPressIDs]
+  mediaType = 'application/json'
+  baseName = 'wordpress-ids'
+  isPlainText = true
+  notAlternative = true
+
 [outputs]
-  home = ['HTML', 'RSS', 'JSON']
+  home = ['HTML', 'RSS', 'JSON', 'WordPressIDs']
 
 [params]
   description = 'Hackerspace i Aalborg. Et fællesskab for kreativ brug af teknik, elektronik, mekanik og software.'
