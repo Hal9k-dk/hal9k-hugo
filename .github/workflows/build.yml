@@ -8,7 +8,8 @@ permissions:
   contents: read
 concurrency:
   group: static-site-${{ github.ref }}
-  cancel-in-progress: true
+  # Only cancel superseded PR runs; a cancelled push run could interrupt rsync mid-deploy.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   build:
     runs-on: ubuntu-latest
