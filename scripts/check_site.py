@@ -25,6 +25,9 @@ class Links(HTMLParser):
                 continue
             base = '/' + str(self.path.parent.relative_to(PUBLIC)) + '/'
             dest = PUBLIC / unquote(urlsplit(urljoin(base, value)).path).lstrip('/')
+            # A directory URL is only served if the fileserver finds its index.html.
+            if dest.is_dir():
+                dest = dest / 'index.html'
             if not dest.exists():
                 errors.add(f'{self.path.relative_to(PUBLIC)}: missing {value}')
         if tag == 'script' and not attrs.get('src'):
