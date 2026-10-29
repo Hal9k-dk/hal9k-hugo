@@ -1,70 +1,33 @@
-name: Build and deploy static site
+name: Deploy site
 on:
   push:
-    branches: [main, master]
-  pull_request:
-  workflow_dispatch:
-permissions:
-  contents: read
+    branches: [main]
+permissions: {}
 concurrency:
-  group: static-site-${{ github.ref }}
-  # Only cancel superseded PR runs; a cancelled push run could interrupt rsync mid-deploy.
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: production-deployment
+  cancel-in-progress: false
 jobs:
-  build:
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          lfs: false
-      - name: Calculate LFS cache key
-        id: lfs-key
+      - name: Trigger server deployment
         shell: bash
-        run: |
-          git lfs install --local
-          digest=$(git lfs ls-files --long | awk '{print $1}' | sort -u | sha256sum | cut -d ' ' -f 1)
-          echo "digest=$digest" >> "$GITHUB_OUTPUT"
-      - name: Restore cached LFS objects
-        uses: actions/cache@v4
-        with:
-          path: .git/lfs/objects
-          key: lfs-v1-${{ runner.os }}-${{ steps.lfs-key.outputs.digest }}
-          restore-keys: |
-            lfs-v1-${{ runner.os }}-
-      - name: Download only missing media and populate checkout
-        run: git lfs pull
-      - name: Verify media checkout
-        run: git lfs fsck
-      - name: Install Hugo 0.168.0
-        env:
-          HUGO_VERSION: '0.168.0'
-        run: |
-          curl --fail --location --retry 3 -o /tmp/hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
-          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
-          sudo install /tmp/hugo /usr/local/bin/hugo
-      - name: Build
-        run: hugo --gc --minify --panicOnWarning
-      - name: Check URLs and content
-        run: python3 scripts/check_site.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: hal9k-static
-          path: public/
-          retention-days: 7
-      - name: Deploy to fileserver (optional)
-        if: github.event_name != 'pull_request' && vars.DEPLOY_HOST != ''
         env:
           DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
-          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          ROOT_KEY: ${{ secrets.ROOT_KEY }}
           DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
         run: |
-          set -eu
-          : "${DEPLOY_USER:?Set DEPLOY_USER}" "${DEPLOY_PATH:?Set DEPLOY_PATH}" "${DEPLOY_SSH_KEY:?Set DEPLOY_SSH_KEY}" "${DEPLOY_KNOWN_HOSTS:?Set DEPLOY_KNOWN_HOSTS}"
-          test "$DEPLOY_PATH" != /
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
-          rsync -az --checksum --delete --delay-updates -e 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes' public/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH%/}/"
+          set -euo pipefail
+          : "${DEPLOY_HOST:?Set DEPLOY_HOST}" "${ROOT_KEY:?Set ROOT_KEY}" "${DEPLOY_KNOWN_HOSTS:?Set DEPLOY_KNOWN_HOSTS}"
+          umask 077
+          ssh_dir=$(mktemp -d)
+          trap 'rm -rf "$ssh_dir"' EXIT
+          printf '%s\n' "$ROOT_KEY" > "$ssh_dir/private-key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$ssh_dir/known_hosts"
+          ssh -o BatchMode=yes -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile="$ssh_dir/known_hosts" \
+              -o GlobalKnownHostsFile=/dev/null \
+              -i "$ssh_dir/private-key" \
+              -p 2222 "deploy@${DEPLOY_HOST}" 'git pull'

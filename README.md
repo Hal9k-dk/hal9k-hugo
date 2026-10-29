@@ -5,7 +5,7 @@ No WordPress, database, PHP, Node, external theme, or asset pipeline is needed t
 
 ## Local development
 
-Install **Git LFS** and **Hugo extended 0.168.0** (the version pinned in CI). Before cloning, run `git lfs install`. For an existing checkout, download the media with:
+Install **Git LFS** and **Hugo extended 0.168.0**. Before cloning, run `git lfs install`. For an existing checkout, download the media with:
 
 ```sh
 git lfs install
@@ -59,24 +59,36 @@ Place new images in `static/images/`, or use Hugo page bundles. Change `hugo.tom
 
 ## CI and fileserver deployment
 
-`.github/workflows/build.yml` builds and validates on pushes to `main`/`master` and pull requests, and always uploads a `hal9k-static` artifact. No migration or network media downloads happen during a build.
+GitHub Actions (`.github/workflows/build.yml`) deploys only on pushes to `main`, never on pull requests or pushes to other branches. CI does not check out the repository, download LFS media, build Hugo, upload artifacts, or copy site output. It only connects as `deploy` on port `2222` and runs `git pull`. The server handles Git LFS, submodules, Hugo builds, and atomic publication.
 
-To enable SSH/rsync deployment, configure GitHub repository **variables**:
+### Configure GitHub Actions
 
-- `DEPLOY_HOST`: fileserver hostname
-- `DEPLOY_USER`: SSH deployment user
-- `DEPLOY_PATH`: a dedicated web root, e.g. `/var/www/hal9k.dk`
+In the repository, open **Settings → Secrets and variables → Actions**:
 
-And **secrets**:
+1. Under **Secrets**, add `ROOT_KEY`: the complete SSH private deployment key, including its header/footer and line breaks. It must work non-interactively (no passphrase prompt). Despite the secret's name, SSH connects as `deploy`, not root. Install the matching public key in the server's deployment account, with only the permissions needed to trigger deployment.
+2. Under **Secrets**, add `DEPLOY_KNOWN_HOSTS`: the verified server host-key entry (or entries). For this nonstandard SSH port, the entry must identify `[drillpress.hal9k.dk]:2222`, for example `[drillpress.hal9k.dk]:2222 ssh-ed25519 <server-public-host-key>`. This is the server's public host key, not the deployment user's key.
+3. Under **Variables**, add `DEPLOY_HOST` with value `drillpress.hal9k.dk` (hostname only, without a username, scheme, or port). The deployment user and port are fixed in the workflow.
 
-- `DEPLOY_SSH_KEY`: private deployment key
-- `DEPLOY_KNOWN_HOSTS`: verified SSH host-key line(s)
+Obtain the server host key from its administrator or a trusted server console and verify its fingerprint through an independent trusted channel. You may collect a candidate locally with `ssh-keyscan -p 2222 drillpress.hal9k.dk > known_hosts`, but **do not trust that output until its fingerprint has been independently verified**. Store the verified file contents in `DEPLOY_KNOWN_HOSTS`; CI never discovers or automatically accepts host keys. Update this secret after verifying any legitimate host-key rotation, and update its hostname if `DEPLOY_HOST` changes.
 
-Until `DEPLOY_HOST` is configured CI only produces an artifact. Deployment runs only after a successful build/check, never for PRs. `rsync --delete` mirrors `public/`, so the destination must be dedicated to this site. Give the deployment user access to that directory only. For another CI provider, the build command and `public/` artifact are all that is required.
+The job writes both secrets to temporary files with owner-only permissions and removes them on exit. It uses `BatchMode=yes`, `IdentitiesOnly=yes`, and `StrictHostKeyChecking=yes`, with the supplied known-hosts file as its trust source. Private keys are not printed. Missing configuration, authentication/host-key errors, or a nonzero remote command status fail the job. Deployments are serialized without cancelling an active deployment.
 
-Media under `static/wp-content/uploads/`, `static/media/`, and `static/images/` is tracked with **Git LFS**, including existing history. Git stores small pointers; LFS stores roughly 850 MB of actual media. New files in these directories automatically use LFS via `.gitattributes`. Keep CSS, JavaScript, and content in ordinary Git. CI checks out Git pointers first, restores `.git/lfs/objects` using `actions/cache`, and runs `git lfs pull` to download only missing objects and populate actual media files. The cache key is based on the sorted LFS object IDs, so text-only edits reuse the same cache; changed media can restore an older cache and fetch only the missing objects. Integrity checks run before building. The initial run, cache eviction, or a cache miss can still require a full download; GitHub cache storage/retention limits apply. Deployment uses rsync checksums so identical media is not retransferred just because a fresh checkout changed timestamps. Once LFS files have been downloaded, builds work offline and the fileserver serves normal files, with no LFS support needed. GitHub LFS storage/download quotas apply, including CI downloads.
+The SSH command is equivalent to:
 
-If you build directly on a persistent webserver instead of in Actions, keep a single checkout (including `.git/lfs/objects`) and run `git pull --ff-only`, `git lfs pull`, then the Hugo build/check commands. LFS automatically reuses downloaded objects. Never serve the source checkout or its `.git` directory: deploy only `public/`. The current rsync deployment needs no Git or LFS installation on the fileserver.
+```sh
+ssh -o BatchMode=yes -o IdentitiesOnly=yes \
+    -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile=/path/to/verified-known_hosts \
+    -o GlobalKnownHostsFile=/dev/null \
+    -i /path/to/private-key \
+    -p 2222 deploy@drillpress.hal9k.dk 'git pull'
+```
+
+The server must arrange for this command to run in the correct persistent checkout (or route it through a restricted deployment command), and propagate deployment failures as a nonzero exit status. Never serve the source checkout or its `.git` directory; the server publishes only the generated site atomically. No `DEPLOY_USER`, `DEPLOY_PATH`, or rsync configuration is required.
+
+### Git LFS
+
+Media under `static/wp-content/uploads/`, `static/media/`, and `static/images/` is tracked with **Git LFS**, including existing history. Git stores small pointers; LFS stores roughly 850 MB of actual media. New files in these directories automatically use LFS via `.gitattributes`. Keep CSS, JavaScript, and content in ordinary Git. The persistent server checkout retains `.git/lfs/objects` so LFS can reuse downloaded objects. Once media has been downloaded, builds work offline and the published site serves normal files. GitHub LFS storage/download quotas apply to developer and server downloads.
 
 History was rewritten for the LFS migration; existing checkouts should be re-cloned after the rewritten branch is pushed. A normal push uploads new LFS objects through the installed pre-push hook.
 
