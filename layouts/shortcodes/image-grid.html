@@ -1,0 +1,2 @@
+{{- /* Places Markdown images side by side; stacking only below ~300px of width. */ -}}
+<div class="image-grid">{{ .Inner | .Page.RenderString (dict "display" "block") }}</div>
