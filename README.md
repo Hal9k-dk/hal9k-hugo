@@ -55,7 +55,7 @@ Skriv artiklen her.
 
 Place new images in `static/images/`, or use Hugo page bundles. Change `hugo.toml` for navigation/site settings. The home page shows all articles chronologically; `/artikler/` provides local client-side search. FAQ toggles use native `<details>`, YouTube embeds use youtube-nocookie.com, and galleries need no WordPress JavaScript. The original battery-life calculator has been reimplemented in `static/js/site.js`.
 
-`check_site.py` currently expects 112 articles after deduplication and verifies the duplicate URL redirect. Update that baseline when intentionally adding or removing articles. It checks every built local link/media reference and all original public page URLs.
+`check_site.py` verifies the duplicate URL redirect. It checks every built local link/media reference and all original public page URLs.
 
 ## CI and fileserver deployment
 
