@@ -1,0 +1,9 @@
+{{- /* Markdown images only; imported WordPress HTML is untouched. Local images get their size so the page doesn't jump while they load. */ -}}
+{{- $size := "" -}}
+{{- if hasPrefix .Destination "/" -}}
+  {{- $file := path.Join "static" .Destination -}}
+  {{- if fileExists $file -}}
+    {{- with try (imageConfig $file) -}}{{- with .Value -}}{{- $size = printf " width=\"%d\" height=\"%d\"" .Width .Height -}}{{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+<img class="md-image" src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ $size | safeHTMLAttr }} loading="lazy">

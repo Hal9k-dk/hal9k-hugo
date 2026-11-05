@@ -17,13 +17,12 @@ I år samler jeg en ikke nærmere defineret mængde savsmuld i en 12,5 L klodska
 
 ![Sort plastkasse mærket "Optænding" fyldt med savsmuld, stående i en stor sæk med mere savsmuld](/images/optaendingsblokke-savsmuld.jpg)
 
-Stearinstumperne smeltes i et glas i vandbad.
+Stearinstumperne smeltes i et glas i vandbad. Omtrent 600 ml flydende stearin hældes direkte i kassen. Herefter masseres den lune blanding, indtil stearinen er jævnt fordelt.
 
+{{< image-grid >}}
 ![Glas med delvist smeltet stearin i en gryde med kogende vand](/images/optaendingsblokke-vandbad.jpg)
-
-Omtrent 600 ml flydende stearin hældes direkte i kassen. Herefter masseres den lune blanding, indtil stearinen er jævnt fordelt.
-
 ![Hånd i engangshandske hælder stearin fra et glas ned i kassen med savsmuld](/images/optaendingsblokke-haeldning.jpg)
+{{< /image-grid >}}
 
 Den første test af en teskefuld brænder længere end rent savsmuld – umiddelbart en succes! Enhedsprisen er lav, hvis man samtidig sætter ens timeløn lav.
 
