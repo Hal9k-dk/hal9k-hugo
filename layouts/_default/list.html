@@ -1,3 +1,3 @@
 {{ define "main" }}<section class="list-page"><p class="eyebrow">HAL9K · ARKIV</p><h1>{{ .Title }}</h1>{{ .Content }}
 {{ if eq .Section "posts" }}{{ partial "search.html" . }}{{ end }}
-{{ $paginator := .Paginate .Pages.ByDate.Reverse }}<div class="cards">{{ range $paginator.Pages }}{{ partial "card.html" . }}{{ end }}</div>{{ partial "pagination.html" . }}</section>{{ end }}
+{{ $pages := .Pages }}{{ if and (eq .Kind "term") (eq .Data.Plural "authors") }}{{ $pages = where $pages "Type" "posts" }}{{ end }}{{ $paginator := .Paginate $pages.ByDate.Reverse }}<div class="cards">{{ range $paginator.Pages }}{{ partial "card.html" . }}{{ end }}</div>{{ partial "pagination.html" . }}</section>{{ end }}
