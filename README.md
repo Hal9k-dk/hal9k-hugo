@@ -30,6 +30,7 @@ Deploy **only `public/`**. The fileserver needs directory indexes (`/slug/` → 
 - `content/sponsors/`: 10 historical sponsor acknowledgements.
 - `content/legacy/`: 5 other published custom-type records (including old tests), preserved rather than silently dropped.
 - `content/categories/`, `content/tags/`: taxonomy titles and original WordPress slugs.
+- `content/authors/`: author archive settings. New authors get a page at `/author/<name>/` automatically; add `<term>/_index.md` only to override a title or URL.
 - `static/wp-content/uploads/`: 2,477 original public media files, keeping existing URLs.
 - `static/media/imported/`: 540 downloaded external images/media variants.
 - `data/comments.json`: 24 approved public comments, without email addresses or IPs.

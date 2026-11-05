@@ -17,13 +17,16 @@ summaryLength = 35
 [taxonomies]
   category = 'categories'
   tag = 'tags'
+  author = 'authors'
 
 [permalinks.taxonomy]
   categories = '/category/'
   tags = '/tag/'
+  authors = '/author/'
 [permalinks.term]
   categories = '/category/:slug/'
   tags = '/tag/:slug/'
+  authors = '/author/:slug/'
 
 # Old WordPress ?p= IDs → URLs, kept out of the search index so redirects stay small.
 [outputFormats.WordPressIDs]

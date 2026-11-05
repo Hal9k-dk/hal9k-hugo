@@ -1,0 +1,1 @@
+{{- with .GetTerms "authors" }} · {{ range $i, $author := . }}{{ if $i }}, {{ end }}<a href="{{ $author.RelPermalink }}">{{ $author.LinkTitle }}</a>{{ end }}{{ end -}}
