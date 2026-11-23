@@ -65,7 +65,7 @@ This is the finished assembly - the OLED display is useful for viewing the clock
 
 ![Back view](/images/alphaclock-back.jpg)
 
-Close-up view of the worm gear that drives the gear for one of the hands:
+Close-up view of the worm gear that drives the gear for one of the hands (note the use of a TPU flexible coupler, along with copious lubrication):
 
 ![Close-up of gears](/images/alphaclock-gears.jpg)
 
@@ -77,5 +77,4 @@ All the CAD files and software can be found at
 [github.com/bullestock/alphaclock](https://github.com/bullestock/alphaclock/).
 
 If you are wondering about the order of the digits, they are arranged according
-to the Danish spelling of the numbers 1 through 12, and I opted to keep 12 at
-the top.
+to the Danish spelling of the numbers 1 through 12.
