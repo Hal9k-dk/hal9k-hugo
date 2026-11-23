@@ -7,6 +7,9 @@ enableRobotsTXT = true
 buildFuture = true
 summaryLength = 35
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 # HTML content preserves WordPress articles without lossy Markdown conversion.
 [security]
   allowContent = ['text/html', 'text/markdown']
