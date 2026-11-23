@@ -15,7 +15,7 @@ the digits sorted alphabetically instead of numerically:
 ![Clock face with the digits arranged alphabetically](/images/alphaclock-clockface.jpg)
 
 I immediately thought this would be a fun project and got hold of an IKEA
-[PLUTTIS](https://www.ikea.com/gb/en/p/pluttis-wall-clock-black-10540847/).
+PLUTTIS (no longer available, but [TALLSPARV](https://www.ikea.com/us/en/p/tallsparv-wall-clock-black-beige-40617086/) is similar).
 
 My original thought was to reuse as much of the mechanism as possible. Since
 the second and minute hands move normally, I planned to add a motor to control
